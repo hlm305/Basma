@@ -265,7 +265,7 @@ const saveLocal=()=>{try{localStorage.setItem('lg_name',NAME);localStorage.setIt
 const open=L=>!PUB||PUB.includes(L);
 const total=()=>Object.values(DONE).reduce((a,b)=>a+b,0)+Object.values(GS).reduce((a,b)=>a+b,0);
 function updHd(){$('#who').innerHTML=NAME?`<span class="chip">${esc(NAME)}</span><span class="chip"><i>★</i> ${total()}</span>`:'';updV()}
-const FB='PUT_DATABASE_URL_HERE',TPIN='1234';
+const FB='https://defense-fingerprint-default-rtdb.firebaseio.com',TPIN='922727';
 const fbOn=()=>FB.indexOf('PUT_')!==0,fbU=p=>FB.replace(/\/$/,'')+'/'+p+'.json';
 async function pullCfg(){if(!fbOn())return;try{const r=await fetch(fbU('config/open'));const d=await r.json();const n=d&&d.length!==undefined?d:null;if(JSON.stringify(n)!==JSON.stringify(PUB)){PUB=n;if(!S&&!$('#dash'))home()}}catch(e){}}
 function init(){
