@@ -155,6 +155,13 @@ input{font-family:inherit;font-size:22px;padding:12px 14px;border-radius:16px;bo
 .mini{width:48px;padding:8px 0;font-size:20px;--c:#b9b3a0;--cd:#8f897a}.mini.on{--c:var(--green);--cd:var(--green-d)}
 .minis{display:flex;flex-wrap:wrap;gap:8px}
 .bar2{height:12px;background:var(--line);border-radius:8px;overflow:hidden}.bar2 i{display:block;height:100%}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:8px 0 12px}
+.kpis div{background:var(--paper2);border-radius:16px;padding:10px;text-align:center}.kpis b{display:block;font-size:26px;font-family:'Baloo Bhaijaan 2','Cairo',sans-serif;line-height:1.3}.kpis span{font-size:13px;color:var(--mut);font-weight:700}
+.ins{background:var(--hint);color:var(--hintx);border-radius:16px;padding:10px 14px;font-weight:700;font-size:16px;margin:8px 0 14px}
+.chart{display:grid;gap:6px;margin:8px 0 16px}.br{display:grid;grid-template-columns:auto 1fr 46px;gap:8px;align-items:center}.bk{min-width:30px;font-weight:800;font-size:15px}.bp{font-size:14px;font-weight:800;text-align:start}
+.stack{display:flex;height:22px;border-radius:12px;overflow:hidden;background:var(--line);margin:8px 0}.stack i{display:block;min-width:0}
+.leg{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;font-weight:700;margin-bottom:14px}.leg u{display:inline-block;width:12px;height:12px;border-radius:50%;margin-inline-end:5px;vertical-align:middle}
+@media print{body{background:#fff!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.noprint,.hd,.ft,.top button{display:none!important}.card{border:0}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:420px){h1{font-size:25px}.lhero .big{font-size:96px}.forms b{font-size:36px}.wline{font-size:44px}.syl2{font-size:52px}.win{font-size:30px}.win.l3{font-size:23px}}
 </style>
@@ -562,6 +569,7 @@ function gEnd(){
 }
 /* ---------- teacher dashboard ---------- */
 const lvl=p=>p===null?['لم يبدأ','#8a8aa8']:p>=85?['متقن','#12a36f']:p>=60?['جيد','#e08a00']:['يحتاج معالجة','#e5483f'];
+const PRINTOK=true;
 const pct=r=>r.length?Math.round(r.filter(x=>x.ok).length/r.length*100):null;
 function dash(sel){
  const a=$('#app');
@@ -572,24 +580,48 @@ function dash(sel){
  const pull=async()=>{try{const r=await fetch(fbU('results')),o=await r.json()||{};DATA=Object.values(o).sort((x,y)=>y.ts-x.ts).slice(0,3000);paint(sel)}catch(e){const c=$('#dc');if(c)c.textContent='تعذّر تحميل البيانات'}};
  pull();unsub=setInterval(pull,15000);
 }
+function bars(map,keys){return keys.filter(k=>map[k]).map(k=>{const p=pct(map[k]),l=lvl(p);return `<div class="br"><span class="bk">${esc(k)}</span><div class="bar2"><i style="width:${Math.max(p,3)}%;background:${l[1]}"></i></div><span class="bp">${p}%</span></div>`}).join('')}
+function group(rs,f){const m={};rs.forEach(r=>{(m[f(r)]=m[f(r)]||[]).push(r)});return m}
+const sk0=s=>String(s).replace('لعبة: ','');
 function paint(sel){
  const el=$('#dc');if(!el)return;
- const by={};DATA.forEach(r=>{(by[r.name]=by[r.name]||[]).push(r)});
- const names=Object.keys(by).sort();
- let h=`<h3>الطلاب (${names.length})</h3>`;
- if(!names.length)h+='<p class="mut">لا توجد استجابات بعد. شاركي رابط الصفحة مع الطلاب.</p>';
- else h+=`<div class="tbl"><table><tr><th>الاسم</th><th>إجابات</th><th>الدقة</th><th>المستوى</th><th>آخر نشاط</th></tr>${names.map(n=>{const r=by[n],p=pct(r),l=lvl(p);return`<tr onclick='dash(${JSON.stringify(n).replace(/'/g,"&#39;")})' style="cursor:pointer"><td><b>${esc(n)}</b></td><td>${r.length}</td><td>${p}%</td><td><span class="tag" style="background:${l[1]}">${l[0]}</span></td><td class="mut">${new Date(r[0].ts).toLocaleDateString('ar-SA')}</td></tr>`}).join('')}</table></div>`;
+ const by=group(DATA,r=>r.name),names=Object.keys(by).sort();
+ let h='';
+ if(!names.length){el.innerHTML='<h3>لا توجد نتائج بعد</h3><p class="mut">عندما يجيب الطلاب عن الأسئلة تظهر هنا الرسوم والتحليل. شاركي رابط الطلاب معهم.</p>'+tail();return}
+ const all=pct(DATA),pr=names.map(n=>pct(by[n])),cnt={m:0,g:0,w:0};pr.forEach(p=>{p>=85?cnt.m++:p>=60?cnt.g++:cnt.w++});
+ const byL=group(DATA,r=>r.letter),bySk=group(DATA,r=>sk0(r.skill));
+ const lk=ORD.filter(k=>byL[k]),sk=Object.keys(bySk).sort((a,b)=>pct(bySk[a])-pct(bySk[b]));
+ const wl=[...lk].sort((a,b)=>pct(byL[a])-pct(byL[b])).filter(k=>pct(byL[k])<85).slice(0,3);
+ const ws=sk.filter(k=>pct(bySk[k])<85).slice(0,2);
+ const need=names.filter((n,i)=>pr[i]<60);
+ const dateS=new Date().toLocaleDateString('ar-SA');
  if(sel&&by[sel]){
-  const r=by[sel],sk={},lt={};r.forEach(x=>{(sk[x.skill]=sk[x.skill]||[]).push(x);(lt[x.letter]=lt[x.letter]||[]).push(x)});
-  h+=`<hr><h3>تفاصيل: ${esc(sel)}</h3><b>المهارات</b>${Object.keys(sk).map(k=>{const p=pct(sk[k]);return`<div>${esc(k)} — ${p}%<div class="bar2"><i style="width:${p}%;background:${lvl(p)[1]}"></i></div></div>`}).join('')}
-  <p><b>الحروف</b></p><div>${Object.keys(lt).map(k=>`<span class="cell" style="background:${lvl(pct(lt[k]))[1]}">${esc(k)}</span>`).join('')}</div>
-  <p class="mut">الأحمر = يحتاج معالجة، البرتقالي = جيد، الأخضر = متقن</p>`;
+  const r=by[sel],s2=group(r,x=>sk0(x.skill)),l2=group(r,x=>x.letter),p=pct(r),l=lvl(p);
+  const sks=Object.keys(s2).sort((a,b)=>pct(s2[a])-pct(s2[b]));
+  const wk=sks.filter(k=>pct(s2[k])<85).slice(0,3);
+  h+=`<div class="top"><h3>تقرير الطالب: ${esc(sel)}</h3><button class="alt noprint" onclick="dash()">كل الصف</button></div>
+  <div class="kpis"><div><b>${p}%</b><span>الدقة العامة</span></div><div><b>${r.length}</b><span>إجابة</span></div><div><b>${Object.keys(l2).length}</b><span>حرف</span></div><div><b style="color:${l[1]}">${l[0]}</b><span>المستوى</span></div></div>
+  <div class="ins">${wk.length?`تحتاج ${esc(sel)} إلى مزيد من التدريب في: ${wk.map(esc).join('، ')}.`:'أداء ممتاز في جميع المهارات التي جرّبها.'}</div>
+  <h3>الدقة حسب الحرف</h3><div class="chart">${bars(l2,ORD)}</div>
+  <h3>الدقة حسب المهارة</h3><div class="chart">${bars(s2,sks)}</div>`;
+ }else{
+  const tot=names.length;
+  h+=`<div class="top"><h3>تقرير الصف</h3><span class="mut">${dateS}</span></div>
+  <div class="kpis"><div><b>${tot}</b><span>طالبًا</span></div><div><b>${DATA.length}</b><span>إجابة</span></div><div><b>${all}%</b><span>دقة الصف</span></div><div><b style="color:#e5483f">${cnt.w}</b><span>يحتاجون معالجة</span></div></div>
+  <div class="ins">${all>=85?'مستوى الصف ممتاز.':all>=60?'مستوى الصف جيد، مع مهارات تحتاج تعزيزًا.':'يحتاج الصف إلى تعزيز واسع.'}${wl.length?` أضعف الحروف: ${wl.map(k=>k+' ('+pct(byL[k])+'%)').join('، ')}.`:''}${ws.length?` أضعف المهارات: ${ws.map(k=>k+' ('+pct(bySk[k])+'%)').join('، ')}.`:''}</div>
+  <h3>توزيع مستويات الطلاب</h3>
+  <div class="stack"><i style="flex:${cnt.m};background:#12a36f"></i><i style="flex:${cnt.g};background:#e08a00"></i><i style="flex:${cnt.w};background:#e5483f"></i></div>
+  <div class="leg"><span><u style="background:#12a36f"></u>متقن ${cnt.m}</span><span><u style="background:#e08a00"></u>جيد ${cnt.g}</span><span><u style="background:#e5483f"></u>يحتاج معالجة ${cnt.w}</span></div>
+  <h3>الدقة حسب الحرف</h3><div class="chart">${bars(byL,lk)}</div>
+  <h3>الدقة حسب المهارة (الأضعف أولًا)</h3><div class="chart">${bars(bySk,sk)}</div>
+  ${need.length?`<h3>طلاب يحتاجون معالجة</h3><div class="note" style="background:#ffe3e0;color:#7a1e16">${need.map(n=>{const s3=group(by[n],x=>sk0(x.skill)),w=Object.keys(s3).filter(k=>pct(s3[k])<60).slice(0,2);return `<div><b>${esc(n)}</b> ${pct(by[n])}%${w.length?' — '+w.map(esc).join('، '):''}</div>`}).join('')}</div>`:''}
+  <h3>الطلاب</h3><div class="chart">${names.map((n,i)=>{const p=pr[i],l=lvl(p);return `<div class="br" onclick='dash(${JSON.stringify(n).replace(/'/g,"&#39;")})' style="cursor:pointer"><span class="bk" style="width:auto;min-width:70px">${esc(n)}</span><div class="bar2"><i style="width:${Math.max(p,3)}%;background:${l[1]}"></i></div><span class="bp">${p}%</span></div>`}).join('')}</div><p class="mut noprint">اضغطي اسم الطالب لعرض تقريره.</p>`;
  }
- h+=`<hr><h3>آخر الاستجابات</h3><div class="tbl"><table>${DATA.slice(0,25).map(r=>`<tr><td>${esc(r.name)}</td><td>حرف ${esc(r.letter)}</td><td>${esc(r.skill)}</td><td>${r.ok?'صحيح':'خطأ ('+r.tries+')'}</td></tr>`).join('')}</table></div>
- <hr><h3>الحروف المنشورة للطلاب</h3><div class="minis">${W.map(w=>`<button class="mini ${open(w[0])?'on':''}" onclick="tog('${w[0]}')">${w[0]}</button>`).join('')}</div>
- <p class="mut">الأخضر منشور، والرمادي مغلق. اضغطي لتغيير الحالة.</p><p><button onclick="csv()">تنزيل التقرير CSV</button></p>`;
- el.innerHTML=h;
+ el.innerHTML=h+tail();
 }
+function tail(){return `<div class="noprint"><hr><h3>الحروف المنشورة للطلاب</h3><div class="minis">${W.map(w=>`<button class="mini ${open(w[0])?'on':''}" onclick="tog('${w[0]}')">${w[0]}</button>`).join('')}</div>
+ <p class="mut">الأخضر منشور، والرمادي مغلق. اضغطي لتغيير الحالة.</p><p class="row">${PRINTOK?'<button onclick="window.print()">طباعة / حفظ PDF</button>':''}<button class="alt" onclick="csv()">تنزيل البيانات CSV</button></p></div>`}
+
 function tog(L){
  const cur=PUB||W.map(w=>w[0]);
  const nx=cur.includes(L)?cur.filter(x=>x!==L):[...cur,L];
