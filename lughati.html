@@ -280,7 +280,7 @@ const PRAISE=['ما شاء الله! إجابة صحيحة','رائع جدًا!'
 const praise=()=>PRAISE[Math.floor(Math.random()*PRAISE.length)];
 const mascot=(t,s)=>`<div class="mascot"><span class="owl">🦉</span><div class="bub"><span>${esc(t)}</span><button class="sp" data-say="${esc(s||t)}" aria-label="اقرأ">🔊</button></div></div>`;
 /* ---- home ---- */
-const ok0=i=>isT||(open(ORD[i])&&(i===0||DONE[ORD[i-1]]>=2));
+const ok0=i=>isT||open(ORD[i]);
 const stars=n=>'★'.repeat(n||0);
 function home(t){
  S=null;if(unsub){clearInterval(unsub);unsub=null}updHd();const a=$('#app');
@@ -383,7 +383,7 @@ function fin(Q){
 function end(){
  const L=ORD[S.i],tot=S.qs.length,good=S.qs.filter(x=>x.tries===0).length,weak=[...new Set(S.qs.filter(x=>x.tries>0).map(x=>x.s))],p=Math.round(good/tot*100);
  if(!S.enrich){DONE[L]=Math.max(DONE[L]||0,p>=85?3:p>=60?2:1);saveLocal()}updHd();
- const nx=S.i+1<U.length&&(isT||DONE[L]>=2);
+ const nx=S.i+1<U.length&&open(ORD[S.i+1]);
  $('#app').innerHTML=`<div class="card big-res"><span class="owl">🦉</span><div class="stars" style="color:var(--sun-d)">${'★'.repeat(p>=85?3:p>=60?2:1)}</div><h2>نتيجتك ${p}%</h2>
  ${weak.length?`<div class="fb hint">معالجة: لنُعد التدريب على (${weak.map(esc).join('، ')})</div><button onclick='start(${S.i},${JSON.stringify(weak)})'>أعد المحاولة</button>`:''}
  ${p>=85&&!S.enrich?`<div class="fb ok">إثراء: ممتاز! جرّب التحدّي</div><button onclick="start(${S.i},null,1)">ابدأ التحدّي</button>`:''}
