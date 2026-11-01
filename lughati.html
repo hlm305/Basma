@@ -731,10 +731,10 @@ function tnHome(b){
  if(unsub){clearInterval(unsub);unsub=null}S={tn:1,i:-1};TN=null;scrollTo(0,0);
  const ex=TNW[0];
  $('#app').innerHTML=`<div class="top"><button class="alt" onclick="tnBack()">رجوع</button>${vbH()}</div>
- <section class="card"><h3>ما التنوين؟${TNL?` <span class="chip2" style="font-size:14px">كلمات حرف ${esc(NM[TNL])}</span>`:''}</h3>${TNL&&!TNO?'<p class="fb hint" style="margin:8px 0">ليس في كلمات هذا الحرف كلمة تقبل التنوين، فنتدرّب على كلمات من حروف أخرى.</p>':''}<p class="mut" style="font-size:18px;margin:6px 0 12px">التنوين نون ساكنة تُنطق في آخر الاسم ولا تُكتب حرفًا، بل تُكتب علامة فوق الحرف الأخير أو تحته.</p>
- <div class="tnrow">${TMK.slice().sort((a,b)=>'ًٌٍ'.indexOf(a)-'ًٌٍ'.indexOf(b)).map(m=>{const x=TNM[m];return `<button class="tnk" style="--c:var(${x.c});--cd:var(${x.d})" data-say="${esc(tnF(ex,m))}"><b>${esc(tnF(ex,m))}</b><span>${x.n}</span><small>تُقرأ: ${esc(tnR(ex,m))}</small></button>`}).join('')}</div><p class="fb hint" style="margin:14px 0 0">يُكتب تنوين الفتح مع ألف بعده ( ـًا ) في كل الحروف، إلا إذا انتهت الكلمة بـ <b>ة</b> أو <b>ء</b> فلا نكتب الألف: مَكْتَبَةً.</p></section>
+ <section class="card"><h3>ما التنوين؟${TNL?` <span class="chip2" style="font-size:14px">كلمات حرف ${esc(NM[TNL])}</span>`:''}</h3>${TNL&&!TNO?'<p class="fb hint" style="margin:8px 0">ليس في كلمات هذا الحرف كلمة تقبل التنوين، فنتدرّب على كلمات من حروف أخرى.</p>':''}<p class="mut" style="font-size:18px;margin:6px 0 12px">التنوين علامة تأتي في آخر الاسم: ضمّتان أو فتحتان أو كسرتان.</p>
+ <div class="tnrow">${TMK.slice().sort((a,b)=>'ًٌٍ'.indexOf(a)-'ًٌٍ'.indexOf(b)).map(m=>{const x=TNM[m];return `<button class="tnk" style="--c:var(${x.c});--cd:var(${x.d})" data-say="${esc(tnF(ex,m))}"><b>${esc(tnF(ex,m))}</b><span>${x.n}</span></button>`}).join('')}</div><p class="fb hint" style="margin:14px 0 0">يُكتب تنوين الفتح مع ألف بعده ( ـًا ) في كل الحروف، إلا إذا انتهت الكلمة بـ <b>ة</b> أو <b>ء</b> فلا نكتب الألف: مَكْتَبَةً.</p></section>
  <h3 style="margin:18px 0 10px">اختر تدريبًا</h3>
- <div class="games">${['ٌ','ً','ٍ'].map(m=>{const x=TNM[m];return `<button class="gt" style="--c:var(${x.c});--cd:var(${x.d})" onclick="tnStart('${m}')"><span class="gi" style="font-size:38px;line-height:2;height:66px;display:block;margin-bottom:10px">${x.e}</span><b>${x.n}</b><small>تدريب على ${x.n}</small><em>${stars(tnGS(m))}</em></button>`}).join('')}
+ <div class="games">${['ٌ','ً','ٍ'].map(m=>{const x=TNM[m];return `<button class="gt" style="--c:var(${x.c});--cd:var(${x.d})" onclick="tnStart('${m}')"><span class="gi" style="font-size:38px;line-height:2;height:66px;display:block;margin-bottom:10px">${esc((TNL||'ب')+m+(m==='ً'?'ا':''))}</span><b>${x.n}</b><small>تدريب على ${x.n}</small><em>${stars(tnGS(m))}</em></button>`}).join('')}
  <button class="gt" style="--c:var(--green);--cd:var(--green-d)" onclick="tnStart('all')"><span class="gi">🌟</span><b>تدريب شامل</b><small>الثلاثة معًا</small><em>${stars(tnGS('all'))}</em></button></div>`;
 }
 function tnMk(t,m,w0){
@@ -746,11 +746,8 @@ function tnMk(t,m,w0){
  if(t===2){ // choose the word with this tanween
   return {s:'اختيار الكلمة',p:'أيّ كلمة فيها '+nm.n+'؟',o:shuf(TMK.map(x=>({t:tnF(w,x),ok:x===m,say:tnF(w,x)}))),hint:'ابحث عن علامة '+nm.n+' ('+nm.e+') في آخر الكلمة.'};
  }
- if(t===3){ // reading
-  return {s:'القراءة',p:'كيف تُقرأ هذه الكلمة؟',big:tnF(w,m),say:tnF(w,m),o:shuf(TMK.map(x=>({t:tnR(w,x),ok:x===m}))),hint:'التنوين يُنطق نونًا ساكنة بعد الحركة: '+nm.n+' يُنطق «'+TNM[m].v+'نْ».'};
- }
- if(t===4){ // complete
-  return {s:'أكمل الكلمة',p:'اقرأ: «'+tnR(w,m)+'»  أيّ تنوين يناسب آخر الكلمة؟',big:w[0]+'؟',say:tnR(w,m),full:tnF(w,m),o:shuf(TMK.map(x=>({t:tnL(w,x),ok:x===m,big:1}))),hint:'الكلمة تنتهي بصوت «'+TNM[m].v+'نْ»، أيّ علامة تُعطي هذا الصوت؟'};
+ if(t===3||t===4){ // complete the word with the named tanween
+  return {s:'أكمل الكلمة',p:'أكمل الكلمة بـ '+nm.n,big:w[0]+'؟',say:tnF(w,m),full:tnF(w,m),o:shuf(TMK.map(x=>({t:tnL(w,x),ok:x===m,big:1}))),hint:'ابحث عن '+nm.n+': '+(m==='ٌ'?'ضمّتان':m==='ً'?'فتحتان':'كسرتان')+' في آخر الكلمة.'};
  }
  // 5: odd one out (no tanween)
  const AB=tnBook().filter(x=>x[0]!==w[0]),w2=AB[Math.floor(Math.random()*AB.length)];
@@ -759,7 +756,7 @@ function tnMk(t,m,w0){
 function tnStart(m){
  const cnt={};TNW.forEach(x=>cnt[x[0]]=(cnt[x[0]]||0)+1);const seen={},uq=[];TNW.forEach(x=>{if(!seen[x[0]]){seen[x[0]]=1;uq.push(x)}});
  const own=shuf(uq.filter(x=>cnt[x[0]]>=3)),rest=shuf(uq.filter(x=>cnt[x[0]]<3)),order=[...own,...rest];
- const types=[1,2,3,4,1,2,3,4,5,2],qs=types.map((t,n)=>{const mm=m==='all'?TMK[Math.floor(Math.random()*3)]:m;const q=tnMk(t,mm,order[n%order.length]);q.m=mm;q.tries=0;q.done=0;return q});
+ const types=[1,2,5,1,2,5,1,2,5,1],qs=types.map((t,n)=>{const mm=m==='all'?TMK[Math.floor(Math.random()*3)]:m;const q=tnMk(t,mm,order[n%order.length]);q.m=mm;q.tries=0;q.done=0;return q});
  TN={m,qs,k:0};S={tn:1,i:-1};tnQ();
 }
 function tnQ(){
