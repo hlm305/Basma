@@ -3,15 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>رحلة الحروف – لغتي الصف الأول | إعداد: فاطمة المطيري</title>
-<meta name="description" content="منصة تفاعلية لتعلّم الحروف العربية الثمانية والعشرين: ألعاب وقراءة وإملاء للصف الأول الابتدائي. إعداد: فاطمة المطيري">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="ar_SA">
-<meta property="og:title" content="رحلة الحروف – لغتي الصف الأول">
-<meta property="og:description" content="ألعاب وقراءة وإملاء لتعلّم الحروف الثمانية والعشرين. إعداد: فاطمة المطيري">
-<meta property="og:url" content="https://hlm305.github.io/Basma/lughati.html">
-<meta name="theme-color" content="#0b6e4f">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A6%89%3C/text%3E%3C/svg%3E">
+<title>رحلة الحروف</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
@@ -144,6 +136,14 @@ input{font-family:inherit;font-size:22px;padding:12px 14px;border-radius:16px;bo
 @keyframes swim{0%,100%{transform:translateX(-7px)}50%{transform:translateX(7px)}}
 .fishb.caught{animation:jump .9s ease forwards}@keyframes jump{to{transform:translateY(-250px) scale(.8);opacity:0}}
 .fishb.r{opacity:.35;animation:none}
+.sec{text-align:center;margin:14px 0 4px;padding-top:10px;border-top:2px dashed var(--line)}
+.vw{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000}.vw iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vl{display:inline-block;text-decoration:underline;color:var(--mut);font-size:15px;padding:8px 14px}
+.tuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.tc{display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:10px 10px 12px;text-align:center;--c:hsl(var(--h) 70% 50%);--cd:hsl(var(--h) 65% 34%)}
+.tc svg{width:100%;height:auto;display:block;background:hsl(var(--h) 70% 42%);border-radius:14px}
+.tc b{font-size:16px;line-height:1.35}.tc.on{outline:4px solid var(--sun);outline-offset:2px}
+.lamrule{display:grid;gap:6px;background:var(--paper2);border-radius:16px;padding:10px 14px;font-size:17px;margin-bottom:10px}
 .bubble{position:absolute;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.4)}
 /* syllable windows + analysis */
 .wins{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
@@ -176,6 +176,11 @@ input{font-family:inherit;font-size:22px;padding:12px 14px;border-radius:16px;bo
 .vb small{display:block;font-size:11px;font-weight:600;opacity:.8}
 body.nv .sp,body.nv .sayb,body.nv .lhero button{display:none!important}
 .vtoast{position:fixed;inset-inline:16px;bottom:max(18px,env(safe-area-inset-bottom,0px));margin:auto;max-width:420px;background:#1d2b53;color:#fff7e4;border-radius:18px;padding:12px 16px;font-weight:800;text-align:center;z-index:60;box-shadow:0 6px 0 rgba(0,0,0,.25)}
+.tnb{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;--c:var(--plum);--cd:var(--plum-d);font-size:22px;margin:0 0 16px}
+.tnb small{font-size:26px;letter-spacing:4px}
+.tnrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tnk{display:flex;flex-direction:column;gap:2px;align-items:center;padding:12px 8px;line-height:1.5}
+.tnk b{font-size:40px;font-weight:800}.tnk span{font-size:17px;font-weight:800}.tnk small{font-size:14px;font-weight:600;opacity:.9}
 @media print{body{background:#fff!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.noprint,.hd,.ft,.top button{display:none!important}.card{border:0}}
 .tbl{margin-bottom:14px}.xt th{background:#0f9d6b;color:#fff;text-align:center}.xt td{text-align:center;border:1px solid var(--line)}.xt tr:nth-child(even) td{background:var(--paper2)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -195,14 +200,14 @@ const U=[
 ['ل',['لِمَاذَا','جَلَسَتْ','يَغْسِلُ','الْأَكْل','قَبْل'],'هُوَ يَغْسِلُ يَدَيْهِ'],
 ['د',['دَرَّاجَة','وَرْد','حَدِيقَة','دُمْيَة','خَالِد'],'وَأَنَا أَلْعَبُ مَعَ صَدِيقِي خَالِدٍ'],
 ['ن',['نُورَة','نَحْنُ','نَظَافَة','تَعَاوُن','تَكْنُسُ'],'وَأُمِّي تَكْنُسُ'],
-['ر',['رَحَّبَ','رَأْس','يَاسِر','فَرْحَة'],'أَنَا فَرِحَةٌ بِقُدُومِ جَدِّي'],
+['ر',['رَحَّبَ','رَأْس','يَاسِر','فَرِحَة'],'أَنَا فَرِحَةٌ بِقُدُومِ جَدِّي'],
 ['ص',['صَالِح','صِحَّتِي','مَقْصَف','عَصِير','أَحْرِص'],'أَحْرِصُ عَلَى صِحَّتِي وَنَظَافَةِ مَدْرَسَتِي'],
 ['ف',['فَصْل','فُصُول','نَافِذَة','رَفّ','نَظِيف'],'فَصْلِي أَجْمَلُ الْفُصُولِ'],
 ['س',['سُور','مَدْرَسَتِي','فَسِيحَة','رُسُوم'],'أَنَا أُحِبُّ مَدْرَسَتِي'],
 ['ق',['قَالَ','الْقِرَاءَة','الْقِصَص','الْقُرْآن','الْعُقُول'],'الْقِرَاءَةُ تُنِيرُ الْعُقُولَ'],
 ['ت',['تُوت','تُفَّاح','تِين','أُرَتِّب','قَالَتْ'],'فِي السَّلَّةِ تُفَّاحٌ وَتِينٌ وَتُوتٌ'],
 ['ح',['حَامِد','يَحْرُسُ','لَحِقَ','فَرِحَ'],'فَرِحَ الْفَرِيقُ بِالْفَوْزِ'],
-['أ',['أَنَا','إِبْرَاهِيم','أَمْوَاج','أُحِبُّ'],'أَنَا أُحِبُّ مَدِينَتِي'],
+['أ',['أَنَا','إِبْرَاهِيم','أَعِيش','أَمْوَاج','أُحِبُّ'],'أَنَا أُحِبُّ مَدِينَتِي'],
 ['ط',['طَارِق','طَبِيعَة','مَطَر','طُيُور','لَطِيف'],'أَنَا طَارِقٌ أَعِيشُ فِي مَدِينَةِ أَبْهَا'],
 ['ز',['زُهَيْر','زِيَاد','زَمْزَم'],'هَذَا أَخِي زِيَادٌ'],
 ['و',['وَلِيد','وَاسِعَة','تَبُوك','فَوَاكِه','زُهُور'],'أَنَا وَلِيدٌ وَمَدِينَتِي تَبُوكُ'],
@@ -220,6 +225,15 @@ const U=[
 ['ظ',['ظَرْف','ظَبْي','ظِلّ','ظُفْر'],'الظَّبْيُ سَرِيعٌ',1]];
 /* pictures (emoji) for words that can be drawn */
 const PIC={'بَيْت':'🏠','مَكْتَبَة':'📚','كُتُب':'📚','حَاسُوب':'💻','دَرَّاجَة':'🚲','وَرْد':'🌹','حَدِيقَة':'🌳','دُمْيَة':'🧸','نَافِذَة':'🪟','عَصِير':'🧃','تُوت':'🍓','تُفَّاح':'🍎','رُسُوم':'🎨','أُمِّي':'👩','مَطَر':'🌧️','طُيُور':'🐦','زُهُور':'🌸','شَمْس':'☀️','شَاطِئ':'🏖️','مَسَاجِد':'🕌','أَبْرَاج':'🏙️','مَتَاجِر':'🏪','شِرَاعِيَّة':'⛵','يَد':'✋','يَمَامَة':'🕊️','عَصْفُور':'🦜','عِنَب':'🍇','عَلَم':'🚩','عَسَل':'🍯','ثَوْب':'👕','ثَعْلَب':'🦊','ثَلْج':'❄️','ثُعْبَان':'🐍','خُبْز':'🍞','خَرُوف':'🐑','خَيْمَة':'⛺','ذُرَة':'🌽','ذِئْب':'🐺','ضِفْدَع':'🐸','ضَوْء':'💡','ظَرْف':'✉️','ظَبْي':'🦌','غَيْمَة':'☁️','غُرْفَة':'🛏️','كِتَاب':'📖','كَلْب':'🐶','كُرَة':'⚽','كُرْسِي':'🪑','هِلَال':'🌙','هَاتِف':'📱','هَدِيَّة':'🎁','نَظَافَة':'🧼','فَوَاكِه':'🍉','مَدْرَسَتِي':'🏫'};
+/* first grade reads every word vowelled to the last letter: an unvowelled last letter (book style) gets tanween damm, like the book's own analysis
+   exercises (حَفْلَةٌ، مَسْبَحٌ). Words that cannot take tanween get damma: (ال) words, names/plurals that are ممنوع من الصرف, and verbs. */
+const NOTAN=['فاطمة','مريم','نورة','إبراهيم','زمزم','تبوك','شيماء','نجود','مساجد','متاجر','فواكه','أحرص','أرتب','أعيش','قبل'];
+(()=>{const V=/[ًٌٍَُِْ]/,T=/[ً-ْ]/;
+ const fv=w=>{const c=[...w];let k=c.length-1;while(k>=0&&T.test(c[k]))k--;if(k<1)return w;const m=c.slice(k+1).join('');if(V.test(m))return w;
+  let j=k-1;while(j>=0&&T.test(c[j]))j--;const pv=c.slice(j+1,k).join('');if((pv.includes('َ')&&c[k]==='ا')||(pv.includes('ُ')&&c[k]==='و')||(pv.includes('ِ')&&c[k]==='ي')||(c[k]==='ا'&&j>=0))return w;
+  const p=w.replace(/[ً-ْٰ]/g,'');return w+(p.startsWith('ال')||NOTAN.includes(p)?'ُ':'ٌ')};
+ const P={};for(const k in PIC)P[fv(k)]=PIC[k];for(const k in PIC)delete PIC[k];Object.assign(PIC,P);
+ U.forEach(u=>{u[1]=u[1].map(fv)});})();
 const ORD=U.map(u=>u[0]),ALPHA='أبتثجحخدذرزسشصضطظعغفقكلمنهوي'.split('');
 const W=ORD.map(l=>[l]),POOL=[...new Set(U.flatMap(u=>u[1]))],NC='ادذرزوأ';
 const NM={'أ':'ألف','ب':'باء','ت':'تاء','ث':'ثاء','ج':'جيم','ح':'حاء','خ':'خاء','د':'دال','ذ':'ذال','ر':'راء','ز':'زاي','س':'سين','ش':'شين','ص':'صاد','ض':'ضاد','ط':'طاء','ظ':'ظاء','ع':'عين','غ':'غين','ف':'فاء','ق':'قاف','ك':'كاف','ل':'لام','م':'ميم','ن':'نون','ه':'هاء','و':'واو','ي':'ياء'};
@@ -263,10 +277,13 @@ function syls(a){
   while(i<a.length&&hasSk(a[i])){e=i;i++}
   out.push([s,e]);
  }
+ /* like the book (صَا - بِـ - ـر، حَفْـ - ـلَـ - ـةٌ): a last letter with no vowel is its own part */
+ const n=a.length-1,L=out[out.length-1];
+ if(n>0&&L&&L[1]===n&&L[0]<n&&!hasV(a[n])&&!(vowelOf(a[n-1])&&MADD[vowelOf(a[n-1])]===a[n].b&&L[0]===n-1)){L[1]=n-1;out.push([n,n])}
  return out;
 }
 const sylT=(a,s,e)=>(jb(a,s)?TT:'')+whole(a.slice(s,e+1))+(jf(a,e)?TT:'');
-const sukAt=a=>{for(let k=1;k<a.length;k++){if(hasSk(a[k])&&hasV(a[k-1])&&!a[k-1].m.includes('ّ'))return k}return -1};
+const sukAt=a=>{for(let k=1;k<a.length-1;k++){if(hasSk(a[k])&&hasV(a[k-1])&&!a[k-1].m.includes('ّ'))return k}return -1};
 /* ---- voice: speaks only inside a tap ---- */
 let VS=[],VN='';
 const lv=()=>{try{VS=speechSynthesis.getVoices().filter(v=>/^ar/i.test(v.lang))}catch(e){}};
@@ -321,30 +338,59 @@ function home(t){
  const n=ORD.filter(l=>DONE[l]).length,p=Math.round(n/28*100);
  a.innerHTML=`<div class="top"><h2>أهلًا يا ${esc(NAME)}</h2><span class="row">${vbH()}${isT?'<button class="alt" onclick="dash()">لوحة المعلمة</button>':''}<button class="alt" onclick="NAME=\'\';saveLocal();home()">تغيير الاسم</button></span></div>
  <div class="seg"><button class="${t==='i'?'':'on'}" onclick="home()">رحلتي</button><button class="${t==='i'?'on':''}" onclick="home('i')">جزيرة الحروف</button></div>`+(t==='i'?
- `<p class="mut">اضغط على أي حرف لتتعرّف عليه وتسمع اسمه</p><div class="path">${ALPHA.map((l,i)=>`<button class="bal" style="--h:${HUE(i)}" onclick="showL('${l}',${i})">${l}</button>`).join('')}</div><div id="fm"></div>`:
+ `<p class="mut">اضغط على أي حرف لتتعرّف عليه وتسمع اسمه</p><div class="path">${ALPHA.map((l,i)=>`<button class="bal" style="--h:${HUE(i)}" onclick="showL('${l}',${i})">${LD(l)}</button>`).join('')}</div><div id="fm"></div>`:
  `<section class="card"><div class="ptop"><h3>رحلتي</h3><span class="mut">أنجزت ${n} من 28 حرفًا</span></div><div class="pb" style="--x:${p}%"><i style="width:${p}%"></i><span class="rk">🚀</span></div></section>
- <div class="path">${ORD.map((l,i)=>ok0(i)?`<button class="st ${DONE[l]?'done':''}" style="--h:${HUE(i)}" onclick="learn(${i})">${l}<small>${stars(DONE[l])}</small></button>`:`<button class="st lock" style="--h:${HUE(i)}" disabled>${l}<small>مغلق</small></button>`).join('')}</div>`);
+ <div class="path">${ORD.map((l,i)=>ok0(i)?`<button class="st ${DONE[l]?'done':''}" style="--h:${HUE(i)}" onclick="learn(${i})">${LD(l)}<small>${stars(DONE[l])}</small></button>`:`<button class="st lock" style="--h:${HUE(i)}" disabled>${l}<small>مغلق</small></button>`).join('')}</div>`);
 }
 function setName(){const v=$('#nm').value.trim();if(!v)return;NAME=v.slice(0,30);saveLocal();home()}
-const formsH=l=>{const f=forms(l),nm=['منفصل','أول','وسط','آخر'];return `<div class="forms">${f.map((x,j)=>`<div><b>${x}</b><small>${nm[j]}</small></div>`).join('')}</div>${NC.includes(l)?'<p class="mut" style="margin:8px 0 0;text-align:center">هذا الحرف لا يتصل بما بعده</p>':''}`};
+/* the letter هـ is written with its tail on the boards, and its forms start with the initial form (as taught in class) */
+const LD=l=>l==='ه'?'هـ':l;
+const VD=(l,s,j)=>l==='ه'&&j<3?s+TT:s;
+const formsH=l=>{const f=forms(l),nm=['منفصل','أول','وسط','آخر'],ord=l==='ه'?[1,2,3,0]:[0,1,2,3];return `<div class="forms">${ord.map(j=>`<div><b>${f[j]}</b><small>${nm[j]}</small></div>`).join('')}</div>${NC.includes(l)?'<p class="mut" style="margin:8px 0 0;text-align:center">هذا الحرف لا يتصل بما بعده</p>':''}`};
 function showL(l,i){
- $('#fm').innerHTML=`<div class="card" style="margin-top:20px"><div class="lhero card" style="--h:${HUE(i)};margin:0 0 12px"><div class="big">${l}</div><button data-say="${NS[l]}">اسم الحرف: ${NM[l]}</button></div>${formsH(l)}<div class="vow" style="margin-top:12px">${SY(l).map((s,j)=>`<div><button data-say="${s}">${s}</button><small>${SYN[j]}</small></div>`).join('')}</div></div>`;
+ $('#fm').innerHTML=`<div class="card" style="margin-top:20px"><div class="lhero card" style="--h:${HUE(i)};margin:0 0 12px"><div class="big">${LD(l)}</div><button data-say="${NS[l]}">اسم الحرف: ${NM[l]}</button></div>${formsH(l)}<div class="vow" style="margin-top:12px">${SY(l).map((s,j)=>`<div><button data-say="${s}">${VD(l,s,j)}</button><small>${SYN[j]}</small></div>`).join('')}</div></div>`;
  $('#fm').scrollIntoView({behavior:reduce?'auto':'smooth'});
 }
 /* ---- letter page ---- */
-const GN={w:'كلمات من حروف',f:'أشكال الحرف',m:'صيد المدود',s:'المقطع الساكن',a:'تحليل الكلمة',p:'اقرأ وطابق',r:'اقرأ الجملة'};
+const GN={w:'كلمات من حروف',f:'أشكال الحرف',m:'صيد المدود',s:'المقطع الساكن',a:'تحليل الكلمة',p:'اقرأ وطابق',r:'اقرأ الجملة',l:'اللام الشمسية والقمرية',d:'فكّ الشدّة',h:'مهارة الشدّة'};
 const GC={w:['--sky','--sky-d','🧩','رتّب مقاطع الكلمة'],f:['--coral','--coral-d','🔤','اختر شكل الحرف في مكانه'],m:['--plum','--plum-d','🎣','اصطد المدّ المناسب'],
- s:['--green','--green-d','🪟','افتح النوافذ واقرأ'],a:['--sun-d','--sun-d','🔍','مقاطع الكلمة وحروفها'],p:['--coral','--coral-d','🖼️','طابق الكلمة بصورتها'],r:['--sky','--sky-d','📖','أكمل الجملة']};
+ s:['--green','--green-d','🪟','افتح النوافذ واقرأ'],a:['--sun-d','--sun-d','🔍','مقاطع الكلمة وحروفها'],p:['--coral','--coral-d','🖼️','طابق الكلمة بصورتها'],r:['--sky','--sky-d','📖','أكمل الجملة'],l:['--plum','--plum-d','☀️🌙','هل نسمع اللام؟'],d:['--coral','--coral-d','✂️','الشدّة حرفان'],h:['--coral','--coral-d','✂️','أفكّ الشدّة ثم أحلّل الكلمة']};
 const GK=['w','f','m','s','a','p','r'];
-function gtiles(i){return `<div class="games" id="gm">${GK.map(k=>`<button class="gt" style="--c:var(${GC[k][0]});--cd:var(${GC[k][1]})" onclick="G('${k}',${i})"><span class="gi">${GC[k][2]}</span><b>${GN[k]}</b><small>${GC[k][3]}</small><em>${stars(GS[ORD[i]+':'+k])}</em></button>`).join('')}</div>`}
+/* reading the lesson passage: YouTube videos the teacher chose, one per letter (letters without a video show no tile) */
+const VID={'م':'xNW2AzqrFk4','ب':'PrumakGHnXE','ل':'vlFpG5iCJNo','د':'TAj7-08Ik94','ن':'39oRFEK7r4M','ر':'wZR1lKdZ2kM','ف':'gb60NNsACiA','ت':'Yvp6AJUJCDY','ح':'6Vq3WZf1wOc','ش':'JimStf4YXts','أ':'-O7S6E5Vp6g','ق':'fFf1i0glmQ4','ع':'cw2_rqC-WpE','ث':'eAC7ApyBK9o',
+ 'ص':'c_GJYxBB3J8','س':'ZBbohtuxx6o','ك':'gVNRBXgXMic','ي':'_r5KxUn5YPs','غ':'JpCrjjEPXyM','خ':'GXNADNDcK7U','ذ':'jpcvhVDCE_U','ظ':'Dc2gkuX1NS4',
+ 'ط':'zrAZLAmsiaI','ز':'GdVi6EzVejk','و':'S94q9Ckb-oQ','ج':'56jjrDid0qA','ه':'ceJgkFUrIYY','ض':'jj7nokpjwf0'};
+function gtiles(i){const L=ORD[i];return `<div class="games" id="gm">${VID[L]?`<button class="gt" style="--c:var(--green);--cd:var(--green-d)" onclick="vid(${i})"><span class="gi">🎬</span><b>قراءة القطعة</b><small>شاهد واقرأ مع الفيديو</small><em>${stars(GS[L+':v'])}</em></button>`:''}<button class="gt" style="--c:var(--plum);--cd:var(--plum-d)" onclick="tut(${i})"><span class="gi">📺</span><b>مقاطع تعليمية</b><small>شرح السكون والمدود والشدّة وغيرها</small><em></em></button>${[...GK,'l','h'].map(k=>`<button class="gt" style="--c:var(${GC[k][0]});--cd:var(${GC[k][1]})" onclick="G('${k}',${i})"><span class="gi">${GC[k][2]}</span><b>${GN[k]}</b><small>${GC[k][3]}</small><em>${stars(GS[L+':'+k])}</em></button>`).join('')}<button class="gt" style="--c:var(--plum);--cd:var(--plum-d)" onclick="tnHome(${i})"><span class="gi">🌟</span><b>التنوين</b><small>ضم وفتح وكسر</small><em>${stars(Math.max(tnGS('ٌ'),tnGS('ً'),tnGS('ٍ'),tnGS('all')))}</em></button></div>`}
+/* teaching videos chosen by the teacher, shared by every letter (last tile in each letter's skills) */
+const TUT=[['السكون','aXloqdxNZlM','ْ'],['الحركات القصيرة والطويلة (المدود)','mdwUZ_hlGhg','ـَا'],['الشدّة','pi5SxozfJSo','ـّ'],['ال القمرية وال الشمسية','vMB6ySDTBxk','ال'],
+ ['تحليل الكلمات إلى مقاطع','W4HIk6Jp35k','✂'],['اسم الإشارة (هذا - هذه)','tdfbs5Fx7_Q','👉'],['ضمير المتكلم (أنا - نحن)','mH2DL5imSiI','🙋']];
+const TART=[`<circle cx="80" cy="58" r="36" fill="#fff" opacity=".18"/><text x="80" y="76" text-anchor="middle" font-size="50" fill="#fff" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">ب</text><circle cx="80" cy="20" r="9" fill="none" stroke="#ffd23f" stroke-width="5"/><circle cx="80" cy="20" r="15" fill="none" stroke="#ffd23f" stroke-width="2" opacity=".5"/>`,`<text x="132" y="50" text-anchor="middle" font-size="30" fill="#fff" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">بَا</text><text x="80" y="50" text-anchor="middle" font-size="30" fill="#fff" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">بُو</text><text x="28" y="50" text-anchor="middle" font-size="30" fill="#fff" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">بِي</text><path d="M146 76 H18" stroke="#ffd23f" stroke-width="5" stroke-linecap="round"/><path d="M28 66 L14 76 L28 86" fill="none" stroke="#ffd23f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`,`<text x="128" y="40" text-anchor="middle" font-size="26" fill="#fff" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">بْ</text><text x="104" y="38" text-anchor="middle" font-size="22" fill="#ffd23f" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">+</text><text x="80" y="40" text-anchor="middle" font-size="26" fill="#fff" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">بَ</text><text x="56" y="38" text-anchor="middle" font-size="22" fill="#ffd23f" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">=</text><rect x="8" y="12" width="40" height="40" rx="12" fill="#fff" opacity=".22"/><text x="28" y="44" text-anchor="middle" font-size="28" fill="#ffd23f" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">بَّ</text><text x="80" y="90" text-anchor="middle" font-size="16" fill="#fff" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">حرفان في حرف</text>`,`<g stroke="#ffd23f" stroke-width="4" stroke-linecap="round"><path d="M34 22v-8M34 82v8M8 52h-6M66 52h-4M15 33l-5-5M53 71l5 5M15 71l-5 5M53 33l5-5"/></g><circle cx="34" cy="52" r="17" fill="#ffd23f"/><path d="M140 32a22 22 0 1 0 6 36a17 17 0 1 1 -6 -36z" fill="#fff"/> <text x="84" y="66" text-anchor="middle" font-size="28" fill="#fff" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">ال</text>`,`<rect x="108" y="26" width="46" height="44" rx="12" fill="#fff"/><rect x="57" y="26" width="46" height="44" rx="12" fill="#ffd23f"/><rect x="6" y="26" width="46" height="44" rx="12" fill="#fff"/><text x="131" y="58" text-anchor="middle" font-size="22" fill="#2a2a5a" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">مِشْـ</text><text x="80" y="58" text-anchor="middle" font-size="22" fill="#2a2a5a" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">ـعَـ</text><text x="29" y="58" text-anchor="middle" font-size="22" fill="#2a2a5a" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">ـلٌ</text><path d="M105.5 16v64M54.5 16v64" stroke="#fff" stroke-width="3" stroke-dasharray="5 5"/><text x="80" y="96" text-anchor="middle" font-size="18">✂️</text>`,`<text x="124" y="54" text-anchor="middle" font-size="34">👦</text><text x="36" y="54" text-anchor="middle" font-size="34">👧</text><text x="80" y="48" text-anchor="middle" font-size="22">👉</text><text x="124" y="88" text-anchor="middle" font-size="22" fill="#fff" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">هذا</text><text x="36" y="88" text-anchor="middle" font-size="22" fill="#ffd23f" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">هذه</text>`,`<text x="124" y="54" text-anchor="middle" font-size="34">🙋</text><text x="40" y="54" text-anchor="middle" font-size="30">🧑‍🤝‍🧑</text><text x="124" y="88" text-anchor="middle" font-size="22" fill="#fff" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">أنا</text><text x="40" y="88" text-anchor="middle" font-size="22" fill="#ffd23f" font-family="'Baloo Bhaijaan 2','Cairo',sans-serif" font-weight="800">نحن</text>`],THUE=[205,265,14,40,150,320,185];
+function tut(i,k){
+ S=null;updHd();const has=k!==undefined,T=has?TUT[k]:null;
+ $('#app').innerHTML=`<div class="top"><button class="alt" onclick="learn(${i})">رجوع</button><h2>مقاطع تعليمية</h2></div>`+
+ (has?`<div class="card"><h3 style="text-align:center;margin-bottom:10px">${T[0]}</h3><div class="vw"><iframe src="https://www.youtube-nocookie.com/embed/${T[1]}?rel=0&playsinline=1" title="${T[0]}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+ <p class="row" style="margin-top:12px"><a class="alt vl" href="https://www.youtube.com/watch?v=${T[1]}" target="_blank" rel="noopener">إن لم يظهر الفيديو، افتحه في يوتيوب</a></p></div>`:mascot('اختر المهارة التي تريد تعلّمها','اختر المهارة التي تريد تعلّمها'))+
+ `<div class="tuts">${TUT.map((t,j)=>`<button class="tc ${j===k?'on':''}" style="--h:${THUE[j]}" onclick="tut(${i},${j})" aria-label="${t[0]}"><svg viewBox="0 0 160 100" aria-hidden="true">${TART[j]}</svg><b>${t[0]}</b></button>`).join('')}</div>`;
+ scrollTo(0,0);
+}
+function vid(i){
+ const L=ORD[i];S=null;updHd();
+ $('#app').innerHTML=`<div class="top"><button class="alt" onclick="learn(${i})">رجوع</button><h2>قراءة القطعة: حرف ${NM[L]}</h2></div>`+mascot('شاهد الفيديو، واقرأ القطعة مع المعلّم بصوت واضح','شاهد الفيديو، واقرأ القطعة مع المعلّم بصوت واضح')+
+ `<div class="card"><div class="vw"><iframe src="https://www.youtube-nocookie.com/embed/${VID[L]}?rel=0&playsinline=1" title="قراءة قطعة حرف ${NM[L]}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+ <p class="row" style="margin-top:12px"><a class="alt vl" href="https://www.youtube.com/watch?v=${VID[L]}" target="_blank" rel="noopener">إن لم يظهر الفيديو، افتحه في يوتيوب</a></p>
+ <p class="row"><button class="go" id="vd" onclick="vDone(${i})">قرأت القطعة ✓</button></p><div id="msg"></div></div>`;
+ scrollTo(0,0);
+}
+function vDone(i){const L=ORD[i],b=$('#vd');if(b.disabled)return;b.disabled=true;GS[L+':v']=3;saveLocal();updHd();burst();log({letter:L,skill:'قراءة القطعة',ok:true,tries:0});
+ $('#msg').innerHTML=`<div class="fb ok">${praise()}</div><p class="row"><button class="alt" onclick="learn(${i})">العودة للحرف</button></p>`}
 const wordBtn=w=>`<button class="w" data-say="${esc(w)}">${PIC[w]?`<span class="pic">${PIC[w]}</span>`:''}${w}</button>`;
 function learn(i){
  const [L,ws,sn,pv]=U[i];S=null;updHd();
  $('#app').innerHTML=`<div class="top"><button class="alt" onclick="home()">رجوع</button>${vbH()}</div>
  ${isT&&pv?'<div class="note">ملاحظة للمعلمة (لا تظهر للطلاب): كلمات هذا الحرف وجملته من اختياري، وليست من كتاب الوحدات الثلاث. قارنيها بالكتاب.</div>':''}
- <div class="card lhero" style="--h:${HUE(i)}"><div class="big">${L}</div><button data-say="${NS[L]}">🔊 اسم الحرف</button></div>
+ <div class="card lhero" style="--h:${HUE(i)}"><div class="big">${LD(L)}</div><button data-say="${NS[L]}">🔊 اسم الحرف</button></div>
  <div class="card"><h3>أشكال الحرف</h3><div style="margin-top:10px">${formsH(L)}</div></div>
- <div class="card"><h3>الحركات القصيرة والطويلة</h3><div class="vow" style="margin-top:10px">${SY(L).map((s,j)=>`<div><button data-say="${s}">${s}</button><small>${SYN[j]}</small></div>`).join('')}</div></div>
+ <div class="card"><h3>الحركات القصيرة والطويلة</h3><div class="vow" style="margin-top:10px">${SY(L).map((s,j)=>`<div><button data-say="${s}">${VD(L,s,j)}</button><small>${SYN[j]}</small></div>`).join('')}</div></div>
  <div class="card"><h3>كلمات الحرف</h3><div class="row" style="margin-top:10px">${ws.map(wordBtn).join('')}</div>${sn?`<h3 style="margin-top:14px">جملة</h3><div class="row" style="margin-top:8px"><button class="w" style="font-size:24px" data-say="${esc(sn)}">${sn}</button></div>`:''}</div>
  <h3 style="margin:18px 0 10px">ألعاب المهارات</h3>${gtiles(i)}
  <p class="row" style="margin-top:18px"><button class="go" onclick="start(${i})">ابدأ التدريب</button></p>`;
@@ -364,8 +410,8 @@ function build(i){
  let v=null;
  for(const w of ws){const m=[...w];for(let k=0;k<m.length-1;k++){if(nz(m[k])===t&&'َُِ'.includes(m[k+1])){v=[w,m[k],m[k+1]];break}}if(v)break}
  if(v)Q.push(mk('تجريد الحرف','أجرّد الحرف من كلمة «'+v[0]+'» وأقرؤه:',[v[1]+'َ',v[1]+'ُ',v[1]+'ِ'],'َُِ'.indexOf(v[2]),'انطق أول مقطع في الكلمة'));
- const n=tiles(ws[0]).length;
- Q.push(mk('التحليل','كم حرفًا في كلمة «'+ws[0]+'»؟',[n-1,n,n+1].map(String),1,'عُدّ الحروف: '+tiles(ws[0]).join(' - ')));
+ const wa=ws.find(w=>!w.includes('ّ'))||ws[0],n=tiles(wa).length;
+ Q.push(mk('التحليل','كم حرفًا في كلمة «'+wa+'»؟',[n-1,n,n+1].map(String),1,'عُدّ الحروف: '+tiles(wa).join(' - ')));
  const sw=[...ws,...POOL].find(w=>w.includes('ّ'));
  Q.push(mk('الشدّة','أيّ كلمة فيها شدّة؟',[sw,...shuf(POOL.filter(w=>!w.includes('ّ'))).slice(0,2)],0,'الشدّة علامة تشبه حرف (ـّ) فوق الحرف'));
  const w3=shuf(ws)[0];
@@ -463,7 +509,8 @@ function gSuk(i){
  }
  return out;
 }
-function gAna(i){return U[i][1].filter(w=>{const n=parseW(w).length;return n>=2&&n<=7}).slice(0,3).map(w=>{const a=parseW(w);return{w,a,sy:syls(a),step:0}})}
+/* word analysis avoids words with a shadda */
+function gAna(i){const ok=w=>{const n=parseW(w).length;return n>=2&&n<=7&&!w.includes('ّ')};let c=U[i][1].filter(ok);if(c.length<2)c=[...c,...POOL.filter(w=>ok(w)&&!c.includes(w)&&nz(w).includes(nz(U[i][0])))];return c.slice(0,3).map(w=>{const a=parseW(w);return{w,a,sy:syls(a),step:0}})}
 function gPic(i){
  const t=nz(U[i][0]),ws=U[i][1],has=w=>PIC[w];
  let c=ws.filter(has);
@@ -480,14 +527,78 @@ function gSent(i){
  return pick.map(k=>{const c=words[k],d=shuf([...U[i][1],...POOL].filter(w=>w!==c&&!words.includes(w)&&plain(w).length>=3)).slice(0,2);
   return{sn,words,k,opts:shuf([{t:c,ok:true},...d.map(t=>({t,ok:false}))])}});
 }
+/* ---- اللام الشمسية والقمرية: words starting with (ال) taken only from the book words and sentences (not the provisional letters) ---- */
+/* words with (ال) taken from the reading texts of the book, units 1-3, with damma on the last letter */
+const LAMB={s:['النَّافِذَةُ','السَّمَاءُ','الشَّاطِئُ','الشَّمْسُ','الرَّمْلُ','الرِّيَاضُ','الدَّمَّامُ','السَّلَّةُ','الزُّهُورُ','التَّمْرُ'],
+ q:['الْكُتُبُ','الْفُصُولُ','الْمَقْصَفُ','الْقُرْآنُ','الْقِصَصُ','الْمُعَلِّمُ','الْعُقُولُ','الْكُرَةُ','الْفَرِيقُ','الْفَوْزُ','الْأَمْوَاجُ','الْكَعْبَةُ','الْبَحْرُ','الْأَرْضُ']};
+const lamWords=()=>['s','q'].flatMap(t=>LAMB[t].map(w=>({w,a:parseW(w),t})));
+const LAMN={q:['🌙','لام قمرية','اللام تُنطق، وعليها سكون ( ْ )'],s:['☀️','لام شمسية','اللام تُكتب ولا تُنطق، والحرف بعدها عليه شدّة ( ّ )']};
+function gLam(){const all=shuf(lamWords()),q=all.filter(x=>x.t==='q'),sh=all.filter(x=>x.t==='s');
+ return shuf([...sh.slice(0,5),...q.slice(0,5)])}
+const lamSplit=R=>`<span class="syb" style="--h:${R.t==='q'?230:40}">${R.a[0].b+R.a[1].b+R.a[1].m}${TT}</span> + <span class="syb" style="--h:150">${whole(R.a.slice(2))}</span>`;
+function grL(R){
+ $('#app').innerHTML=gTop()+mascot('اقرأ الكلمة: هل نسمع صوت اللام؟',R.w)+`<div class="card">
+ <div class="lamrule"><div>🌙 <b>القمرية</b>: نسمع اللام ( الْـ )</div><div>☀️ <b>الشمسية</b>: لا نسمع اللام، والحرف بعدها مشدّد ( ـّ )</div></div>
+ ${picH(R.w)}<div class="wline" id="wl"><span class="fx">${esc(R.w)}</span></div><p class="row"><button class="sayb" data-say="${esc(R.w)}">🔊 اسمع الكلمة</button></p>
+ <div class="fopts" id="op">${['q','s'].map(k=>`<button class="o t" onclick="glPick('${k}')">${LAMN[k][0]}<br>${LAMN[k][1]}</button>`).join('')}</div><div id="msg"></div></div>`;
+}
+function glPick(k){
+ const R=S.r[S.k];if(R.done)return;const b=$('#op').children[k==='q'?0:1];
+ if(k===R.t){R.done=1;b.classList.add('g');$('#msg').innerHTML=`<div class="fb ok">${praise()} ${LAMN[k][1]}: ${LAMN[k][2]}<div class="row" style="margin-top:8px">${lamSplit(R)}</div></div>`;gDone(R,1)}
+ else{R.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">انظر إلى اللام: هل عليها سكون ( ْ )؟ أم على الحرف الذي بعدها شدّة ( ّ )؟</div>`}
+}
+/* ---- فكّ الشدّة: book words with a shadda (not the provisional letters); the doubled letter = a letter with sukun + the same letter with its vowel ---- */
+function gShd(){
+ const seen=new Set(),out=[];
+ U.filter(u=>!u[3]).forEach(u=>u[1].forEach(w=>{const a=parseW(w),k=a.findIndex(x=>x.m.includes('ّ'));if(k<1||seen.has(w))return;seen.add(w);
+  const c=a[k].b,v=a[k].m.replace('ّ','')||'',open=[...a.slice(0,k),{b:c,m:'ْ'},{b:c,m:v},...a.slice(k+1)];
+  out.push({w,a,k,c,v,open,opts:shuf([{t:c+'ْ'+' + '+c+v,ok:true},{t:c+v+' + '+c+'ْ',ok:false},{t:c+v,ok:false}])})}));
+ return shuf(out).slice(0,8);
+}
+function grD(R){
+ $('#app').innerHTML=gTop()+mascot('الشدّة حرفان: الأول ساكن، والثاني متحرّك',R.w)+`<div class="card">${picH(R.w)}<div class="wline" id="wl"><span class="fx">${esc(R.w)}</span></div><p class="row"><button class="sayb" data-say="${esc(R.w)}">🔊 اسمع الكلمة</button></p>
+ <div class="gtitle">الحرف المشدّد ( ${R.c}${R.v}ّ ) يُفكّ إلى:</div><div class="fopts" id="op">${R.opts.map((o,j)=>`<button class="o t" onclick="gdPick(${j})">${o.t}</button>`).join('')}</div><div id="msg"></div></div>`;
+}
+function gdPick(j){
+ const R=S.r[S.k];if(R.done)return;const o=R.opts[j],b=$('#op').children[j];
+ if(o.ok){R.done=1;b.classList.add('g');const t=whole(R.open);
+  $('#msg').innerHTML=`<div class="fb ok">${praise()} ${R.c}ّ = ${R.c}ْ + ${R.c}${R.v}<div class="row" style="margin-top:8px"><span class="syb" style="--h:150">${esc(R.w)}</span> ← <button class="w" style="font-size:30px" data-say="${esc(R.w)}">${t}</button></div></div>`;gDone(R,1)}
+ else{R.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">الشدّة حرفان متشابهان: الأول عليه سكون ( ْ )، والثاني عليه الحركة.</div>`}
+}
+/* ---- تحليل كلمة الشدّة (separate tile): unpack the shadda, then count syllables and letters of the unpacked word ---- */
+function gShA(){return gShd().map(r=>Object.assign(r,{sy:syls(r.open),st:0}))}
+function grH(R){
+ R.st=0;R.busy=0;
+ $('#app').innerHTML=gTop()+mascot('نفكّ الشدّة، ثم نحلّل الكلمة',R.w)+`<div class="card">${picH(R.w)}<div class="wline"><span class="fx">${esc(R.w)}</span></div><p class="row"><button class="sayb" data-say="${esc(R.w)}">🔊 اسمع الكلمة</button></p><h3 class="sec">١- فكّ الشدّة</h3><div id="un"></div><div id="an"></div><div id="qa"></div><div id="msg"></div></div>`;
+ ghQ(R);
+}
+function ghQ(R){
+ let t,o;
+ if(R.st===0){t=`الحرف ( ${R.c}${R.v}ّ ) =`;o=R.opts}
+ else{const n=R.st===1?R.sy.length:R.open.length;let v=[n-1,n,n+1];if(v[0]<1)v=[n,n+1,n+2];o=R.no=shuf(v.map(x=>({t:String(x),ok:x===n})));
+  t=R.st===1?'كم مقطعًا في الكلمة؟ (صفّق عند كل مقطع)':'كم حرفًا في الكلمة؟ (الشدّة حرفان)'}
+ $('#qa').innerHTML=`<div class="gtitle" style="margin-top:8px">${t}</div><div class="fopts" id="op">${o.map((x,j)=>`<button class="o ${R.st?'':'t'}" onclick="ghPick(${j})">${x.t}</button>`).join('')}</div>`;
+}
+function ghPick(j){
+ const R=S.r[S.k];if(R.done||R.busy)return;const o=(R.st?R.no:R.opts)[j],b=$('#op').children[j];
+ if(!o.ok){R.tries++;b.classList.add('r');b.disabled=true;
+  $('#msg').innerHTML=`<div class="fb hint">${['الشدّة حرفان متشابهان: الأول ساكن ( ْ )، والثاني عليه الحركة.','اقرأ الكلمة بعد فكّ الشدّة ببطء، وصفّق عند كل مقطع.','عُدّ الحروف بعد فكّ الشدّة: الحرف المشدّد حرفان.'][R.st]}</div>`;return}
+ b.classList.add('g');$('#msg').innerHTML='';
+ if(R.st===0){const t=whole(R.open);$('#an').innerHTML='<h3 class="sec">٢- تحليل الكلمة</h3>';$('#un').innerHTML=`<div class="row"><span class="syb" style="--h:150">${R.c}ّ = ${R.c}ْ + ${R.c}${R.v}</span></div><p class="row"><button class="w" style="font-size:30px" data-say="${esc(R.w)}">${t}</button></p>`}
+ if(R.st<2){R.busy=1;setTimeout(()=>{R.st++;R.busy=0;ghQ(R)},900);return}
+ R.done=1;
+ $('#qa').innerHTML=`<h3 style="text-align:center">المقاطع (${R.sy.length})</h3><div class="row">${R.sy.map((x,k)=>`<span class="syb" style="--h:${HUE(k*3)}">${sylT(R.open,x[0],x[1])}</span>`).join('')}</div><h3 style="text-align:center;margin-top:10px">الحروف (${R.open.length})</h3><div class="lets">${R.open.map(x=>`<span>${x.b}</span>`).join('')}</div>`;
+ $('#msg').innerHTML=`<div class="fb ok">${praise()}</div>`;gDone(R,1);
+}
 function G(kind,i){
- const r={w:gWords,f:gForms,m:gMadd,s:gSuk,a:gAna,p:gPic,r:gSent}[kind](i);
+ const r={w:gWords,f:gForms,m:gMadd,s:gSuk,a:gAna,p:gPic,r:gSent,l:gLam,d:gShd,h:gShA}[kind](i);
  if(!r.length)return;S={g:kind,i,r,k:0,res:[]};gr();
 }
-const gTop=()=>`<div class="qtop"><button class="alt" onclick="learn(${S.i})">رجوع</button><span class="chip2">${GN[S.g]}</span>${vbH(1)}${dotsH(S.r.length,S.k)}</div>`;
+const back=()=>S&&S.i<0?'home()':'learn('+S.i+')';
+const gTop=()=>`<div class="qtop"><button class="alt" onclick="${back()}">رجوع</button><span class="chip2">${GN[S.g]}</span>${vbH(1)}${dotsH(S.r.length,S.k)}</div>`;
 function gr(){
  const R=S.r[S.k];if(!R)return gEnd();R.tries=0;R.done=0;R.logged=0;scrollTo(0,0);
- ({w:grW,f:grF,m:grM,s:grS,a:grA,p:grP,r:grR})[S.g](R);
+ ({w:grW,f:grF,m:grM,s:grS,a:grA,p:grP,r:grR,l:grL,d:grD,h:grH})[S.g](R);
 }
 function grW(R){
  R.n=0;R.tray=shuf(R.a.map((x,k)=>({key:x.b+x.m,t:shp(R.a,k)})));
@@ -515,7 +626,7 @@ function grS(R){
  <div id="q2"></div><div id="msg"></div></div>`;
 }
 function grA(R){
- R.step=0;R.busy=0;
+ R.busy=0;R.ra=R.a;R.sy=syls(R.a);R.step=0;
  $('#app').innerHTML=gTop()+mascot('لنحلّل الكلمة معًا',R.w)+`<div class="card">${picH(R.w)}<div class="wline"><span class="fx">${esc(R.w)}</span></div><p class="row"><button class="sayb" data-say="${esc(R.w)}">🔊 اسمع الكلمة</button></p><div id="qa"></div><div id="msg"></div></div>`;
  gaQ(R);
 }
@@ -565,7 +676,7 @@ function gaPick(j){
  const R=S.r[S.k];if(R.done||R.busy)return;const o=R.opts[j],b=$('#op').children[j];
  if(o.ok){b.classList.add('g');
   if(!R.step){R.busy=1;$('#msg').innerHTML=`<div class="fb ok">${praise()} ${'👏'.repeat(R.sy.length)} الكلمة ${R.sy.length} ${R.sy.length>2?'مقاطع':R.sy.length===2?'مقطعان':'مقطع'}</div>`;setTimeout(()=>{R.step=1;R.busy=0;$('#msg').innerHTML='';gaQ(R)},1300)}
-  else{R.done=1;$('#qa').innerHTML=`<h3 style="text-align:center">المقاطع</h3><div class="row">${R.sy.map((s,x)=>`<span class="syb" style="--h:${HUE(x*3)}">${sylT(R.a,s[0],s[1])}</span>`).join('')}</div><h3 style="text-align:center;margin-top:10px">الحروف (${R.a.length})</h3><div class="lets">${R.a.map(x=>`<span>${x.b}</span>`).join('')}</div>`;
+  else{R.done=1;$('#qa').innerHTML=`<h3 style="text-align:center">المقاطع</h3><div class="row">${R.sy.map((s,x)=>`<span class="syb" style="--h:${HUE(x*3)}">${sylT(R.ra,s[0],s[1])}</span>`).join('')}</div><h3 style="text-align:center;margin-top:10px">الحروف (${R.a.length})</h3><div class="lets">${R.a.map(x=>`<span>${x.b}</span>`).join('')}</div>`;
    $('#msg').innerHTML=`<div class="fb ok">${praise()}</div>`;gDone(R,1)}
  }else{R.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">${R.step?'عُدّ الحروف واحدًا واحدًا. الشدّة لا تُعدّ حرفًا جديدًا.':'انطق الكلمة ببطء وصفّق عند كل مقطع.'}</div>`}
 }
@@ -580,18 +691,98 @@ function grPick(j){
  else{R.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">أعد قراءة الجملة، وفكّر: أيّ كلمة تناسب المعنى؟</div>`}
 }
 function gDone(R,manual){
- if(R.logged)return;R.logged=1;S.res.push(R.tries===0);burst();log({letter:ORD[S.i],skill:'لعبة: '+GN[S.g],ok:R.tries===0,tries:R.tries});
- if(manual){const last=S.k+1>=S.r.length;$('#msg').insertAdjacentHTML('beforeend',`<p class="row" style="margin-top:12px"><button class="go" onclick="S.k++;gr()">${last?'إنهاء اللعبة':'الكلمة التالية'}</button><button class="alt" onclick="learn(S.i)">رجوع</button></p>`);return}
+ if(R.logged)return;R.logged=1;S.res.push(R.tries===0);burst();log({letter:S.i<0?'ال':ORD[S.i],skill:'لعبة: '+GN[S.g],ok:R.tries===0,tries:R.tries});
+ if(manual){const last=S.k+1>=S.r.length;$('#msg').insertAdjacentHTML('beforeend',`<p class="row" style="margin-top:12px"><button class="go" onclick="S.k++;gr()">${last?'إنهاء اللعبة':'الكلمة التالية'}</button><button class="alt" onclick="${back()}">رجوع</button></p>`);return}
  setTimeout(()=>{S.k++;gr()},1900);
 }
 function gEnd(){
- const good=S.res.filter(Boolean).length,p=Math.round(good/S.r.length*100),n=p>=85?3:p>=60?2:1,key=ORD[S.i]+':'+S.g;
+ const good=S.res.filter(Boolean).length,p=Math.round(good/S.r.length*100),n=p>=85?3:p>=60?2:1,key=(S.i<0?'ال':ORD[S.i])+':'+S.g;
  GS[key]=Math.max(GS[key]||0,n);saveLocal();updHd();
- const nx=GK[(GK.indexOf(S.g)+1)%GK.length];
+ const nx='ldh'.includes(S.g)?S.g:GK[(GK.indexOf(S.g)+1)%GK.length];
  $('#app').innerHTML=`<div class="card big-res"><span class="owl">🦉</span><div class="stars" style="color:var(--sun-d)">${'★'.repeat(n)}</div><h2>أنهيت لعبة «${GN[S.g]}»</h2><p class="mut" style="margin:0">أجبت ${good} من ${S.r.length} من أول مرة</p>
- <button onclick="G('${S.g}',${S.i})">العب مرة أخرى</button><button style="--c:var(${GC[nx][0]});--cd:var(${GC[nx][1]})" onclick="G('${nx}',${S.i})">لعبة «${GN[nx]}»</button><button class="alt" onclick="learn(${S.i})">العودة للحرف</button></div>`;
+ <button onclick="G('${S.g}',${S.i})">العب مرة أخرى</button>${'ldh'.includes(S.g)?'':`<button style="--c:var(${GC[nx][0]});--cd:var(${GC[nx][1]})" onclick="G('${nx}',${S.i})">لعبة «${GN[nx]}»</button>`}<button class="alt" onclick="${back()}">${S.i<0?'الرئيسية':'العودة للحرف'}</button></div>`;
  burst();
 }
+/* ================= تدريبات التنوين ================= */
+const TNM={'ٌ':{n:'تنوين الضم',e:'بٌ',v:'ُ',c:'--plum',d:'--plum-d'},'ً':{n:'تنوين الفتح',e:'بًا',v:'َ',c:'--sky',d:'--sky-d'},'ٍ':{n:'تنوين الكسر',e:'بٍ',v:'ِ',c:'--coral',d:'--coral-d'}};
+const TMK=['ً','ٌ','ٍ'];
+const TNBAD=['مِشْعَل','خَالِد','يَاسِر','صَالِح','حَامِد','طَارِق','زُهَيْر','زِيَاد','وَلِيد'];
+const tnOK=w=>{if(!w.endsWith('ٌ'))return null;const b=w.slice(0,-1);if(/ّ[َُِ]?$/.test(b)||TNBAD.includes(b))return null;return [b,/ة$/.test(b)?1:0]};
+const tnBook=()=>{const o=[],seen={};U.forEach(u=>{if(u[3])return;u[1].forEach(w=>{const x=tnOK(w);if(x&&!seen[x[0]]){seen[x[0]]=1;o.push(x)}})});return o};
+const tnNorm=t=>t.replace(/[ً-ْٰ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي');
+function tnPoolFor(i){const all=shuf(tnBook());if(i===null||i===undefined||i<0)return {w:all,own:0};
+ const L=tnNorm(ORD[i]),own=U[i][3]?[]:U[i][1].map(tnOK).filter(Boolean);
+ const has=all.filter(x=>tnNorm(x[0]).includes(L)&&!own.some(o=>o[0]===x[0]));
+ let w=[];own.forEach(x=>{w.push(x,x,x)});has.forEach(x=>{w.push(x);if(own.length<2)w.push(x)});
+ if(new Set(w.map(x=>x[0])).size<4)all.forEach(x=>{if(!w.some(o=>o[0]===x[0]))w.push(x)});
+ return {w,own:own.length+has.length}}
+let TNW=[],TNO=0,TNL=null;
+const tnF=(w,m)=>m==='ً'&&!w[1]?w[0]+'ً'+'ا':w[0]+m;
+const tnL=(w,m)=>w[0].slice(-1)+m+(m==='ً'&&!w[1]?'ا':'');
+const tnR=(w,m)=>(w[1]===1?w[0].slice(0,-1)+'ت':w[0])+TNM[m].v+'نْ';
+const tnPlain=w=>w[0]+(w[1]?'ُ':'ُ');
+const tnGS=m=>GS['تنوين:'+m]||0;
+let TN=null;
+let TNB=null;
+function tnBack(){const b=TNB;TNB=null;b!==null&&b>=0?learn(b):home()}
+function tnHome(b){
+ if(b!==undefined){TNB=b;const r=tnPoolFor(b);TNW=r.w;TNO=r.own;TNL=b!==null&&b>=0?ORD[b]:null}
+ if(!TNW.length){const r=tnPoolFor(null);TNW=r.w;TNO=0}
+ if(unsub){clearInterval(unsub);unsub=null}S={tn:1,i:-1};TN=null;scrollTo(0,0);
+ const ex=TNW[0];
+ $('#app').innerHTML=`<div class="top"><button class="alt" onclick="tnBack()">رجوع</button>${vbH()}</div>
+ <section class="card"><h3>ما التنوين؟${TNL?` <span class="chip2" style="font-size:14px">كلمات حرف ${esc(NM[TNL])}</span>`:''}</h3>${TNL&&!TNO?'<p class="fb hint" style="margin:8px 0">ليس في كلمات هذا الحرف كلمة تقبل التنوين، فنتدرّب على كلمات من حروف أخرى.</p>':''}<p class="mut" style="font-size:18px;margin:6px 0 12px">التنوين نون ساكنة تُنطق في آخر الاسم ولا تُكتب حرفًا، بل تُكتب علامة فوق الحرف الأخير أو تحته.</p>
+ <div class="tnrow">${TMK.slice().sort((a,b)=>'ًٌٍ'.indexOf(a)-'ًٌٍ'.indexOf(b)).map(m=>{const x=TNM[m];return `<button class="tnk" style="--c:var(${x.c});--cd:var(${x.d})" data-say="${esc(tnF(ex,m))}"><b>${esc(tnF(ex,m))}</b><span>${x.n}</span><small>تُقرأ: ${esc(tnR(ex,m))}</small></button>`}).join('')}</div><p class="fb hint" style="margin:14px 0 0">يُكتب تنوين الفتح مع ألف بعده ( ـًا ) في كل الحروف، إلا إذا انتهت الكلمة بـ <b>ة</b> أو <b>ء</b> فلا نكتب الألف: مَكْتَبَةً.</p></section>
+ <h3 style="margin:18px 0 10px">اختر تدريبًا</h3>
+ <div class="games">${['ٌ','ً','ٍ'].map(m=>{const x=TNM[m];return `<button class="gt" style="--c:var(${x.c});--cd:var(${x.d})" onclick="tnStart('${m}')"><span class="gi" style="font-size:38px;line-height:2;height:66px;display:block;margin-bottom:10px">${x.e}</span><b>${x.n}</b><small>تدريب على ${x.n}</small><em>${stars(tnGS(m))}</em></button>`}).join('')}
+ <button class="gt" style="--c:var(--green);--cd:var(--green-d)" onclick="tnStart('all')"><span class="gi">🌟</span><b>تدريب شامل</b><small>الثلاثة معًا</small><em>${stars(tnGS('all'))}</em></button></div>`;
+}
+function tnMk(t,m,w0){
+ const w=w0||TNW[Math.floor(Math.random()*TNW.length)],nm=TNM[m];
+ const others=TMK.filter(x=>x!==m);
+ if(t===1){ // name of tanween
+  return {s:'تمييز التنوين',p:'ما اسم التنوين في آخر هذه الكلمة؟',big:tnF(w,m),say:tnF(w,m),o:shuf(TMK.map(x=>({t:TNM[x].n,ok:x===m}))),hint:'انظر إلى العلامة في آخر الكلمة: ضمتان أو فتحتان أو كسرتان.'};
+ }
+ if(t===2){ // choose the word with this tanween
+  return {s:'اختيار الكلمة',p:'أيّ كلمة فيها '+nm.n+'؟',o:shuf(TMK.map(x=>({t:tnF(w,x),ok:x===m,say:tnF(w,x)}))),hint:'ابحث عن علامة '+nm.n+' ('+nm.e+') في آخر الكلمة.'};
+ }
+ if(t===3){ // reading
+  return {s:'القراءة',p:'كيف تُقرأ هذه الكلمة؟',big:tnF(w,m),say:tnF(w,m),o:shuf(TMK.map(x=>({t:tnR(w,x),ok:x===m}))),hint:'التنوين يُنطق نونًا ساكنة بعد الحركة: '+nm.n+' يُنطق «'+TNM[m].v+'نْ».'};
+ }
+ if(t===4){ // complete
+  return {s:'أكمل الكلمة',p:'اقرأ: «'+tnR(w,m)+'»  أيّ تنوين يناسب آخر الكلمة؟',big:w[0]+'؟',say:tnR(w,m),full:tnF(w,m),o:shuf(TMK.map(x=>({t:tnL(w,x),ok:x===m,big:1}))),hint:'الكلمة تنتهي بصوت «'+TNM[m].v+'نْ»، أيّ علامة تُعطي هذا الصوت؟'};
+ }
+ // 5: odd one out (no tanween)
+ const AB=tnBook().filter(x=>x[0]!==w[0]),w2=AB[Math.floor(Math.random()*AB.length)];
+ return {s:'من دون تنوين',p:'أيّ كلمة ليس فيها تنوين؟',o:shuf([{t:tnF(w,m),ok:false},{t:tnF(w2,others[0]),ok:false},{t:tnPlain(w),ok:true}]),hint:'التنوين علامتان، أما الضمة الواحدة فليست تنوينًا.'};
+}
+function tnStart(m){
+ const cnt={};TNW.forEach(x=>cnt[x[0]]=(cnt[x[0]]||0)+1);const seen={},uq=[];TNW.forEach(x=>{if(!seen[x[0]]){seen[x[0]]=1;uq.push(x)}});
+ const own=shuf(uq.filter(x=>cnt[x[0]]>=3)),rest=shuf(uq.filter(x=>cnt[x[0]]<3)),order=[...own,...rest];
+ const types=[1,2,3,4,1,2,3,4,5,2],qs=types.map((t,n)=>{const mm=m==='all'?TMK[Math.floor(Math.random()*3)]:m;const q=tnMk(t,mm,order[n%order.length]);q.m=mm;q.tries=0;q.done=0;return q});
+ TN={m,qs,k:0};S={tn:1,i:-1};tnQ();
+}
+function tnQ(){
+ const Q=TN.qs[TN.k];scrollTo(0,0);
+ const head=`<div class="qtop"><button class="alt" onclick="tnHome()">رجوع</button><span class="chip2">${esc(Q.s)}</span>${vbH(1)}${dotsH(TN.qs.length,TN.k)}</div>`;
+ const sp=Q.say?`<p class="row"><button class="sayb" data-say="${esc(Q.say)}">🔊 اسمع</button></p>`:'';
+ $('#app').innerHTML=head+mascot(Q.p,Q.p)+`<div class="card">${Q.big?`<div class="wline" id="wl">${esc(Q.big)}</div>`:''}${sp}<div class="${Q.big&&Q.o[0].big?'fopts':'opts'}" id="op">${Q.o.map((o,j)=>`<button class="o${o.big?' e':''}" ${o.say?`data-say="${esc(o.say)}" `:''}onclick="tnAns(${j})">${esc(o.t)}</button>`).join('')}</div><div id="msg"></div></div>`;
+}
+function tnAns(j){
+ const Q=TN.qs[TN.k],o=Q.o[j],b=$('#op').children[j];if(Q.done)return;
+ if(o.ok){Q.done=1;b.classList.add('g');if(Q.full&&$('#wl'))$('#wl').innerHTML=`<span class="fx">${esc(Q.full)}</span>`;$('#msg').innerHTML=`<div class="fb ok">${praise()} ${TNM[Q.m].n}: ${esc(TNM[Q.m].e)}</div>`;burst();
+  log({letter:TNL||'التنوين',skill:'تنوين: '+Q.s,ok:Q.tries===0,tries:Q.tries});
+  setTimeout(()=>{TN.k++;TN.k<TN.qs.length?tnQ():tnEnd()},1500)}
+ else{Q.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">حاول مرة أخرى. ${esc(Q.hint||'')}</div>`}
+}
+function tnEnd(){
+ const tot=TN.qs.length,good=TN.qs.filter(x=>x.tries===0).length,p=Math.round(good/tot*100),n=p>=85?3:p>=60?2:1;
+ const key='تنوين:'+TN.m;GS[key]=Math.max(GS[key]||0,n);saveLocal();updHd();
+ $('#app').innerHTML=`<div class="card big-res"><span class="owl">🦉</span><div class="stars" style="color:var(--sun-d)">${'★'.repeat(n)}</div><h2>أنهيت تدريب التنوين</h2><p class="mut" style="margin:0">أجبت ${good} من ${tot} من أول مرة</p>
+ <button onclick="tnStart('${TN.m}')">تدريب جديد</button><button class="alt" onclick="tnHome()">اختيار تدريب آخر</button><button class="alt" onclick="tnBack()">رجوع</button></div>`;
+ burst();
+}
+
 /* ---------- teacher dashboard ---------- */
 const lvl=p=>p===null?['لم يبدأ','#8a8aa8']:p>=85?['متقن','#12a36f']:p>=60?['جيد','#e08a00']:['يحتاج معالجة','#e5483f'];
 const XLOK=true;
