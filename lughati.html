@@ -136,6 +136,10 @@ input{font-family:inherit;font-size:22px;padding:12px 14px;border-radius:16px;bo
 @keyframes swim{0%,100%{transform:translateX(-7px)}50%{transform:translateX(7px)}}
 .fishb.caught{animation:jump .9s ease forwards}@keyframes jump{to{transform:translateY(-250px) scale(.8);opacity:0}}
 .fishb.r{opacity:.35;animation:none}
+.sec{text-align:center;margin:14px 0 4px;padding-top:10px;border-top:2px dashed var(--line)}
+.vw{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000}.vw iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vl{display:inline-block;text-decoration:underline;color:var(--mut);font-size:15px;padding:8px 14px}
+.lamrule{display:grid;gap:6px;background:var(--paper2);border-radius:16px;padding:10px 14px;font-size:17px;margin-bottom:10px}
 .bubble{position:absolute;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.4)}
 /* syllable windows + analysis */
 .wins{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
@@ -181,14 +185,14 @@ const U=[
 ['ل',['لِمَاذَا','جَلَسَتْ','يَغْسِلُ','الْأَكْل','قَبْل'],'هُوَ يَغْسِلُ يَدَيْهِ'],
 ['د',['دَرَّاجَة','وَرْد','حَدِيقَة','دُمْيَة','خَالِد'],'وَأَنَا أَلْعَبُ مَعَ صَدِيقِي خَالِدٍ'],
 ['ن',['نُورَة','نَحْنُ','نَظَافَة','تَعَاوُن','تَكْنُسُ'],'وَأُمِّي تَكْنُسُ'],
-['ر',['رَحَّبَ','رَأْس','يَاسِر','فَرْحَة'],'أَنَا فَرِحَةٌ بِقُدُومِ جَدِّي'],
+['ر',['رَحَّبَ','رَأْس','يَاسِر','فَرِحَة'],'أَنَا فَرِحَةٌ بِقُدُومِ جَدِّي'],
 ['ص',['صَالِح','صِحَّتِي','مَقْصَف','عَصِير','أَحْرِص'],'أَحْرِصُ عَلَى صِحَّتِي وَنَظَافَةِ مَدْرَسَتِي'],
 ['ف',['فَصْل','فُصُول','نَافِذَة','رَفّ','نَظِيف'],'فَصْلِي أَجْمَلُ الْفُصُولِ'],
 ['س',['سُور','مَدْرَسَتِي','فَسِيحَة','رُسُوم'],'أَنَا أُحِبُّ مَدْرَسَتِي'],
 ['ق',['قَالَ','الْقِرَاءَة','الْقِصَص','الْقُرْآن','الْعُقُول'],'الْقِرَاءَةُ تُنِيرُ الْعُقُولَ'],
 ['ت',['تُوت','تُفَّاح','تِين','أُرَتِّب','قَالَتْ'],'فِي السَّلَّةِ تُفَّاحٌ وَتِينٌ وَتُوتٌ'],
 ['ح',['حَامِد','يَحْرُسُ','لَحِقَ','فَرِحَ'],'فَرِحَ الْفَرِيقُ بِالْفَوْزِ'],
-['أ',['أَنَا','إِبْرَاهِيم','أَمْوَاج','أُحِبُّ'],'أَنَا أُحِبُّ مَدِينَتِي'],
+['أ',['أَنَا','إِبْرَاهِيم','أَعِيش','أَمْوَاج','أُحِبُّ'],'أَنَا أُحِبُّ مَدِينَتِي'],
 ['ط',['طَارِق','طَبِيعَة','مَطَر','طُيُور','لَطِيف'],'أَنَا طَارِقٌ أَعِيشُ فِي مَدِينَةِ أَبْهَا'],
 ['ز',['زُهَيْر','زِيَاد','زَمْزَم'],'هَذَا أَخِي زِيَادٌ'],
 ['و',['وَلِيد','وَاسِعَة','تَبُوك','فَوَاكِه','زُهُور'],'أَنَا وَلِيدٌ وَمَدِينَتِي تَبُوكُ'],
@@ -206,6 +210,15 @@ const U=[
 ['ظ',['ظَرْف','ظَبْي','ظِلّ','ظُفْر'],'الظَّبْيُ سَرِيعٌ',1]];
 /* pictures (emoji) for words that can be drawn */
 const PIC={'بَيْت':'🏠','مَكْتَبَة':'📚','كُتُب':'📚','حَاسُوب':'💻','دَرَّاجَة':'🚲','وَرْد':'🌹','حَدِيقَة':'🌳','دُمْيَة':'🧸','نَافِذَة':'🪟','عَصِير':'🧃','تُوت':'🍓','تُفَّاح':'🍎','رُسُوم':'🎨','أُمِّي':'👩','مَطَر':'🌧️','طُيُور':'🐦','زُهُور':'🌸','شَمْس':'☀️','شَاطِئ':'🏖️','مَسَاجِد':'🕌','أَبْرَاج':'🏙️','مَتَاجِر':'🏪','شِرَاعِيَّة':'⛵','يَد':'✋','يَمَامَة':'🕊️','عَصْفُور':'🦜','عِنَب':'🍇','عَلَم':'🚩','عَسَل':'🍯','ثَوْب':'👕','ثَعْلَب':'🦊','ثَلْج':'❄️','ثُعْبَان':'🐍','خُبْز':'🍞','خَرُوف':'🐑','خَيْمَة':'⛺','ذُرَة':'🌽','ذِئْب':'🐺','ضِفْدَع':'🐸','ضَوْء':'💡','ظَرْف':'✉️','ظَبْي':'🦌','غَيْمَة':'☁️','غُرْفَة':'🛏️','كِتَاب':'📖','كَلْب':'🐶','كُرَة':'⚽','كُرْسِي':'🪑','هِلَال':'🌙','هَاتِف':'📱','هَدِيَّة':'🎁','نَظَافَة':'🧼','فَوَاكِه':'🍉','مَدْرَسَتِي':'🏫'};
+/* first grade reads every word vowelled to the last letter: an unvowelled last letter (book style) gets tanween damm, like the book's own analysis
+   exercises (حَفْلَةٌ، مَسْبَحٌ). Words that cannot take tanween get damma: (ال) words, names/plurals that are ممنوع من الصرف, and verbs. */
+const NOTAN=['فاطمة','مريم','نورة','إبراهيم','زمزم','تبوك','شيماء','نجود','مساجد','متاجر','فواكه','أحرص','أرتب','أعيش','قبل'];
+(()=>{const V=/[ًٌٍَُِْ]/,T=/[ً-ْ]/;
+ const fv=w=>{const c=[...w];let k=c.length-1;while(k>=0&&T.test(c[k]))k--;if(k<1)return w;const m=c.slice(k+1).join('');if(V.test(m))return w;
+  let j=k-1;while(j>=0&&T.test(c[j]))j--;const pv=c.slice(j+1,k).join('');if((pv.includes('َ')&&c[k]==='ا')||(pv.includes('ُ')&&c[k]==='و')||(pv.includes('ِ')&&c[k]==='ي')||(c[k]==='ا'&&j>=0))return w;
+  const p=w.replace(/[ً-ْٰ]/g,'');return w+(p.startsWith('ال')||NOTAN.includes(p)?'ُ':'ٌ')};
+ const P={};for(const k in PIC)P[fv(k)]=PIC[k];for(const k in PIC)delete PIC[k];Object.assign(PIC,P);
+ U.forEach(u=>{u[1]=u[1].map(fv)});})();
 const ORD=U.map(u=>u[0]),ALPHA='أبتثجحخدذرزسشصضطظعغفقكلمنهوي'.split('');
 const W=ORD.map(l=>[l]),POOL=[...new Set(U.flatMap(u=>u[1]))],NC='ادذرزوأ';
 const NM={'أ':'ألف','ب':'باء','ت':'تاء','ث':'ثاء','ج':'جيم','ح':'حاء','خ':'خاء','د':'دال','ذ':'ذال','ر':'راء','ز':'زاي','س':'سين','ش':'شين','ص':'صاد','ض':'ضاد','ط':'طاء','ظ':'ظاء','ع':'عين','غ':'غين','ف':'فاء','ق':'قاف','ك':'كاف','ل':'لام','م':'ميم','ن':'نون','ه':'هاء','و':'واو','ي':'ياء'};
@@ -249,10 +262,13 @@ function syls(a){
   while(i<a.length&&hasSk(a[i])){e=i;i++}
   out.push([s,e]);
  }
+ /* like the book (صَا - بِـ - ـر، حَفْـ - ـلَـ - ـةٌ): a last letter with no vowel is its own part */
+ const n=a.length-1,L=out[out.length-1];
+ if(n>0&&L&&L[1]===n&&L[0]<n&&!hasV(a[n])&&!(vowelOf(a[n-1])&&MADD[vowelOf(a[n-1])]===a[n].b&&L[0]===n-1)){L[1]=n-1;out.push([n,n])}
  return out;
 }
 const sylT=(a,s,e)=>(jb(a,s)?TT:'')+whole(a.slice(s,e+1))+(jf(a,e)?TT:'');
-const sukAt=a=>{for(let k=1;k<a.length;k++){if(hasSk(a[k])&&hasV(a[k-1])&&!a[k-1].m.includes('ّ'))return k}return -1};
+const sukAt=a=>{for(let k=1;k<a.length-1;k++){if(hasSk(a[k])&&hasV(a[k-1])&&!a[k-1].m.includes('ّ'))return k}return -1};
 /* ---- voice: speaks only inside a tap ---- */
 let VS=[],VN='';
 const lv=()=>{try{VS=speechSynthesis.getVoices().filter(v=>/^ar/i.test(v.lang))}catch(e){}};
@@ -298,30 +314,47 @@ function home(t){
  const n=ORD.filter(l=>DONE[l]).length,p=Math.round(n/28*100);
  a.innerHTML=`<div class="top"><h2>أهلًا يا ${esc(NAME)}</h2><span class="row">${isT?'<button class="alt" onclick="dash()">لوحة المعلمة</button>':''}<button class="alt" onclick="NAME=\'\';saveLocal();home()">تغيير الاسم</button></span></div>
  <div class="seg"><button class="${t==='i'?'':'on'}" onclick="home()">رحلتي</button><button class="${t==='i'?'on':''}" onclick="home('i')">جزيرة الحروف</button></div>`+(t==='i'?
- `<p class="mut">اضغط على أي حرف لتتعرّف عليه وتسمع اسمه</p><div class="path">${ALPHA.map((l,i)=>`<button class="bal" style="--h:${HUE(i)}" onclick="showL('${l}',${i})">${l}</button>`).join('')}</div><div id="fm"></div>`:
+ `<p class="mut">اضغط على أي حرف لتتعرّف عليه وتسمع اسمه</p><div class="path">${ALPHA.map((l,i)=>`<button class="bal" style="--h:${HUE(i)}" onclick="showL('${l}',${i})">${LD(l)}</button>`).join('')}</div><div id="fm"></div>`:
  `<section class="card"><div class="ptop"><h3>رحلتي</h3><span class="mut">أنجزت ${n} من 28 حرفًا</span></div><div class="pb" style="--x:${p}%"><i style="width:${p}%"></i><span class="rk">🚀</span></div></section>
- <div class="path">${ORD.map((l,i)=>ok0(i)?`<button class="st ${DONE[l]?'done':''}" style="--h:${HUE(i)}" onclick="learn(${i})">${l}<small>${stars(DONE[l])}</small></button>`:`<button class="st lock" style="--h:${HUE(i)}" disabled>${l}<small>مغلق</small></button>`).join('')}</div>`);
+ <div class="path">${ORD.map((l,i)=>ok0(i)?`<button class="st ${DONE[l]?'done':''}" style="--h:${HUE(i)}" onclick="learn(${i})">${LD(l)}<small>${stars(DONE[l])}</small></button>`:`<button class="st lock" style="--h:${HUE(i)}" disabled>${l}<small>مغلق</small></button>`).join('')}</div>`);
 }
 function setName(){const v=$('#nm').value.trim();if(!v)return;NAME=v.slice(0,30);saveLocal();home()}
-const formsH=l=>{const f=forms(l),nm=['منفصل','أول','وسط','آخر'];return `<div class="forms">${f.map((x,j)=>`<div><b>${x}</b><small>${nm[j]}</small></div>`).join('')}</div>${NC.includes(l)?'<p class="mut" style="margin:8px 0 0;text-align:center">هذا الحرف لا يتصل بما بعده</p>':''}`};
+/* the letter هـ is written with its tail on the boards, and its forms start with the initial form (as taught in class) */
+const LD=l=>l==='ه'?'هـ':l;
+const VD=(l,s,j)=>l==='ه'&&j<3?s+TT:s;
+const formsH=l=>{const f=forms(l),nm=['منفصل','أول','وسط','آخر'],ord=l==='ه'?[1,2,3,0]:[0,1,2,3];return `<div class="forms">${ord.map(j=>`<div><b>${f[j]}</b><small>${nm[j]}</small></div>`).join('')}</div>${NC.includes(l)?'<p class="mut" style="margin:8px 0 0;text-align:center">هذا الحرف لا يتصل بما بعده</p>':''}`};
 function showL(l,i){
- $('#fm').innerHTML=`<div class="card" style="margin-top:20px"><div class="lhero card" style="--h:${HUE(i)};margin:0 0 12px"><div class="big">${l}</div><button data-say="${NS[l]}">اسم الحرف: ${NM[l]}</button></div>${formsH(l)}<div class="vow" style="margin-top:12px">${SY(l).map((s,j)=>`<div><button data-say="${s}">${s}</button><small>${SYN[j]}</small></div>`).join('')}</div></div>`;
+ $('#fm').innerHTML=`<div class="card" style="margin-top:20px"><div class="lhero card" style="--h:${HUE(i)};margin:0 0 12px"><div class="big">${LD(l)}</div><button data-say="${NS[l]}">اسم الحرف: ${NM[l]}</button></div>${formsH(l)}<div class="vow" style="margin-top:12px">${SY(l).map((s,j)=>`<div><button data-say="${s}">${VD(l,s,j)}</button><small>${SYN[j]}</small></div>`).join('')}</div></div>`;
  $('#fm').scrollIntoView({behavior:reduce?'auto':'smooth'});
 }
 /* ---- letter page ---- */
-const GN={w:'كلمات من حروف',f:'أشكال الحرف',m:'صيد المدود',s:'المقطع الساكن',a:'تحليل الكلمة',p:'اقرأ وطابق',r:'اقرأ الجملة'};
+const GN={w:'كلمات من حروف',f:'أشكال الحرف',m:'صيد المدود',s:'المقطع الساكن',a:'تحليل الكلمة',p:'اقرأ وطابق',r:'اقرأ الجملة',l:'اللام الشمسية والقمرية',d:'فكّ الشدّة',h:'مهارة الشدّة'};
 const GC={w:['--sky','--sky-d','🧩','رتّب مقاطع الكلمة'],f:['--coral','--coral-d','🔤','اختر شكل الحرف في مكانه'],m:['--plum','--plum-d','🎣','اصطد المدّ المناسب'],
- s:['--green','--green-d','🪟','افتح النوافذ واقرأ'],a:['--sun-d','--sun-d','🔍','مقاطع الكلمة وحروفها'],p:['--coral','--coral-d','🖼️','طابق الكلمة بصورتها'],r:['--sky','--sky-d','📖','أكمل الجملة']};
+ s:['--green','--green-d','🪟','افتح النوافذ واقرأ'],a:['--sun-d','--sun-d','🔍','مقاطع الكلمة وحروفها'],p:['--coral','--coral-d','🖼️','طابق الكلمة بصورتها'],r:['--sky','--sky-d','📖','أكمل الجملة'],l:['--plum','--plum-d','☀️🌙','هل نسمع اللام؟'],d:['--coral','--coral-d','✂️','الشدّة حرفان'],h:['--coral','--coral-d','✂️','أفكّ الشدّة ثم أحلّل الكلمة']};
 const GK=['w','f','m','s','a','p','r'];
-function gtiles(i){return `<div class="games" id="gm">${GK.map(k=>`<button class="gt" style="--c:var(${GC[k][0]});--cd:var(${GC[k][1]})" onclick="G('${k}',${i})"><span class="gi">${GC[k][2]}</span><b>${GN[k]}</b><small>${GC[k][3]}</small><em>${stars(GS[ORD[i]+':'+k])}</em></button>`).join('')}</div>`}
+/* reading the lesson passage: YouTube videos the teacher chose, one per letter (letters without a video show no tile) */
+const VID={'م':'xNW2AzqrFk4','ب':'PrumakGHnXE','ل':'vlFpG5iCJNo','د':'TAj7-08Ik94','ن':'39oRFEK7r4M','ر':'wZR1lKdZ2kM','ف':'gb60NNsACiA','ت':'Yvp6AJUJCDY','ح':'6Vq3WZf1wOc','ش':'JimStf4YXts','أ':'-O7S6E5Vp6g','ق':'fFf1i0glmQ4','ع':'cw2_rqC-WpE','ث':'eAC7ApyBK9o',
+ 'ص':'c_GJYxBB3J8','س':'ZBbohtuxx6o','ك':'gVNRBXgXMic','ي':'_r5KxUn5YPs','غ':'JpCrjjEPXyM','خ':'GXNADNDcK7U','ذ':'jpcvhVDCE_U','ظ':'Dc2gkuX1NS4',
+ 'ط':'zrAZLAmsiaI','ز':'GdVi6EzVejk','و':'S94q9Ckb-oQ','ج':'56jjrDid0qA','ه':'ceJgkFUrIYY','ض':'jj7nokpjwf0'};
+function gtiles(i){const L=ORD[i];return `<div class="games" id="gm">${VID[L]?`<button class="gt" style="--c:var(--green);--cd:var(--green-d)" onclick="vid(${i})"><span class="gi">🎬</span><b>قراءة القطعة</b><small>شاهد واقرأ مع الفيديو</small><em>${stars(GS[L+':v'])}</em></button>`:''}${[...GK,'l','h'].map(k=>`<button class="gt" style="--c:var(${GC[k][0]});--cd:var(${GC[k][1]})" onclick="G('${k}',${i})"><span class="gi">${GC[k][2]}</span><b>${GN[k]}</b><small>${GC[k][3]}</small><em>${stars(GS[L+':'+k])}</em></button>`).join('')}</div>`}
+function vid(i){
+ const L=ORD[i];S=null;updHd();
+ $('#app').innerHTML=`<div class="top"><button class="alt" onclick="learn(${i})">رجوع</button><h2>قراءة القطعة: حرف ${NM[L]}</h2></div>`+mascot('شاهد الفيديو، واقرأ القطعة مع المعلّم بصوت واضح','شاهد الفيديو، واقرأ القطعة مع المعلّم بصوت واضح')+
+ `<div class="card"><div class="vw"><iframe src="https://www.youtube-nocookie.com/embed/${VID[L]}?rel=0&playsinline=1" title="قراءة قطعة حرف ${NM[L]}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+ <p class="row" style="margin-top:12px"><a class="alt vl" href="https://www.youtube.com/watch?v=${VID[L]}" target="_blank" rel="noopener">إن لم يظهر الفيديو، افتحه في يوتيوب</a></p>
+ <p class="row"><button class="go" id="vd" onclick="vDone(${i})">قرأت القطعة ✓</button></p><div id="msg"></div></div>`;
+ scrollTo(0,0);
+}
+function vDone(i){const L=ORD[i],b=$('#vd');if(b.disabled)return;b.disabled=true;GS[L+':v']=3;saveLocal();updHd();burst();log({letter:L,skill:'قراءة القطعة',ok:true,tries:0});
+ $('#msg').innerHTML=`<div class="fb ok">${praise()}</div><p class="row"><button class="alt" onclick="learn(${i})">العودة للحرف</button></p>`}
 const wordBtn=w=>`<button class="w" data-say="${esc(w)}">${PIC[w]?`<span class="pic">${PIC[w]}</span>`:''}${w}</button>`;
 function learn(i){
  const [L,ws,sn,pv]=U[i];S=null;updHd();
  $('#app').innerHTML=`<div class="top"><button class="alt" onclick="home()">رجوع</button><h2>حرف ${NM[L]}</h2></div>
  ${isT&&pv?'<div class="note">ملاحظة للمعلمة (لا تظهر للطلاب): كلمات هذا الحرف وجملته من اختياري، وليست من كتاب الوحدات الثلاث. قارنيها بالكتاب.</div>':''}
- <div class="card lhero" style="--h:${HUE(i)}"><div class="big">${L}</div><button data-say="${NS[L]}">🔊 اسم الحرف</button></div>
+ <div class="card lhero" style="--h:${HUE(i)}"><div class="big">${LD(L)}</div><button data-say="${NS[L]}">🔊 اسم الحرف</button></div>
  <div class="card"><h3>أشكال الحرف</h3><div style="margin-top:10px">${formsH(L)}</div></div>
- <div class="card"><h3>الحركات القصيرة والطويلة</h3><div class="vow" style="margin-top:10px">${SY(L).map((s,j)=>`<div><button data-say="${s}">${s}</button><small>${SYN[j]}</small></div>`).join('')}</div></div>
+ <div class="card"><h3>الحركات القصيرة والطويلة</h3><div class="vow" style="margin-top:10px">${SY(L).map((s,j)=>`<div><button data-say="${s}">${VD(L,s,j)}</button><small>${SYN[j]}</small></div>`).join('')}</div></div>
  <div class="card"><h3>كلمات الحرف</h3><div class="row" style="margin-top:10px">${ws.map(wordBtn).join('')}</div>${sn?`<h3 style="margin-top:14px">جملة</h3><div class="row" style="margin-top:8px"><button class="w" style="font-size:24px" data-say="${esc(sn)}">${sn}</button></div>`:''}</div>
  <h3 style="margin:18px 0 10px">ألعاب المهارات</h3>${gtiles(i)}
  <p class="row" style="margin-top:18px"><button class="go" onclick="start(${i})">ابدأ التدريب</button></p>`;
@@ -341,8 +374,8 @@ function build(i){
  let v=null;
  for(const w of ws){const m=[...w];for(let k=0;k<m.length-1;k++){if(nz(m[k])===t&&'َُِ'.includes(m[k+1])){v=[w,m[k],m[k+1]];break}}if(v)break}
  if(v)Q.push(mk('تجريد الحرف','أجرّد الحرف من كلمة «'+v[0]+'» وأقرؤه:',[v[1]+'َ',v[1]+'ُ',v[1]+'ِ'],'َُِ'.indexOf(v[2]),'انطق أول مقطع في الكلمة'));
- const n=tiles(ws[0]).length;
- Q.push(mk('التحليل','كم حرفًا في كلمة «'+ws[0]+'»؟',[n-1,n,n+1].map(String),1,'عُدّ الحروف: '+tiles(ws[0]).join(' - ')));
+ const wa=ws.find(w=>!w.includes('ّ'))||ws[0],n=tiles(wa).length;
+ Q.push(mk('التحليل','كم حرفًا في كلمة «'+wa+'»؟',[n-1,n,n+1].map(String),1,'عُدّ الحروف: '+tiles(wa).join(' - ')));
  const sw=[...ws,...POOL].find(w=>w.includes('ّ'));
  Q.push(mk('الشدّة','أيّ كلمة فيها شدّة؟',[sw,...shuf(POOL.filter(w=>!w.includes('ّ'))).slice(0,2)],0,'الشدّة علامة تشبه حرف (ـّ) فوق الحرف'));
  const w3=shuf(ws)[0];
@@ -440,7 +473,8 @@ function gSuk(i){
  }
  return out;
 }
-function gAna(i){return U[i][1].filter(w=>{const n=parseW(w).length;return n>=2&&n<=7}).slice(0,3).map(w=>{const a=parseW(w);return{w,a,sy:syls(a),step:0}})}
+/* word analysis avoids words with a shadda */
+function gAna(i){const ok=w=>{const n=parseW(w).length;return n>=2&&n<=7&&!w.includes('ّ')};let c=U[i][1].filter(ok);if(c.length<2)c=[...c,...POOL.filter(w=>ok(w)&&!c.includes(w)&&nz(w).includes(nz(U[i][0])))];return c.slice(0,3).map(w=>{const a=parseW(w);return{w,a,sy:syls(a),step:0}})}
 function gPic(i){
  const t=nz(U[i][0]),ws=U[i][1],has=w=>PIC[w];
  let c=ws.filter(has);
@@ -457,14 +491,78 @@ function gSent(i){
  return pick.map(k=>{const c=words[k],d=shuf([...U[i][1],...POOL].filter(w=>w!==c&&!words.includes(w)&&plain(w).length>=3)).slice(0,2);
   return{sn,words,k,opts:shuf([{t:c,ok:true},...d.map(t=>({t,ok:false}))])}});
 }
+/* ---- اللام الشمسية والقمرية: words starting with (ال) taken only from the book words and sentences (not the provisional letters) ---- */
+/* words with (ال) taken from the reading texts of the book, units 1-3, with damma on the last letter */
+const LAMB={s:['النَّافِذَةُ','السَّمَاءُ','الشَّاطِئُ','الشَّمْسُ','الرَّمْلُ','الرِّيَاضُ','الدَّمَّامُ','السَّلَّةُ','الزُّهُورُ','التَّمْرُ'],
+ q:['الْكُتُبُ','الْفُصُولُ','الْمَقْصَفُ','الْقُرْآنُ','الْقِصَصُ','الْمُعَلِّمُ','الْعُقُولُ','الْكُرَةُ','الْفَرِيقُ','الْفَوْزُ','الْأَمْوَاجُ','الْكَعْبَةُ','الْبَحْرُ','الْأَرْضُ']};
+const lamWords=()=>['s','q'].flatMap(t=>LAMB[t].map(w=>({w,a:parseW(w),t})));
+const LAMN={q:['🌙','لام قمرية','اللام تُنطق، وعليها سكون ( ْ )'],s:['☀️','لام شمسية','اللام تُكتب ولا تُنطق، والحرف بعدها عليه شدّة ( ّ )']};
+function gLam(){const all=shuf(lamWords()),q=all.filter(x=>x.t==='q'),sh=all.filter(x=>x.t==='s');
+ return shuf([...sh.slice(0,5),...q.slice(0,5)])}
+const lamSplit=R=>`<span class="syb" style="--h:${R.t==='q'?230:40}">${R.a[0].b+R.a[1].b+R.a[1].m}${TT}</span> + <span class="syb" style="--h:150">${whole(R.a.slice(2))}</span>`;
+function grL(R){
+ $('#app').innerHTML=gTop()+mascot('اقرأ الكلمة: هل نسمع صوت اللام؟',R.w)+`<div class="card">
+ <div class="lamrule"><div>🌙 <b>القمرية</b>: نسمع اللام ( الْـ )</div><div>☀️ <b>الشمسية</b>: لا نسمع اللام، والحرف بعدها مشدّد ( ـّ )</div></div>
+ ${picH(R.w)}<div class="wline" id="wl"><span class="fx">${esc(R.w)}</span></div><p class="row"><button class="sayb" data-say="${esc(R.w)}">🔊 اسمع الكلمة</button></p>
+ <div class="fopts" id="op">${['q','s'].map(k=>`<button class="o t" onclick="glPick('${k}')">${LAMN[k][0]}<br>${LAMN[k][1]}</button>`).join('')}</div><div id="msg"></div></div>`;
+}
+function glPick(k){
+ const R=S.r[S.k];if(R.done)return;const b=$('#op').children[k==='q'?0:1];
+ if(k===R.t){R.done=1;b.classList.add('g');$('#msg').innerHTML=`<div class="fb ok">${praise()} ${LAMN[k][1]}: ${LAMN[k][2]}<div class="row" style="margin-top:8px">${lamSplit(R)}</div></div>`;gDone(R,1)}
+ else{R.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">انظر إلى اللام: هل عليها سكون ( ْ )؟ أم على الحرف الذي بعدها شدّة ( ّ )؟</div>`}
+}
+/* ---- فكّ الشدّة: book words with a shadda (not the provisional letters); the doubled letter = a letter with sukun + the same letter with its vowel ---- */
+function gShd(){
+ const seen=new Set(),out=[];
+ U.filter(u=>!u[3]).forEach(u=>u[1].forEach(w=>{const a=parseW(w),k=a.findIndex(x=>x.m.includes('ّ'));if(k<1||seen.has(w))return;seen.add(w);
+  const c=a[k].b,v=a[k].m.replace('ّ','')||'',open=[...a.slice(0,k),{b:c,m:'ْ'},{b:c,m:v},...a.slice(k+1)];
+  out.push({w,a,k,c,v,open,opts:shuf([{t:c+'ْ'+' + '+c+v,ok:true},{t:c+v+' + '+c+'ْ',ok:false},{t:c+v,ok:false}])})}));
+ return shuf(out).slice(0,8);
+}
+function grD(R){
+ $('#app').innerHTML=gTop()+mascot('الشدّة حرفان: الأول ساكن، والثاني متحرّك',R.w)+`<div class="card">${picH(R.w)}<div class="wline" id="wl"><span class="fx">${esc(R.w)}</span></div><p class="row"><button class="sayb" data-say="${esc(R.w)}">🔊 اسمع الكلمة</button></p>
+ <div class="gtitle">الحرف المشدّد ( ${R.c}${R.v}ّ ) يُفكّ إلى:</div><div class="fopts" id="op">${R.opts.map((o,j)=>`<button class="o t" onclick="gdPick(${j})">${o.t}</button>`).join('')}</div><div id="msg"></div></div>`;
+}
+function gdPick(j){
+ const R=S.r[S.k];if(R.done)return;const o=R.opts[j],b=$('#op').children[j];
+ if(o.ok){R.done=1;b.classList.add('g');const t=whole(R.open);
+  $('#msg').innerHTML=`<div class="fb ok">${praise()} ${R.c}ّ = ${R.c}ْ + ${R.c}${R.v}<div class="row" style="margin-top:8px"><span class="syb" style="--h:150">${esc(R.w)}</span> ← <button class="w" style="font-size:30px" data-say="${esc(R.w)}">${t}</button></div></div>`;gDone(R,1)}
+ else{R.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">الشدّة حرفان متشابهان: الأول عليه سكون ( ْ )، والثاني عليه الحركة.</div>`}
+}
+/* ---- تحليل كلمة الشدّة (separate tile): unpack the shadda, then count syllables and letters of the unpacked word ---- */
+function gShA(){return gShd().map(r=>Object.assign(r,{sy:syls(r.open),st:0}))}
+function grH(R){
+ R.st=0;R.busy=0;
+ $('#app').innerHTML=gTop()+mascot('نفكّ الشدّة، ثم نحلّل الكلمة',R.w)+`<div class="card">${picH(R.w)}<div class="wline"><span class="fx">${esc(R.w)}</span></div><p class="row"><button class="sayb" data-say="${esc(R.w)}">🔊 اسمع الكلمة</button></p><h3 class="sec">١- فكّ الشدّة</h3><div id="un"></div><div id="an"></div><div id="qa"></div><div id="msg"></div></div>`;
+ ghQ(R);
+}
+function ghQ(R){
+ let t,o;
+ if(R.st===0){t=`الحرف ( ${R.c}${R.v}ّ ) =`;o=R.opts}
+ else{const n=R.st===1?R.sy.length:R.open.length;let v=[n-1,n,n+1];if(v[0]<1)v=[n,n+1,n+2];o=R.no=shuf(v.map(x=>({t:String(x),ok:x===n})));
+  t=R.st===1?'كم مقطعًا في الكلمة؟ (صفّق عند كل مقطع)':'كم حرفًا في الكلمة؟ (الشدّة حرفان)'}
+ $('#qa').innerHTML=`<div class="gtitle" style="margin-top:8px">${t}</div><div class="fopts" id="op">${o.map((x,j)=>`<button class="o ${R.st?'':'t'}" onclick="ghPick(${j})">${x.t}</button>`).join('')}</div>`;
+}
+function ghPick(j){
+ const R=S.r[S.k];if(R.done||R.busy)return;const o=(R.st?R.no:R.opts)[j],b=$('#op').children[j];
+ if(!o.ok){R.tries++;b.classList.add('r');b.disabled=true;
+  $('#msg').innerHTML=`<div class="fb hint">${['الشدّة حرفان متشابهان: الأول ساكن ( ْ )، والثاني عليه الحركة.','اقرأ الكلمة بعد فكّ الشدّة ببطء، وصفّق عند كل مقطع.','عُدّ الحروف بعد فكّ الشدّة: الحرف المشدّد حرفان.'][R.st]}</div>`;return}
+ b.classList.add('g');$('#msg').innerHTML='';
+ if(R.st===0){const t=whole(R.open);$('#an').innerHTML='<h3 class="sec">٢- تحليل الكلمة</h3>';$('#un').innerHTML=`<div class="row"><span class="syb" style="--h:150">${R.c}ّ = ${R.c}ْ + ${R.c}${R.v}</span></div><p class="row"><button class="w" style="font-size:30px" data-say="${esc(R.w)}">${t}</button></p>`}
+ if(R.st<2){R.busy=1;setTimeout(()=>{R.st++;R.busy=0;ghQ(R)},900);return}
+ R.done=1;
+ $('#qa').innerHTML=`<h3 style="text-align:center">المقاطع (${R.sy.length})</h3><div class="row">${R.sy.map((x,k)=>`<span class="syb" style="--h:${HUE(k*3)}">${sylT(R.open,x[0],x[1])}</span>`).join('')}</div><h3 style="text-align:center;margin-top:10px">الحروف (${R.open.length})</h3><div class="lets">${R.open.map(x=>`<span>${x.b}</span>`).join('')}</div>`;
+ $('#msg').innerHTML=`<div class="fb ok">${praise()}</div>`;gDone(R,1);
+}
 function G(kind,i){
- const r={w:gWords,f:gForms,m:gMadd,s:gSuk,a:gAna,p:gPic,r:gSent}[kind](i);
+ const r={w:gWords,f:gForms,m:gMadd,s:gSuk,a:gAna,p:gPic,r:gSent,l:gLam,d:gShd,h:gShA}[kind](i);
  if(!r.length)return;S={g:kind,i,r,k:0,res:[]};gr();
 }
-const gTop=()=>`<div class="qtop"><button class="alt" onclick="learn(${S.i})">رجوع</button><span class="chip2">${GN[S.g]}</span>${dotsH(S.r.length,S.k)}</div>`;
+const back=()=>S&&S.i<0?'home()':'learn('+S.i+')';
+const gTop=()=>`<div class="qtop"><button class="alt" onclick="${back()}">رجوع</button><span class="chip2">${GN[S.g]}</span>${dotsH(S.r.length,S.k)}</div>`;
 function gr(){
  const R=S.r[S.k];if(!R)return gEnd();R.tries=0;R.done=0;R.logged=0;scrollTo(0,0);
- ({w:grW,f:grF,m:grM,s:grS,a:grA,p:grP,r:grR})[S.g](R);
+ ({w:grW,f:grF,m:grM,s:grS,a:grA,p:grP,r:grR,l:grL,d:grD,h:grH})[S.g](R);
 }
 function grW(R){
  R.n=0;R.tray=shuf(R.a.map((x,k)=>({key:x.b+x.m,t:shp(R.a,k)})));
@@ -492,7 +590,7 @@ function grS(R){
  <div id="q2"></div><div id="msg"></div></div>`;
 }
 function grA(R){
- R.step=0;R.busy=0;
+ R.busy=0;R.ra=R.a;R.sy=syls(R.a);R.step=0;
  $('#app').innerHTML=gTop()+mascot('لنحلّل الكلمة معًا',R.w)+`<div class="card">${picH(R.w)}<div class="wline"><span class="fx">${esc(R.w)}</span></div><p class="row"><button class="sayb" data-say="${esc(R.w)}">🔊 اسمع الكلمة</button></p><div id="qa"></div><div id="msg"></div></div>`;
  gaQ(R);
 }
@@ -542,7 +640,7 @@ function gaPick(j){
  const R=S.r[S.k];if(R.done||R.busy)return;const o=R.opts[j],b=$('#op').children[j];
  if(o.ok){b.classList.add('g');
   if(!R.step){R.busy=1;$('#msg').innerHTML=`<div class="fb ok">${praise()} ${'👏'.repeat(R.sy.length)} الكلمة ${R.sy.length} ${R.sy.length>2?'مقاطع':R.sy.length===2?'مقطعان':'مقطع'}</div>`;setTimeout(()=>{R.step=1;R.busy=0;$('#msg').innerHTML='';gaQ(R)},1300)}
-  else{R.done=1;$('#qa').innerHTML=`<h3 style="text-align:center">المقاطع</h3><div class="row">${R.sy.map((s,x)=>`<span class="syb" style="--h:${HUE(x*3)}">${sylT(R.a,s[0],s[1])}</span>`).join('')}</div><h3 style="text-align:center;margin-top:10px">الحروف (${R.a.length})</h3><div class="lets">${R.a.map(x=>`<span>${x.b}</span>`).join('')}</div>`;
+  else{R.done=1;$('#qa').innerHTML=`<h3 style="text-align:center">المقاطع</h3><div class="row">${R.sy.map((s,x)=>`<span class="syb" style="--h:${HUE(x*3)}">${sylT(R.ra,s[0],s[1])}</span>`).join('')}</div><h3 style="text-align:center;margin-top:10px">الحروف (${R.a.length})</h3><div class="lets">${R.a.map(x=>`<span>${x.b}</span>`).join('')}</div>`;
    $('#msg').innerHTML=`<div class="fb ok">${praise()}</div>`;gDone(R,1)}
  }else{R.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">${R.step?'عُدّ الحروف واحدًا واحدًا. الشدّة لا تُعدّ حرفًا جديدًا.':'انطق الكلمة ببطء وصفّق عند كل مقطع.'}</div>`}
 }
@@ -557,16 +655,16 @@ function grPick(j){
  else{R.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">أعد قراءة الجملة، وفكّر: أيّ كلمة تناسب المعنى؟</div>`}
 }
 function gDone(R,manual){
- if(R.logged)return;R.logged=1;S.res.push(R.tries===0);burst();log({letter:ORD[S.i],skill:'لعبة: '+GN[S.g],ok:R.tries===0,tries:R.tries});
- if(manual){const last=S.k+1>=S.r.length;$('#msg').insertAdjacentHTML('beforeend',`<p class="row" style="margin-top:12px"><button class="go" onclick="S.k++;gr()">${last?'إنهاء اللعبة':'الكلمة التالية'}</button><button class="alt" onclick="learn(S.i)">رجوع</button></p>`);return}
+ if(R.logged)return;R.logged=1;S.res.push(R.tries===0);burst();log({letter:S.i<0?'ال':ORD[S.i],skill:'لعبة: '+GN[S.g],ok:R.tries===0,tries:R.tries});
+ if(manual){const last=S.k+1>=S.r.length;$('#msg').insertAdjacentHTML('beforeend',`<p class="row" style="margin-top:12px"><button class="go" onclick="S.k++;gr()">${last?'إنهاء اللعبة':'الكلمة التالية'}</button><button class="alt" onclick="${back()}">رجوع</button></p>`);return}
  setTimeout(()=>{S.k++;gr()},1900);
 }
 function gEnd(){
- const good=S.res.filter(Boolean).length,p=Math.round(good/S.r.length*100),n=p>=85?3:p>=60?2:1,key=ORD[S.i]+':'+S.g;
+ const good=S.res.filter(Boolean).length,p=Math.round(good/S.r.length*100),n=p>=85?3:p>=60?2:1,key=(S.i<0?'ال':ORD[S.i])+':'+S.g;
  GS[key]=Math.max(GS[key]||0,n);saveLocal();updHd();
- const nx=GK[(GK.indexOf(S.g)+1)%GK.length];
+ const nx='ldh'.includes(S.g)?S.g:GK[(GK.indexOf(S.g)+1)%GK.length];
  $('#app').innerHTML=`<div class="card big-res"><span class="owl">🦉</span><div class="stars" style="color:var(--sun-d)">${'★'.repeat(n)}</div><h2>أنهيت لعبة «${GN[S.g]}»</h2><p class="mut" style="margin:0">أجبت ${good} من ${S.r.length} من أول مرة</p>
- <button onclick="G('${S.g}',${S.i})">العب مرة أخرى</button><button style="--c:var(${GC[nx][0]});--cd:var(${GC[nx][1]})" onclick="G('${nx}',${S.i})">لعبة «${GN[nx]}»</button><button class="alt" onclick="learn(${S.i})">العودة للحرف</button></div>`;
+ <button onclick="G('${S.g}',${S.i})">العب مرة أخرى</button>${'ldh'.includes(S.g)?'':`<button style="--c:var(${GC[nx][0]});--cd:var(${GC[nx][1]})" onclick="G('${nx}',${S.i})">لعبة «${GN[nx]}»</button>`}<button class="alt" onclick="${back()}">${S.i<0?'الرئيسية':'العودة للحرف'}</button></div>`;
  burst();
 }
 /* ---------- teacher dashboard ---------- */
