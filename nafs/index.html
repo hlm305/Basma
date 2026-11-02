@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>تدريب نافس الإلكتروني</title>
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500;700&family=Noto+Naskh+Arabic:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap">
+<style>
+/* Layout: purple banner, then a shelf of colored model rows (like the library); tapping a row opens its test in place */
+:root{
+  --bg:#fbf9f5; --surface:#ffffff; --ink:#26213d; --muted:#5f5a78; --line:#e6e1ef;
+  --brand:#3f3577; --on-brand:#ffffff; --brand-soft:#eeeaf9; --sun:#f4c76a;
+  --ok:#2f9d62; --ok-soft:#e3f5ea; --bad:#d9566b; --bad-soft:#fbe7ea;
+  --c1:#e9873a; --c2:#2f9d62; --c3:#2b93a6; --c4:#6a56b8; --c5:#d9566b; --c6:#c9962b;
+  --t1:#fdf0e4; --t2:#e6f5ec; --t3:#e3f3f6; --t4:#eeeaf9; --t5:#fbe9ec; --t6:#faf2de;
+  --display:"Readex Pro","IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --body:"IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --read:"Noto Naskh Arabic","Traditional Arabic",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16131f; --surface:#211c30; --ink:#f1eef9; --muted:#b5aecb; --line:#352e4a;
+  --brand:#2a2350; --on-brand:#ffffff; --brand-soft:#2c2545;
+  --ok:#5cc98b; --ok-soft:#173326; --bad:#f0849a; --bad-soft:#3a1b23;
+  --t1:#33241a; --t2:#183025; --t3:#16292e; --t4:#2a2445; --t5:#35202a; --t6:#322a17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#16131f; --surface:#211c30; --ink:#f1eef9; --muted:#b5aecb; --line:#352e4a;
+  --brand:#2a2350; --on-brand:#ffffff; --brand-soft:#2c2545;
+  --ok:#5cc98b; --ok-soft:#173326; --bad:#f0849a; --bad-soft:#3a1b23;
+  --t1:#33241a; --t2:#183025; --t3:#16292e; --t4:#2a2445; --t5:#35202a; --t6:#322a17; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.7;direction:rtl}
+.band{background:#3f3577;color:#fff;border-radius:0 0 0 48px;position:relative;overflow:hidden}
+.band-in{max-width:760px;margin:0 auto;padding-block:26px 30px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;align-items:center;gap:16px;position:relative}
+.blob{position:absolute;border-radius:50%;opacity:.22;pointer-events:none}
+.eyebrow{display:inline-block;background:var(--sun);color:#3f3577;font-weight:700;border-radius:99px;padding:3px 14px;font-size:.85rem}
+.band h1{font-family:var(--display);font-size:clamp(1.8rem,6.5vw,2.6rem);line-height:1.2;margin:8px 0 2px;text-wrap:balance}
+.band p{margin:0;color:#d9d3f7;font-weight:600}
+.mark{width:84px;height:84px;flex:none;background:#fff;border-radius:20px;padding:8px;transform:rotate(-5deg)}
+.wrap{max-width:760px;margin:0 auto;padding-block:22px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.namebox{display:flex;flex-direction:column;gap:6px}
+label{font-weight:700}
+input[type=text]{font:inherit;width:100%;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+input[type=text]:focus{outline:none;border-color:var(--c4)}
+.shelf{display:flex;flex-direction:column;gap:12px;list-style:none;margin:0;padding:0}
+.row{font:inherit;width:100%;text-align:right;cursor:pointer;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:14px;background:var(--t);color:var(--ink);border:0;border-right:8px solid var(--c);border-radius:20px;padding:14px 16px;transition:transform .15s}
+.row:hover{transform:translateX(-4px)}
+.num{width:52px;height:52px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:1.25rem}
+.rt{display:flex;flex-direction:column;min-width:0}
+.rt b{font-family:var(--display);font-size:1.1rem;line-height:1.4}
+.rt span{color:var(--muted);font-size:.88rem}
+.go{font-weight:700;font-size:.85rem;color:var(--c);background:var(--surface);border:1.5px solid var(--c);border-radius:99px;padding:5px 12px;white-space:nowrap}
+.done{font-size:.8rem;font-weight:700;color:var(--ok)}
+.tagrv{font-size:.78rem;font-weight:700;color:var(--c6)}
+.shelf li{display:flex;flex-direction:column;gap:6px}
+.solvebtn{font:inherit;align-self:flex-start;margin-right:70px;background:none;border:0;color:var(--c);font-weight:700;font-size:.88rem;cursor:pointer;padding:2px 4px}
+.solvebtn:hover{text-decoration:underline}
+.solvebtn:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+@media (max-width:460px){.solvebtn{margin-right:60px}}
+.sq{display:flex;flex-direction:column;gap:10px;padding-top:14px;border-top:1px solid var(--line)}
+.ck{margin-right:auto;color:var(--ok);font-size:1.2rem}
+details summary{list-style:none}
+details summary::-webkit-details-marker{display:none}
+.note{background:var(--t6);border-right:5px solid var(--c6);border-radius:12px;padding:10px 14px;font-size:.92rem}
+@media (max-width:460px){.row{grid-template-columns:46px 1fr}.num{width:44px;height:44px}.go{grid-column:2;justify-self:start}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:16px}
+h2{font-family:var(--display);font-size:1.25rem;margin:0;text-wrap:balance}
+p{margin:0}
+.btn{font:inherit;font-family:var(--display);font-weight:700;font-size:1.05rem;border:0;border-radius:99px;padding:12px 26px;cursor:pointer;background:#3f3577;color:#fff;align-self:flex-start}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.btn:focus-visible,.opt:focus-visible,.row:focus-visible,.toggle:focus-visible,.back:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.back{font:inherit;background:none;border:0;color:var(--muted);cursor:pointer;font-weight:600;padding:0;align-self:flex-start}
+.progress{height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--c1),var(--sun));border-radius:99px;transition:width .3s}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums}
+.passage{border:2px dashed var(--line);border-radius:18px;background:var(--bg)}
+.toggle{font:inherit;width:100%;background:none;border:0;color:var(--c3);font-weight:700;padding:12px 16px;cursor:pointer;text-align:right;display:flex;justify-content:space-between;gap:10px}
+.ptext{padding:0 18px 18px;font-family:var(--read);font-size:1.18rem;line-height:2.1}
+.ptext p+p{margin-top:8px}
+.q{font-family:var(--display);font-weight:700;font-size:1.2rem;line-height:1.6}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:480px){.opts{grid-template-columns:1fr}}
+.opt{font:inherit;text-align:right;cursor:pointer;display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:16px;padding:12px 14px;min-height:58px}
+.opt .l{flex:none;width:34px;height:34px;border-radius:50%;background:var(--brand-soft);color:var(--ink);display:grid;place-items:center;font-weight:700;font-family:var(--display)}
+.opt:hover:not(:disabled){border-color:var(--c4)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .l{background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .l{background:var(--bad);color:#fff}
+.fb{font-weight:700;border-radius:14px;padding:10px 14px}
+.fb.ok{background:var(--ok-soft);color:var(--ok)}
+.fb.no{background:var(--bad-soft);color:var(--bad)}
+.score{font-family:var(--display);font-size:3rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.stars{font-size:2rem;letter-spacing:4px;color:var(--c6)}
+.review{display:flex;flex-direction:column;gap:10px}
+.rv{border-radius:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--line)}
+.rv b{display:block}
+.rv .y{color:var(--bad)} .rv .c{color:var(--ok);font-weight:700}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+footer{background:#3f3577;color:#fff;border-radius:48px 0 0 0}
+footer div{max-width:760px;margin:0 auto;padding-block:18px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-weight:700;font-size:.92rem}
+footer b{color:var(--sun)}
+@media (prefers-reduced-motion:reduce){.row,.progress i{transition:none}}
+</style>
+
+</head>
+<body>
+<header class="band">
+  <span class="blob" style="width:220px;height:220px;background:#f0943f;left:-70px;top:-110px"></span>
+  <span class="blob" style="width:120px;height:120px;background:#3fae6a;left:34%;bottom:-70px"></span>
+  <div class="band-in">
+    <div><span class="eyebrow">مسابقة فرسان نافس 2026</span>
+      <h1>تدريب نافس الإلكتروني</h1>
+      <p>مادة لغتي · القراءة · الصف الثالث الابتدائي</p></div>
+    <svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect x="6" y="18" width="30" height="30" rx="5" fill="#f0943f" transform="rotate(-12 21 33)"/><circle cx="50" cy="32" r="17" fill="#3fae6a"/><path d="M42 32l6 6 11-12" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="66" y="13" width="26" height="30" rx="5" fill="#3aa6b8" transform="rotate(10 79 28)"/><text x="50" y="88" text-anchor="middle" font-family="Readex Pro,sans-serif" font-weight="700" font-size="26" fill="#3f3577">نافس</text></svg>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<footer><div><span>الابتدائية 179 الطفولة المبكرة</span><span>إعداد: <b>فاطمة المطيري</b></span></div></footer>
+
+<script src="models.js"></script>
+<script>
+const L=["أ","ب","ج","د"];
+const NOTE=`<p class="note"><b>تنويه:</b> التصحيح في هذه الصفحة إلكتروني وقابل للخطأ. إذا شككت في إجابة فارجع إلى معلمتك.</p>`;
+const app=document.getElementById("app");
+let S={name:"",model:null,i:0,ans:[],open:true};
+const best={};
+try{Object.assign(best,JSON.parse(localStorage.getItem("nafs-best")||"{}"));S.name=localStorage.getItem("nafs-name")||""}catch(e){}
+const save=()=>{try{localStorage.setItem("nafs-best",JSON.stringify(best));localStorage.setItem("nafs-name",S.name)}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const toTop=()=>window.scrollTo({top:0});
+
+function home(){
+  app.innerHTML=`<div class="namebox"><label for="nm">اسم الطالب/ـة</label><input type="text" id="nm" placeholder="اكتب اسمك قبل أن تبدأ" value="${esc(S.name)}"></div>
+  ${NOTE}
+  <h2>اختر نموذجًا للتدريب (${ORDER.length} نموذجًا)</h2>
+  <ul class="shelf">${ORDER.map((k,ix)=>{const m=M[k],c=ix%6+1,b=best[k];
+    return `<li><button class="row" data-k="${k}" style="--c:var(--c${c});--t:var(--t${c})"><span class="num">${ix+1}</span><span class="rt"><b>${m.name}</b><span>${m.sub} · ${m.q.length} سؤالًا</span>${m.review?`<span class="tagrv">الحل إلكتروني · بانتظار مراجعة المعلمة</span>`:""}${b!==undefined?`<span class="done">أفضل نتيجة: ${b} / ${m.q.length}</span>`:""}</span><span class="go">ابدأ ‹</span></button></li>`}).join("")}</ul>`;
+  const nm=app.querySelector("#nm"); nm.oninput=()=>{S.name=nm.value;save()};
+  app.querySelectorAll(".row").forEach(b=>b.onclick=()=>{S.model=b.dataset.k;S.i=0;S.ans=[];S.open=true;question();toTop()});
+  app.querySelectorAll(".solvebtn").forEach(b=>b.onclick=()=>{S.model=b.dataset.s;solved();toTop()});
+}
+function question(){
+  const m=M[S.model],[pk,qt,opts,cor]=m.q[S.i],p=P[pk],n=m.q.length,a=S.ans[S.i];
+  if(S.i===0||m.q[S.i-1][0]!==pk){if(S.ans[S.i]===undefined)S.open=true}
+  app.innerHTML=`<button class="back" id="bk">→ كل النماذج</button><section class="card">
+    <div class="meta"><span>${m.name}${S.name?" · "+esc(S.name):""}</span><span>السؤال ${S.i+1} من ${n}</span></div>
+    <div class="progress"><i style="width:${(S.i/n)*100}%"></i></div>
+    <div class="passage"><button class="toggle" id="tg" aria-expanded="${S.open}"><span>📖 ${p.t}</span><span>${S.open?"إخفاء النص":"اقرأ النص"}</span></button>
+      <div class="ptext" ${S.open?"":"hidden"}>${p.p.map(x=>`<p>${x}</p>`).join("")}</div></div>
+    <p class="q">${S.i+1}. ${qt}</p>
+    <div class="opts">${opts.map((o,j)=>`<button class="opt ${a!==undefined?(j===cor?"right":j===a?"wrong":""):""}" data-j="${j}" ${a!==undefined?"disabled":""}><span class="l">${L[j]}</span><span>${o}</span></button>`).join("")}</div>
+    ${a!==undefined?(a===cor?`<p class="fb ok">أحسنت! إجابة صحيحة ✓</p>`:`<p class="fb no">إجابة غير صحيحة. الإجابة الصحيحة: (${L[cor]}) ${opts[cor]}</p>`):""}
+    ${a!==undefined?`<div class="btns"><button class="btn" id="nx">${S.i+1<n?"السؤال التالي":"عرض النتيجة"}</button></div>`:""}
+  </section>`;
+  app.querySelector("#bk").onclick=()=>{home();toTop()};
+  app.querySelector("#tg").onclick=()=>{S.open=!S.open;question()};
+  app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{S.ans[S.i]=+b.dataset.j;question();app.querySelector("#nx")?.focus()});
+  const nx=app.querySelector("#nx"); if(nx) nx.onclick=()=>{S.i++; if(S.i<n){S.open=false;question()} else result(); toTop()};
+}
+function solved(){
+  const m=M[S.model];let last=null,html="";
+  m.q.forEach((q,i)=>{const [pk,qt,opts,cor]=q;
+    if(pk!==last){const p=P[pk];html+=`<div class="passage"><details ${last===null?"open":""}><summary class="toggle">📖 ${p.t}</summary><div class="ptext">${p.p.map(x=>`<p>${x}</p>`).join("")}</div></details></div>`;last=pk}
+    html+=`<div class="sq"><p class="q">${i+1}. ${qt}</p><div class="opts">${opts.map((o,j)=>`<div class="opt ${j===cor?"right":""}"><span class="l">${L[j]}</span><span>${o}</span>${j===cor?`<b class="ck">✓</b>`:""}</div>`).join("")}</div></div>`});
+  app.innerHTML=`<button class="back" id="bk">→ كل النماذج</button><section class="card">
+    <div class="meta"><span>📘 ${m.name} · محلول</span><span>${m.q.length} سؤالًا</span></div>
+    ${m.src?`<p style="color:var(--muted);font-size:.9rem">المصدر: ${m.src}</p>`:""}
+    ${NOTE}
+    ${html}
+    <div class="btns"><button class="btn" id="st">ابدأ الاختبار الآن</button><button class="btn ghost" id="hm">كل النماذج</button></div>
+  </section>`;
+  app.querySelector("#bk").onclick=()=>{home();toTop()};
+  app.querySelector("#hm").onclick=()=>{home();toTop()};
+  app.querySelector("#st").onclick=()=>{S.i=0;S.ans=[];S.open=true;question();toTop()};
+}
+function result(){
+  const m=M[S.model],n=m.q.length,sc=m.q.filter((q,i)=>S.ans[i]===q[3]).length,pct=sc/n;
+  if(best[S.model]===undefined||sc>best[S.model]){best[S.model]=sc;save()}
+  const st=pct>=.9?3:pct>=.7?2:pct>=.5?1:0;
+  const msg=pct>=.9?"ممتاز! أنت فارس من فرسان نافس":pct>=.7?"أحسنت! مستوى جيد جدًا":pct>=.5?"جيد، واصل التدريب":"لا بأس، أعد القراءة وحاول مرة أخرى";
+  const wrong=m.q.map((q,i)=>[q,i]).filter(([q,i])=>S.ans[i]!==q[3]);
+  app.innerHTML=`<section class="card">
+    <div class="meta"><span>${m.name}${S.name?" · "+esc(S.name):""}</span></div>
+    <div class="stars" aria-label="${st} من 3 نجوم">${"★".repeat(st)}${"☆".repeat(3-st)}</div>
+    <div class="score">${sc} / ${n}</div>
+    <h2>${msg}</h2>
+    ${wrong.length?`<p style="color:var(--muted);font-weight:700">راجع الأسئلة التي أخطأت فيها:</p><div class="review">${wrong.map(([q,i])=>`<div class="rv"><b>${i+1}. ${q[1]}</b><span class="y">إجابتك: ${q[2][S.ans[i]]}</span><br><span class="c">الصحيحة: ${q[2][q[3]]}</span></div>`).join("")}</div>`:`<p>أجبت عن جميع الأسئلة إجابة صحيحة.</p>`}
+    ${NOTE}
+    <div class="btns"><button class="btn" id="re">أعد هذا النموذج</button><button class="btn ghost" id="hm">كل النماذج</button></div>
+  </section>`;
+  app.querySelector("#re").onclick=()=>{S.i=0;S.ans=[];S.open=true;question();toTop()};
+  app.querySelector("#hm").onclick=()=>{home();toTop()};
+}
+home();
+</script>
+
+</body>
+</html>
