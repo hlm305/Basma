@@ -181,6 +181,31 @@ body.nv .sp,body.nv .sayb,body.nv .lhero button{display:none!important}
 .tnrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 .tnk{display:flex;flex-direction:column;gap:2px;align-items:center;padding:12px 8px;line-height:1.5}
 .tnk b{font-size:40px;font-weight:800}.tnk span{font-size:17px;font-weight:800}.tnk small{font-size:14px;font-weight:600;opacity:.9}
+.spl{display:flex;flex-direction:row;justify-content:center;align-items:flex-start;flex-wrap:wrap;gap:4px 14px;margin:14px 0 6px;direction:rtl}
+.spc{position:relative;font-size:52px;font-weight:800;line-height:1.7;padding-bottom:6px;text-align:center}.spc .mdl{display:block;font-size:13px;line-height:1.2;color:#1479b8;font-weight:800}.spc .mdl i{display:block;font-style:normal;font-size:16px}
+.scs{align-self:center;color:var(--mut);font-size:20px;opacity:.8;margin-top:-10px}
+.spc.t-greenx,.asy.t-greenx{color:#12a36f}.spc.t-plumx,.asy.t-plumx{color:#7a4cff}.spc.t-skyx,.asy.t-skyx{color:#1479b8}
+.acard.bd-green{border-color:#12a36f}.acard.bd-plum{border-color:#7a4cff}.acard.bd-sky{border-color:#1479b8}
+.syb.bg-green{background:#12a36f}.syb.bg-plum{background:#7a4cff}.syb.bg-sky{background:#1479b8}
+.spl{transition:gap .6s ease}.spl.joined{gap:4px 0}.spl .scs{display:inline-block;transition:opacity .4s,width .6s,margin .6s;overflow:hidden;width:24px}
+.spl.snip .scs{animation:snp .35s ease-in-out infinite;opacity:1;color:#d83b2b}
+@keyframes snp{0%,100%{transform:rotate(-25deg) scale(1.25)}50%{transform:rotate(25deg) scale(1.55)}}
+.spl.joined .scs{width:0;opacity:0;margin:0;animation:none}
+.spl.joined .spc .mdl{opacity:.0;transition:opacity .4s}
+@media (prefers-reduced-motion:reduce){.spl,.spl .scs{transition:none}.spl.snip .scs{animation:none}}
+.anq{display:flex;gap:10px;flex-wrap:wrap}.anq input{flex:1 1 180px;min-width:0;font:inherit;font-size:26px;font-weight:700;padding:10px 14px;border:3px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);text-align:right}
+.anq input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}.anq .go{flex:0 0 auto}
+.asm{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;min-height:8px;margin-top:6px}
+.acards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px;margin-top:12px}
+.acard{position:relative;background:var(--card);border:3px solid hsl(var(--h) 55% 62%);border-radius:20px;padding:10px 10px 12px;text-align:center;transition:transform .2s,box-shadow .2s}
+.acard.on{transform:scale(1.04);box-shadow:0 0 0 4px var(--sun)}
+.an-n{position:absolute;inset-block-start:8px;inset-inline-start:10px;font-weight:800;color:var(--mut)}
+.asy{font-size:44px;font-weight:800;line-height:1.6;color:hsl(var(--h) 60% 38%)}
+.acard small{display:block;color:var(--mut);font-weight:700;margin-bottom:6px}
+.acard ul{list-style:none;margin:6px 0 0;padding:0;text-align:right;display:grid;gap:4px}.acard li{font-size:15px;font-weight:700}.acard li b{display:inline-block;min-width:1.4em;font-size:22px;text-align:center;color:var(--green)}.acard li span{display:block;color:var(--mut);font-weight:600;font-size:13px;margin-inline-start:1.6em}
+.atag{display:inline-block;border-radius:999px;padding:1px 10px;font-size:13px;font-weight:800;color:#fff;margin:4px 0}
+.t-green{background:#12a36f}.t-plum{background:#7a4cff}.t-sky{background:#1479b8}.t-sun{background:#d99a00}
+.leg2{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;font-weight:700;margin-top:12px}.leg2 i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-inline-end:5px;vertical-align:middle}
 @media print{body{background:#fff!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.noprint,.hd,.ft,.top button{display:none!important}.card{border:0}}
 .tbl{margin-bottom:14px}.xt th{background:#0f9d6b;color:#fff;text-align:center}.xt td{text-align:center;border:1px solid var(--line)}.xt tr:nth-child(even) td{background:var(--paper2)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -360,7 +385,7 @@ const GK=['w','f','m','s','a','p','r'];
 const VID={'م':'xNW2AzqrFk4','ب':'PrumakGHnXE','ل':'vlFpG5iCJNo','د':'TAj7-08Ik94','ن':'39oRFEK7r4M','ر':'wZR1lKdZ2kM','ف':'gb60NNsACiA','ت':'Yvp6AJUJCDY','ح':'6Vq3WZf1wOc','ش':'JimStf4YXts','أ':'-O7S6E5Vp6g','ق':'fFf1i0glmQ4','ع':'cw2_rqC-WpE','ث':'eAC7ApyBK9o',
  'ص':'c_GJYxBB3J8','س':'ZBbohtuxx6o','ك':'gVNRBXgXMic','ي':'_r5KxUn5YPs','غ':'JpCrjjEPXyM','خ':'GXNADNDcK7U','ذ':'jpcvhVDCE_U','ظ':'Dc2gkuX1NS4',
  'ط':'zrAZLAmsiaI','ز':'GdVi6EzVejk','و':'S94q9Ckb-oQ','ج':'56jjrDid0qA','ه':'ceJgkFUrIYY','ض':'jj7nokpjwf0'};
-function gtiles(i){const L=ORD[i];return `<div class="games" id="gm">${VID[L]?`<button class="gt" style="--c:var(--green);--cd:var(--green-d)" onclick="vid(${i})"><span class="gi">🎬</span><b>قراءة القطعة</b><small>شاهد واقرأ مع الفيديو</small><em>${stars(GS[L+':v'])}</em></button>`:''}<button class="gt" style="--c:var(--plum);--cd:var(--plum-d)" onclick="tut(${i})"><span class="gi">📺</span><b>مقاطع تعليمية</b><small>شرح السكون والمدود والشدّة وغيرها</small><em></em></button>${[...GK,'l','h'].map(k=>`<button class="gt" style="--c:var(${GC[k][0]});--cd:var(${GC[k][1]})" onclick="G('${k}',${i})"><span class="gi">${GC[k][2]}</span><b>${GN[k]}</b><small>${GC[k][3]}</small><em>${stars(GS[L+':'+k])}</em></button>`).join('')}<button class="gt" style="--c:var(--plum);--cd:var(--plum-d)" onclick="tnHome(${i})"><span class="gi">🌟</span><b>التنوين</b><small>ضم وفتح وكسر</small><em>${stars(Math.max(tnGS('ٌ'),tnGS('ً'),tnGS('ٍ'),tnGS('all')))}</em></button></div>`}
+function gtiles(i){const L=ORD[i];return `<div class="games" id="gm">${VID[L]?`<button class="gt" style="--c:var(--green);--cd:var(--green-d)" onclick="vid(${i})"><span class="gi">🎬</span><b>قراءة القطعة</b><small>شاهد واقرأ مع الفيديو</small><em>${stars(GS[L+':v'])}</em></button>`:''}<button class="gt" style="--c:var(--plum);--cd:var(--plum-d)" onclick="tut(${i})"><span class="gi">📺</span><b>مقاطع تعليمية</b><small>شرح السكون والمدود والشدّة وغيرها</small><em></em></button>${[...GK,'l','h'].map(k=>`<button class="gt" style="--c:var(${GC[k][0]});--cd:var(${GC[k][1]})" onclick="G('${k}',${i})"><span class="gi">${GC[k][2]}</span><b>${GN[k]}</b><small>${GC[k][3]}</small><em>${stars(GS[L+':'+k])}</em></button>`).join('')}<button class="gt" style="--c:var(--plum);--cd:var(--plum-d)" onclick="tnHome(${i})"><span class="gi">🌟</span><b>التنوين</b><small>ضم وفتح وكسر</small><em>${stars(Math.max(tnGS('ٌ'),tnGS('ً'),tnGS('ٍ'),tnGS('all')))}</em></button><button class="gt" style="--c:var(--sun-d);--cd:var(--sun-d)" onclick="an(${i})"><span class="gi">✍️</span><b>حلّل كلمتك</b><small>اكتب أي كلمة وشاهد مقاطعها</small><em></em></button></div>`}
 /* teaching videos chosen by the teacher, shared by every letter (last tile in each letter's skills) */
 const TUT=[['السكون','aXloqdxNZlM','ْ'],['الحركات القصيرة والطويلة (المدود)','mdwUZ_hlGhg','ـَا'],['الشدّة','pi5SxozfJSo','ـّ'],['ال القمرية وال الشمسية','vMB6ySDTBxk','ال'],
  ['تحليل الكلمات إلى مقاطع','W4HIk6Jp35k','✂'],['اسم الإشارة (هذا - هذه)','tdfbs5Fx7_Q','👉'],['ضمير المتكلم (أنا - نحن)','mH2DL5imSiI','🙋']];
@@ -778,6 +803,74 @@ function tnEnd(){
  $('#app').innerHTML=`<div class="card big-res"><span class="owl">🦉</span><div class="stars" style="color:var(--sun-d)">${'★'.repeat(n)}</div><h2>أنهيت تدريب التنوين</h2><p class="mut" style="margin:0">أجبت ${good} من ${tot} من أول مرة</p>
  <button onclick="tnStart('${TN.m}')">تدريب جديد</button><button class="alt" onclick="tnHome()">اختيار تدريب آخر</button><button class="alt" onclick="tnBack()">رجوع</button></div>`;
  burst();
+}
+
+/* ================= حلّل كلمتك (أداة تحليل حرّة) ================= */
+const NMX={'ا':'ألف','أ':'ألف','إ':'همزة','آ':'ألف مدّ','ء':'همزة','ة':'تاء مربوطة','ى':'ألف مقصورة','ئ':'همزة','ؤ':'همزة','ٱ':'ألف'};
+const anName=c=>NM[c]||NMX[c]||c;
+const VN3={'َ':'الفتحة','ُ':'الضمة','ِ':'الكسرة'},TNN={'ً':'تنوين الفتح','ٌ':'تنوين الضم','ٍ':'تنوين الكسر'},MDL={'ا':'الألف','و':'الواو','ي':'الياء'};
+let ANB=null;
+function an(i,w0){
+ if(unsub){clearInterval(unsub);unsub=null}
+ if(i!==undefined)ANB=i;S={an:1,i:-1};scrollTo(0,0);
+ const ex=(ANB!==null&&ANB>=0&&U[ANB])?U[ANB][1].filter(w=>!w.includes('ّ')).slice(0,4):[];
+ $('#app').innerHTML=`<div class="top"><button class="alt" onclick="anBack()">رجوع</button>${vbH()}</div>
+ <section class="card"><h3>حلّل كلمتك</h3><p class="mut" style="margin:4px 0 12px">اكتب كلمة بالتشكيل، وشاهد كيف تنقسم إلى مقاطع وحروف.</p>
+ <div class="anq"><input id="anw" dir="rtl" lang="ar" placeholder="اكتب الكلمة هنا" maxlength="25" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="go" onclick="anRun()">حلّل الكلمة</button></div>
+ ${ex.length?`<p class="mut" style="margin:12px 0 6px">جرّب كلمات من هذا الحرف:</p><div class="row">${ex.map(w=>`<button class="w" onclick="anRun('${w}')">${w}</button>`).join('')}</div>`:''}
+ <div id="msg"></div></section><div id="anr"></div>`;
+ const f=$('#anw');f.addEventListener('keydown',e=>{if(e.key==='Enter')anRun()});
+ if(w0)anRun(w0);
+}
+function anBack(){const b=ANB;ANB=null;b!==null&&b>=0?learn(b):home()}
+function anType(a,s,e){
+ if(e>s){const v=vowelOf(a[s]);if(v&&a[e].m===''&&a[e].b===MADD[v]&&e===s+1)return ['ممدود','مقطع ممدود','حرف بحركة ثم حرف مدّ','sky'];
+  if([...Array(e-s).keys()].some(k=>hasSk(a[s+1+k])))return ['ساكن','مقطع ساكن','فيه حرف ساكن','plum']}
+ if(!hasV(a[s]))return ['ساكن','حرف ساكن','يُقرأ مع الحرف الذي قبله','plum'];
+ return ['متحرك','مقطع متحرك','حرف بحركة وحده','green'];
+}
+function anLetter(a,k,s,e){
+ const x=a[k],nm=anName(x.b);
+ if(k>s&&k===e&&e===s+1&&vowelOf(a[s])&&x.m===''&&x.b===MADD[vowelOf(a[s])])return [nm,'حرف مدّ بـ'+MDL[x.b]];
+ const parts=[];const v=vowelOf(x);const tn=[...x.m].find(c=>'ًٌٍ'.includes(c));
+ if(x.m.includes('ّ'))parts.push('عليه شدّة');
+ if(hasSk(x))parts.push('ساكن');
+ else if(tn)parts.push(TNN[tn]);
+ else if(v)parts.push('متحرك بـ'+VN3[v]);
+ else parts.push('بدون حركة');
+ return [nm,parts.join(' · ')];
+}
+function anRun(w){
+ const f=$('#anw');let t=(w||f.value||'').trim().split(/\s+/)[0]||'';if(f&&w)f.value=w;
+ const m=$('#msg');m.innerHTML='';
+ if(!t){m.innerHTML='<div class="fb hint">اكتب كلمة أولًا.</div>';$('#anr').innerHTML='';return}
+ const a=parseW(t).filter(x=>/[ء-ي]/.test(x.b));
+ if(t.includes('ّ')){m.innerHTML='<div class="fb hint">كلمات الشدّة ليست في هذا المستوى، اكتب كلمة بدون شدّة.</div>';$('#anr').innerHTML='';return}
+ if(!a.length){m.innerHTML='<div class="fb hint">اكتب كلمة بحروف عربية.</div>';$('#anr').innerHTML='';return}
+ if(!a.some(hasV)&&a.length>1)m.innerHTML='<div class="fb hint">اكتب الكلمة بالتشكيل (الفتحة والضمة والكسرة والسكون) ليكون التحليل صحيحًا.</div>';
+ const sy=syls(a),W=whole(a);
+ const cards=sy.map(([s,e],j)=>{const ty=anType(a,s,e),h=HUE(j*3);
+  const tn=a.slice(s,e+1).some(x=>[...x.m].some(c=>'ًٌٍ'.includes(c)));
+  return `<div class="acard bd-${ty[3]}" style="--h:${h}" id="ac${j}"><div class="an-n">${j+1}</div><span class="atag t-${ty[3]}">${ty[1]}</span><div class="asy t-${ty[3]}x">${esc(sylT(a,s,e))}</div><small>${ty[2]}</small>
+  <ul>${a.slice(s,e+1).map((x,q)=>{const r=anLetter(a,s+q,s,e);return `<li><b>${esc(x.b)}</b> ${r[0]} <span>${r[1]}</span></li>`}).join('')}</ul>${tn?'<span class="atag t-sun">فيه تنوين</span>':''}</div>`}).join('');
+ const hasSkl=a.some(x=>hasSk(x));
+ $('#anr').innerHTML=`<section class="card"><h3>الكلمة مفكّكة إلى مقاطع</h3><div class="spl" id="anw2" role="img" aria-label="${esc(W)}">${sy.map(([s0,e0],j)=>{const ty=anType(a,s0,e0),md=ty[3]==='sky';return (j?'<span class="scs" aria-hidden="true">✂</span>':'')+`<span class="spc t-${ty[3]}x">${esc(sylT(a,s0,e0))}${md?'<small class="mdl"><i>↑</i>حرف المدّ</small>':''}</span>`}).join('')}</div>
+  <p class="row"><button class="sayb" data-say="${esc(W)}">🔊 استمع</button><button class="alt" id="anbt" onclick="anBuild()">🧩 ركّب الكلمة</button></p>
+  
+  <p class="mut" style="text-align:center;margin:6px 0 0">عدد المقاطع: <b>${sy.length}</b> · عدد الحروف: <b>${a.length}</b></p></section>
+  <div class="leg2"><span><i class="t-green"></i>مقطع متحرك: حرف بحركة وحده</span><span><i class="t-plum"></i>مقطع ساكن: فيه حرف ساكن</span><span><i class="t-sky"></i>مقطع ممدود: حرف مدّ</span></div>
+  <div class="acards">${cards}</div>
+  ${hasSkl?'<div class="ins" style="margin-top:12px"><b>الحرف الساكن:</b> لا يُنطق وحده، بل يُقرأ مع الحرف الذي قبله في مقطع واحد.</div>':''}`;
+ ANS={n:sy.length};
+ $('#anr').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+}
+let ANS={n:0},anTm=[];
+function anBuild(){
+ anTm.forEach(clearTimeout);anTm=[];const sp=$('#anw2'),bt=$('#anbt');if(!sp)return;
+ if(sp.classList.contains('joined')){sp.classList.remove('joined','snip');bt.textContent='🧩 ركّب الكلمة';return}
+ bt.disabled=true;sp.classList.add('snip');
+ anTm.push(setTimeout(()=>{sp.classList.remove('snip');sp.classList.add('joined')},reduce?100:1100));
+ anTm.push(setTimeout(()=>{burst();bt.disabled=false;bt.textContent='✂️ فكّك الكلمة'},reduce?400:1900));
 }
 
 /* ---------- teacher dashboard ---------- */
