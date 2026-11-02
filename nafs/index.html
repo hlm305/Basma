@@ -63,6 +63,7 @@ input[type=text]:focus{outline:none;border-color:var(--c4)}
 .ck{margin-right:auto;color:var(--ok);font-size:1.2rem}
 details summary{list-style:none}
 details summary::-webkit-details-marker{display:none}
+.srcl{font-size:.75rem;color:var(--muted)}
 .note{background:var(--t6);border-right:5px solid var(--c6);border-radius:12px;padding:10px 14px;font-size:.92rem}
 @media (max-width:460px){.row{grid-template-columns:46px 1fr}.num{width:44px;height:44px}.go{grid-column:2;justify-self:start}}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:16px}
@@ -102,6 +103,7 @@ p{margin:0}
 .btns{display:flex;gap:10px;flex-wrap:wrap}
 footer{background:#3f3577;color:#fff;border-radius:48px 0 0 0}
 footer div{max-width:760px;margin:0 auto;padding-block:18px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-weight:700;font-size:.92rem}
+footer .copy{flex-basis:100%;text-align:center;font-weight:400;font-size:.78rem;opacity:.85}
 footer b{color:var(--sun)}
 @media (prefers-reduced-motion:reduce){.row,.progress i{transition:none}}
 </style>
@@ -119,7 +121,7 @@ footer b{color:var(--sun)}
   </div>
 </header>
 <main class="wrap" id="app"></main>
-<footer><div><span>الابتدائية 179 الطفولة المبكرة</span><span>إعداد: <b>فاطمة المطيري</b></span></div></footer>
+<footer><div><span>الابتدائية 179 الطفولة المبكرة</span><span>إعداد: <b>فاطمة المطيري</b></span><span class="copy">© ٢٠٢٦ فاطمة المطيري · جميع الحقوق محفوظة لتصميم الصفحة وبرمجتها<br>الأسئلة من نماذج تدريبية لمكاتب التعليم وهيئة تقويم التعليم، والمصدر مذكور مع كل نموذج</span></div></footer>
 
 <script src="models.js"></script>
 <script>
@@ -138,7 +140,7 @@ function home(){
   ${NOTE}
   <h2>اختر نموذجًا للتدريب (${ORDER.length} نموذجًا)</h2>
   <ul class="shelf">${ORDER.map((k,ix)=>{const m=M[k],c=ix%6+1,b=best[k];
-    return `<li><button class="row" data-k="${k}" style="--c:var(--c${c});--t:var(--t${c})"><span class="num">${ix+1}</span><span class="rt"><b>${m.name}</b><span>${m.sub} · ${m.q.length} سؤالًا</span>${m.review?`<span class="tagrv">الحل إلكتروني · بانتظار مراجعة المعلمة</span>`:""}${b!==undefined?`<span class="done">أفضل نتيجة: ${b} / ${m.q.length}</span>`:""}</span><span class="go">ابدأ ‹</span></button></li>`}).join("")}</ul>`;
+    return `<li><button class="row" data-k="${k}" style="--c:var(--c${c});--t:var(--t${c})"><span class="num">${ix+1}</span><span class="rt"><b>${m.name}</b><span>${m.sub} · ${m.q.length} سؤالًا</span>${m.src?`<span class="srcl">المصدر: ${m.src}</span>`:""}${m.review?`<span class="tagrv">الحل إلكتروني · بانتظار مراجعة المعلمة</span>`:""}${b!==undefined?`<span class="done">أفضل نتيجة: ${b} / ${m.q.length}</span>`:""}</span><span class="go">ابدأ ‹</span></button></li>`}).join("")}</ul>`;
   const nm=app.querySelector("#nm"); nm.oninput=()=>{S.name=nm.value;save()};
   app.querySelectorAll(".row").forEach(b=>b.onclick=()=>{S.model=b.dataset.k;S.i=0;S.ans=[];S.open=true;question();toTop()});
   app.querySelectorAll(".solvebtn").forEach(b=>b.onclick=()=>{S.model=b.dataset.s;solved();toTop()});
