@@ -64,6 +64,16 @@ input[type=text]:focus{outline:none;border-color:var(--c4)}
 details summary{list-style:none}
 details summary::-webkit-details-marker{display:none}
 .srcl{font-size:.75rem;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stats div{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center;display:flex;flex-direction:column}
+.stats b{font-family:var(--display);font-size:1.6rem;font-variant-numeric:tabular-nums}
+.stats span{font-size:.85rem;color:var(--muted)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:700}
+td{font-variant-numeric:tabular-nums}
+select{font:inherit;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
 .note{background:var(--t6);border-right:5px solid var(--c6);border-radius:12px;padding:10px 14px;font-size:.92rem}
 @media (max-width:460px){.row{grid-template-columns:46px 1fr}.num{width:44px;height:44px}.go{grid-column:2;justify-self:start}}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:16px}
@@ -126,6 +136,9 @@ footer b{color:var(--sun)}
 <script src="models.js"></script>
 <script>
 const L=["أ","ب","ج","د"];
+const FB="https://defense-fingerprint-default-rtdb.firebaseio.com",TPIN="922727";
+let isT=false;try{isT=new URLSearchParams(location.search).get("t")===TPIN}catch(e){}
+function logResult(rec){try{fetch(FB+"/nafs_results.json",{method:"POST",body:JSON.stringify(rec)}).catch(()=>{})}catch(e){}}
 const NOTE=`<p class="note"><b>تنويه:</b> التصحيح في هذه الصفحة إلكتروني وقابل للخطأ. إذا شككت في إجابة فارجع إلى معلمتك.</p>`;
 const app=document.getElementById("app");
 let S={name:"",model:null,i:0,ans:[],open:true};
@@ -137,12 +150,14 @@ const toTop=()=>window.scrollTo({top:0});
 
 function home(){
   app.innerHTML=`<div class="namebox"><label for="nm">اسم الطالب/ـة</label><input type="text" id="nm" placeholder="اكتب اسمك قبل أن تبدأ" value="${esc(S.name)}"></div>
+  ${isT?`<button class="btn" id="dsh" style="background:var(--c2)">📊 لوحة المعلمة: نتائج الطلاب</button>`:""}
   ${NOTE}
   <h2>اختر نموذجًا للتدريب (${ORDER.length} نموذجًا)</h2>
   <ul class="shelf">${ORDER.map((k,ix)=>{const m=M[k],c=ix%6+1,b=best[k];
     return `<li><button class="row" data-k="${k}" style="--c:var(--c${c});--t:var(--t${c})"><span class="num">${ix+1}</span><span class="rt"><b>${m.name}</b><span>${m.sub} · ${m.q.length} سؤالًا</span>${m.src?`<span class="srcl">المصدر: ${m.src}</span>`:""}${m.review?`<span class="tagrv">الحل إلكتروني · بانتظار مراجعة المعلمة</span>`:""}${b!==undefined?`<span class="done">أفضل نتيجة: ${b} / ${m.q.length}</span>`:""}</span><span class="go">ابدأ ‹</span></button></li>`}).join("")}</ul>`;
   const nm=app.querySelector("#nm"); nm.oninput=()=>{S.name=nm.value;save()};
-  app.querySelectorAll(".row").forEach(b=>b.onclick=()=>{S.model=b.dataset.k;S.i=0;S.ans=[];S.open=true;question();toTop()});
+  const ds=app.querySelector("#dsh"); if(ds) ds.onclick=()=>{dash();toTop()};
+  app.querySelectorAll(".row").forEach(b=>b.onclick=()=>{if(!S.name.trim()){nm.focus();nm.style.borderColor="var(--bad)";nm.placeholder="اكتب اسمك أولًا ثم اختر النموذج";toTop();return}S.model=b.dataset.k;S.i=0;S.ans=[];S.open=true;question();toTop()});
   app.querySelectorAll(".solvebtn").forEach(b=>b.onclick=()=>{S.model=b.dataset.s;solved();toTop()});
 }
 function question(){
@@ -182,6 +197,7 @@ function solved(){
 function result(){
   const m=M[S.model],n=m.q.length,sc=m.q.filter((q,i)=>S.ans[i]===q[3]).length,pct=sc/n;
   if(best[S.model]===undefined||sc>best[S.model]){best[S.model]=sc;save()}
+  logResult({name:S.name.trim().slice(0,60),m:S.model,s:sc,n:n,w:m.q.map((q,i)=>S.ans[i]===q[3]?0:1).join(""),ts:Date.now()});
   const st=pct>=.9?3:pct>=.7?2:pct>=.5?1:0;
   const msg=pct>=.9?"ممتاز! أنت فارس من فرسان نافس":pct>=.7?"أحسنت! مستوى جيد جدًا":pct>=.5?"جيد، واصل التدريب":"لا بأس، أعد القراءة وحاول مرة أخرى";
   const wrong=m.q.map((q,i)=>[q,i]).filter(([q,i])=>S.ans[i]!==q[3]);
@@ -196,6 +212,41 @@ function result(){
   </section>`;
   app.querySelector("#re").onclick=()=>{S.i=0;S.ans=[];S.open=true;question();toTop()};
   app.querySelector("#hm").onclick=()=>{home();toTop()};
+}
+function dash(){
+  let DATA=[],sel="all";
+  const fmt=t=>{try{return new Date(t).toLocaleString("ar-SA",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})}catch(e){return""}};
+  const paint=()=>{
+    const rows=DATA.filter(r=>M[r.m]&&(sel==="all"||r.m===sel));
+    const names=[...new Set(rows.map(r=>r.name))];
+    const avg=rows.length?Math.round(rows.reduce((a,r)=>a+r.s/r.n,0)/rows.length*100):0;
+    let hard="";
+    if(sel!=="all"&&rows.length){const m=M[sel],cnt=m.q.map((q,i)=>rows.filter(r=>(r.w||"")[i]==="1").length);
+      const top=cnt.map((c,i)=>[c,i]).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,5);
+      hard=top.length?`<h2 style="font-size:1.05rem">أكثر الأسئلة خطأً</h2><div class="review">${top.map(([c,i])=>`<div class="rv"><b>${i+1}. ${m.q[i][1]}</b><span class="y">أخطأ فيه ${c} من ${rows.length}</span></div>`).join("")}</div>`:""}
+    const per={};rows.forEach(r=>{const k=r.name;(per[k]=per[k]||[]).push(r)});
+    document.getElementById("dbody").innerHTML=`
+      <div class="stats"><div><b>${rows.length}</b><span>محاولة</span></div><div><b>${names.length}</b><span>طالب/ـة</span></div><div><b>${avg}٪</b><span>متوسط الدرجات</span></div></div>
+      ${hard}
+      <h2 style="font-size:1.05rem">الطلاب (أفضل نتيجة)</h2>
+      <div class="tw"><table><thead><tr><th>الاسم</th><th>المحاولات</th><th>أفضل نتيجة</th><th>آخر محاولة</th></tr></thead><tbody>
+      ${Object.entries(per).sort((a,b)=>a[0].localeCompare(b[0],"ar")).map(([n,rs])=>{const bst=rs.reduce((a,r)=>r.s/r.n>a.s/a.n?r:a);return `<tr><td>${esc(n)}</td><td>${rs.length}</td><td>${bst.s}/${bst.n}${sel==="all"?` <small>(${esc(M[bst.m].name)})</small>`:""}</td><td>${fmt(Math.max(...rs.map(r=>r.ts)))}</td></tr>`}).join("")||`<tr><td colspan="4">لا توجد نتائج بعد.</td></tr>`}
+      </tbody></table></div>
+      <h2 style="font-size:1.05rem">كل المحاولات</h2>
+      <div class="tw"><table><thead><tr><th>الاسم</th><th>النموذج</th><th>الدرجة</th><th>الوقت</th></tr></thead><tbody>
+      ${rows.slice(0,300).map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(M[r.m].name)}</td><td>${r.s}/${r.n}</td><td>${fmt(r.ts)}</td></tr>`).join("")||`<tr><td colspan="4">لا توجد نتائج بعد.</td></tr>`}
+      </tbody></table></div>`;
+  };
+  app.innerHTML=`<button class="back" id="bk">→ كل النماذج</button><section class="card">
+    <h2>📊 لوحة المعلمة: نتائج تدريب نافس</h2>
+    <div class="namebox"><label for="fm">النموذج</label><select id="fm"><option value="all">كل النماذج</option>${ORDER.map(k=>`<option value="${k}">${esc(M[k].name)}</option>`).join("")}</select></div>
+    <div class="btns"><button class="btn ghost" id="rf">تحديث</button></div>
+    <div id="dbody"><p>جارٍ تحميل النتائج...</p></div>
+  </section>`;
+  app.querySelector("#bk").onclick=()=>{home();toTop()};
+  app.querySelector("#fm").onchange=e=>{sel=e.target.value;paint()};
+  const pull=()=>fetch(FB+"/nafs_results.json").then(r=>r.json()).then(o=>{DATA=Object.values(o||{}).filter(r=>r&&r.name&&r.n).sort((a,b)=>b.ts-a.ts);paint()}).catch(()=>{document.getElementById("dbody").innerHTML="<p>تعذّر تحميل النتائج. تأكدي من الاتصال بالإنترنت ثم اضغطي تحديث.</p>"});
+  app.querySelector("#rf").onclick=pull; pull();
 }
 home();
 </script>
