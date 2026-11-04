@@ -94,6 +94,8 @@ footer{color:var(--muted);font-size:.82rem;text-align:center}
 .teacherbox{display:flex;flex-direction:column;gap:6px;background:var(--accent-soft);border-radius:12px;padding:14px 16px}
 .teacherbox label{font-family:var(--display);font-size:1.05rem;color:var(--accent)}
 .teacherbox input{font-size:1.1rem;padding:10px 12px;background:var(--surface)}
+.inputs2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.inputs2>*{min-width:0}
 .cbrow{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
 .cbrow .field{flex:1 1 200px;min-width:0}
 button.danger{color:var(--bad)}
@@ -155,10 +157,15 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
 
   <section class="classbar">
     <div class="cbrow">
-      <div class="field"><label for="clsSel">الفصل</label><select id="clsSel"></select></div>
-      <button type="button" class="primary" id="clsNew">+ فصل جديد</button>
+      <div class="field"><label for="clsSel">المادة والفصل</label><select id="clsSel"></select></div>
+      <button type="button" class="primary" id="clsNew">+ مادة أو فصل جديد</button>
     </div>
-    <div class="field"><label for="klass">اسم الفصل والمادة</label><input type="text" id="klass" placeholder="مثل: لغتي – 1/3"></div>
+    <div class="inputs2">
+      <div class="field"><label for="subj">المادة</label><input type="text" id="subj" list="subjList" placeholder="مثل: لغتي"></div>
+      <div class="field"><label for="klass">الفصل</label><input type="text" id="klass" placeholder="مثل: 1/3"></div>
+    </div>
+    <datalist id="subjList"><option value="لغتي"><option value="الدراسات الإسلامية"><option value="الرياضيات"><option value="العلوم"><option value="اللغة الإنجليزية"><option value="المهارات الرقمية"><option value="المهارات الحياتية والأسرية"><option value="التربية الفنية"><option value="التربية البدنية والدفاع عن النفس"><option value="الدراسات الاجتماعية"></datalist>
+    <p class="hint">لكل مادة في كل فصل سجل مستقل. إذا أضفتي مادة جديدة لفصل موجود، ينتقل كشف أسمائه تلقائيًا.</p>
     <div class="row"><button type="button" id="clsReset">بداية فترة جديدة</button><button type="button" class="danger" id="clsDel">حذف الفصل</button></div>
     <p class="hint" id="clsInfo"></p>
   </section>
@@ -533,7 +540,7 @@ $('#pdf').addEventListener('click',()=>{
   const v=id=>$('#'+id).value.trim();
   $('#pSchool').textContent=v('school')?'المدرسة: '+v('school'):'';
   $('#pTeacher').textContent=v('teacher')?'المعلمة: '+v('teacher'):'';
-  $('#pClass').textContent=v('klass')?'المادة والفصل: '+v('klass'):'';
+  $('#pClass').textContent=[v('subj')?'المادة: '+v('subj'):'',v('klass')?'الفصل: '+v('klass'):''].filter(Boolean).join(' · ');
   $('#pDate').textContent='تاريخ التقرير: '+new Date().toLocaleDateString('ar-SA-u-ca-gregory-nu-latn');
   $('#pSign').textContent=v('teacher');$('#pDeputy').textContent=v('deputy');$('#pPrincipal').textContent=v('principal');
   $('#pLessons').innerHTML=lessons.map((L,i)=>'<li>د'+(i+1)+': '+esc(L.label)+'</li>').join('');
@@ -548,20 +555,22 @@ function loadStore(){
   if(!store||!Array.isArray(store.classes)||!store.classes.length){
     let roster='',name='';try{roster=localStorage.getItem('roster')||'';name=localStorage.getItem('f_klass')||'';}catch(e){}
     firstRun=!roster;
-    store={classes:[{id:newId(),name:name||'فصلي',roster,lessons:[]}],current:null};
+    store={classes:[{id:newId(),subject:name||'',section:'',roster,lessons:[]}],current:null};
   }
+  store.classes.forEach(c=>{if(c.subject==null){c.subject=c.name&&c.name!=='فصلي'?c.name:'';c.section='';}});
   if(!store.classes.find(c=>c.id===store.current)) store.current=store.classes[0].id;
 }
 function cur(){return store.classes.find(c=>c.id===store.current);}
 function save(){
   const c=cur(); if(!c) return;
   if(!isDemo) c.lessons=lessons.map(L=>({label:L.label,att:[...L.attendees.entries()].map(([k,a])=>[k,a.name,a.minutes])}));
-  c.roster=$('#roster').value; c.name=$('#klass').value.trim()||c.name;
+  c.roster=$('#roster').value; c.subject=$('#subj').value.trim(); c.section=$('#klass').value.trim();
   try{localStorage.setItem('hodoor_v2',JSON.stringify(store));}catch(e){}
   fillSel();
 }
+function title(c){return [c.subject,c.section].filter(Boolean).join(' – ')||'بدون اسم';}
 function fillSel(){
-  $('#clsSel').innerHTML=store.classes.map(c=>'<option value="'+c.id+'"'+(c.id===store.current?' selected':'')+'>'+esc(c.name)+' ('+c.lessons.length+' درس)</option>').join('');
+  $('#clsSel').innerHTML=store.classes.map(c=>'<option value="'+c.id+'"'+(c.id===store.current?' selected':'')+'>'+esc(title(c))+' ('+c.lessons.length+' درس)</option>').join('');
   const c=cur(); $('#clsInfo').textContent=isDemo?'':'محفوظ في هذا الجهاز: '+c.lessons.length+' درس لهذا الفصل. ارفعي ملف كل حصة جديدة فقط، والحصر يتجمع تلقائيًا.';
 }
 function makeDemo(){
@@ -576,7 +585,7 @@ function makeDemo(){
 function loadClass(){
   const c=cur(); isDemo=false;
   lessons=(c.lessons||[]).map(x=>({id:++uid,label:x.label,attendees:new Map(x.att.map(([k,n,m])=>[k,{name:n,minutes:m}]))}));
-  $('#roster').value=c.roster||''; $('#klass').value=c.name||'';
+  $('#roster').value=c.roster||''; $('#subj').value=c.subject||''; $('#klass').value=c.section||'';
   $('#errors').innerHTML=''; $('#rosterMsg').textContent=''; $('#q').value='';
   if(firstRun&&!lessons.length){makeDemo();firstRun=false;}
   fillSel(); render();
@@ -587,12 +596,19 @@ function twice(btn,fn){
   btn._t=setTimeout(()=>{delete btn.dataset.armed;btn.textContent=btn.dataset.label;},4000);
 }
 $('#clsSel').addEventListener('change',e=>{save();store.current=e.target.value;loadClass();});
-$('#clsNew').addEventListener('click',()=>{save();const c={id:newId(),name:'فصل جديد '+(store.classes.length+1),roster:'',lessons:[]};
-  store.classes.push(c);store.current=c.id;isDemo=false;lessons=[];loadClass();save();const k=$('#klass');k.focus();k.select();});
-$('#klass').addEventListener('input',()=>save());
+$('#clsNew').addEventListener('click',()=>{save();const c={id:newId(),subject:'',section:'',roster:'',lessons:[]};
+  store.classes.push(c);store.current=c.id;isDemo=false;lessons=[];loadClass();save();$('#subj').focus();});
+$('#subj').addEventListener('input',()=>save());
+$('#klass').addEventListener('input',()=>{
+  const sec=norm($('#klass').value);
+  if(sec&&!$('#roster').value.trim()){
+    const src=store.classes.find(o=>o.id!==store.current&&norm(o.section)===sec&&o.roster&&o.roster.trim());
+    if(src){$('#roster').value=src.roster;$('#rosterMsg').style.color='';$('#rosterMsg').textContent='نقلت كشف أسماء الفصل '+src.section+' من مادة '+(src.subject||'أخرى')+'.';render();}
+  }
+  save();});
 $('#clsReset').addEventListener('click',e=>twice(e.currentTarget,()=>{lessons=[];isDemo=false;$('#errors').innerHTML='';save();render();}));
 $('#clsDel').addEventListener('click',e=>twice(e.currentTarget,()=>{
-  if(store.classes.length===1){const c=cur();c.lessons=[];c.roster='';c.name='فصلي';}
+  if(store.classes.length===1){const c=cur();c.lessons=[];c.roster='';c.subject='';c.section='';}
   else{store.classes=store.classes.filter(c=>c.id!==store.current);store.current=store.classes[0].id;}
   try{localStorage.setItem('hodoor_v2',JSON.stringify(store));}catch(e){}
   loadClass();}));
