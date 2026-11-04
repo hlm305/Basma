@@ -37,6 +37,8 @@ section{background:var(--surface);border:1px solid var(--line);border-radius:12p
 .grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
 @media (max-width:720px){.grid2{grid-template-columns:1fr}}
 .grid2>*{min-width:0}
+.target{background:var(--accent-soft);color:var(--ink);border-radius:8px;padding:8px 12px;font-size:.95rem}
+.target b{color:var(--accent);font-size:1.05rem}
 .drop{border:2px dashed var(--line);border-radius:10px;padding:22px 14px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:6px;align-items:center}
 .drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
 .drop strong{font-size:1rem}
@@ -96,6 +98,9 @@ footer{color:var(--muted);font-size:.82rem;text-align:center}
 .teacherbox input{font-size:1.1rem;padding:10px 12px;background:var(--surface)}
 .inputs2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .inputs2>*{min-width:0}
+.editbox{display:flex;flex-direction:column;gap:14px}
+.tab.all{border-style:dashed}
+.tab.all[aria-selected="true"]{border-style:solid}
 .tabs{display:flex;flex-wrap:wrap;gap:8px}
 .tab{display:flex;flex-direction:column;align-items:flex-start;gap:0;border:1.5px solid var(--line);border-radius:10px;padding:8px 14px;background:var(--bg);text-align:right;min-width:0}
 .tab b{font-weight:600}
@@ -127,14 +132,23 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
 .printhead,.printfoot{display:none}
 @media print{
   :root,:root[data-theme="dark"]{--bg:#fff;--surface:#fff;--ink:#000;--muted:#444;--line:#bbb;--accent:#0f6b55;--accent-soft:#e1f0ea;--good:#1d7a4f;--good-bg:#dff2e7;--warn:#9a6200;--warn-bg:#fbefd6;--bad:#b03a2e;--bad-bg:#f8e1dd;color-scheme:light}
-  @page{size:A4;margin:12mm}
+  @page{size:A4;margin:12mm 12mm 20mm}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{font-size:11pt}
-  .wrap{padding:0;max-width:none;gap:10px}
+  .wrap{padding:0;max-width:none;display:block}
   header,.teacherbox,.classbar,.grid2,.tools,.toast,footer,#res-title{display:none!important}
   #analysis{break-before:page}
   .charts{grid-template-columns:1.4fr 1fr}
-  section{border:0;padding:0}
+  section{border:0;padding:0;display:block;margin:0 0 12px}
+  section>*+*{margin-top:12px}
+  .tablebox{display:block}
+  thead{display:table-header-group}
+  .printhead,.stats,.stat,.chartcard,.charts,.insights li,.dist>div,.chips span,.printfoot,.sig{break-inside:avoid;page-break-inside:avoid}
+  h2,h3{break-after:avoid;page-break-after:avoid}
+  #analysis{page-break-before:always}
+  .chips{display:block}.chips span{display:inline-block;margin:0 0 6px 6px}
+  .chartcard{display:block}.chartcard>*+*{margin-top:8px}
+  .printfoot{page-break-before:avoid}
   .printhead{display:flex;flex-direction:column;gap:6px}
   .printhead h1{font-size:18pt;margin:0}
   .printhead .meta{display:flex;flex-wrap:wrap;gap:4px 24px;font-size:10.5pt}
@@ -168,6 +182,7 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
     <h2>موادي وفصولي</h2>
     <div class="tabs" id="clsTabs" role="tablist"></div>
     <button type="button" class="primary" id="clsNew">+ إضافة مادة أو فصل</button>
+    <div id="editBox" class="editbox">
     <h3 class="edith" id="editH">بيانات السجل المحدد</h3>
     <div class="inputs2">
       <div class="field"><label for="subj">المادة</label><input type="text" id="subj" list="subjList" placeholder="مثل: لغتي"></div>
@@ -176,14 +191,16 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
     <datalist id="subjList"><option value="لغتي"><option value="الدراسات الإسلامية"><option value="الرياضيات"><option value="العلوم"><option value="اللغة الإنجليزية"><option value="المهارات الرقمية"><option value="المهارات الحياتية والأسرية"><option value="التربية الفنية"><option value="التربية البدنية والدفاع عن النفس"><option value="الدراسات الاجتماعية"></datalist>
     <p class="hint">لكل مادة في كل فصل سجل مستقل. لإضافة مادة ثانية اضغطي «+ إضافة مادة أو فصل»، ولا تكتبين فوق المادة الحالية لأن ذلك يغيّر اسمها. إذا أضفتي مادة لفصل موجود، ينتقل كشف أسمائه تلقائيًا.</p>
     <div class="row"><button type="button" id="clsReset">بداية فترة جديدة</button><button type="button" class="danger" id="clsDel">حذف هذا السجل</button></div>
+    </div>
     <p class="hint" id="clsInfo"></p>
   </section>
 
   <div class="grid2">
-    <section>
-      <h2>الدروس</h2>
+    <section id="uploadSec">
+      <h2>رفع الحصص</h2>
+      <div class="target">ترفعين الآن في: <b id="targetName"></b></div>
       <label class="drop" id="drop" for="files">
-        <strong>اسحبي ملفات الحضور هنا أو اضغطي للاختيار</strong>
+        <strong>اضغطي هنا لاختيار ملفات حصص <span id="dropName"></span></strong>
         <small>ملف لكل درس · CSV أو Excel من تقرير الحضور في Teams · تقدرين ترفعين عدة ملفات مرة وحدة</small>
       </label>
       <input type="file" id="files" accept=".csv,.txt,.xlsx,.xls" multiple hidden>
@@ -202,7 +219,7 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
       <div class="field">
         <label for="roster">كشف أسماء الفصل (اختياري)</label>
         <textarea id="roster" placeholder="اسم في كل سطر&#10;عشان يظهر الطالب اللي ما حضر أبدًا"></textarea>
-        <div class="row"><label class="btnlike" for="rosterFile">رفع كشف الأسماء</label><button type="button" id="rosterClear">مسح الكشف</button></div>
+        <div class="row" id="rosterBtns"><label class="btnlike" for="rosterFile">رفع كشف الأسماء</label><button type="button" id="rosterClear">مسح الكشف</button></div>
         <input type="file" id="rosterFile" accept=".xlsx,.xls,.csv,.pdf,.docx,.doc" hidden>
         <p class="hint">ارفعي كشف الأسماء بصيغة Excel أو PDF أو Word. الصفحة تلقط الأسماء تلقائيًا، وراجعيها بعدها. أو الصقي الأسماء هنا، اسم في كل سطر.</p>
         <div class="toast" id="rosterMsg" role="status"></div>
@@ -386,7 +403,7 @@ function compute(){
 let lastRows=[];
 function render(){
   $('#demo').hidden=!isDemo;
-  $('#lessons').innerHTML=lessons.map((L,i)=>'<li><span class="num">'+(i+1)+'</span><input id="lbl'+L.id+'" data-id="'+L.id+'" value="'+esc(L.label)+'" aria-label="اسم الدرس"><span class="cnt">'+L.attendees.size+' حاضر</span><button class="x" data-del="'+L.id+'" aria-label="حذف الدرس">×</button></li>').join('');
+  $('#lessons').innerHTML=lessons.map((L,i)=>'<li><span class="num">'+(i+1)+'</span><input id="lbl'+L.id+'" data-id="'+L.id+'" value="'+esc(L.label)+'" aria-label="اسم الدرس"'+(L.ro?' readonly':'')+'><span class="cnt">'+L.attendees.size+' حاضر</span>'+(L.ro?'':'<button class="x" data-del="'+L.id+'" aria-label="حذف الدرس">×</button>')+'</li>').join('');
   const rows=compute(); lastRows=rows; const n=lessons.length;
   $('#sL').textContent=n; $('#sS').textContent=rows.length;
   $('#sA').textContent=(rows.length?Math.round(rows.reduce((a,r)=>a+r.pct,0)/rows.length):0)+'٪';
@@ -580,7 +597,9 @@ function loadStore(){
   if(!store.classes.find(c=>c.id===store.current)) store.current=store.classes[0].id;
 }
 function cur(){return store.classes.find(c=>c.id===store.current);}
+let allMode=false;
 function save(){
+  if(allMode){fillSel();return;}
   const c=cur(); if(!c) return;
   if(!isDemo) c.lessons=lessons.map(L=>({label:L.label,att:[...L.attendees.entries()].map(([k,a])=>[k,a.name,a.minutes])}));
   c.roster=$('#roster').value; c.subject=$('#subj').value.trim(); c.section=$('#klass').value.trim();
@@ -589,8 +608,12 @@ function save(){
 }
 function title(c){return [c.subject,c.section].filter(Boolean).join(' – ')||'بدون اسم';}
 function fillSel(){
-  $('#clsTabs').innerHTML=store.classes.map(c=>'<button type="button" class="tab" role="tab" data-cls="'+c.id+'" aria-selected="'+(c.id===store.current)+'"><b>'+esc(title(c))+'</b><small>'+c.lessons.length+' حصة محفوظة</small></button>').join('');
+  const tot=store.classes.reduce((a,c)=>a+c.lessons.length,0);
+  $('#clsTabs').innerHTML=(store.classes.length>1?'<button type="button" class="tab all" role="tab" data-cls="__all" aria-selected="'+allMode+'"><b>تقرير شامل لكل المواد</b><small>'+tot+' حصة من كل السجلات</small></button>':'')+store.classes.map(c=>'<button type="button" class="tab" role="tab" data-cls="'+c.id+'" aria-selected="'+(c.id===store.current)+'"><b>'+esc(title(c))+'</b><small>'+c.lessons.length+' حصة محفوظة</small></button>').join('');
+  $('#editBox').hidden=allMode; $('#drop').hidden=allMode; $('#targetName').parentElement.hidden=allMode; $('#uploadSec').querySelector('h2').textContent=allMode?'كل الحصص':'رفع الحصص'; $('#rosterBtns').hidden=allMode; $('#roster').readOnly=allMode;
+  if(allMode){$('#clsInfo').textContent='هذا تقرير يجمع كل الحصص من كل المواد في تقرير واحد. لرفع حصص جديدة اختاري المادة من البطاقات.';return;}
   $('#editH').textContent='بيانات السجل المحدد: '+title(cur());
+  $('#targetName').textContent=title(cur()); $('#dropName').textContent=title(cur());
   const c=cur(); $('#clsInfo').textContent=isDemo?'':'محفوظ في هذا الجهاز: '+c.lessons.length+' درس لهذا الفصل. ارفعي ملف كل حصة جديدة فقط، والحصر يتجمع تلقائيًا.';
 }
 function makeDemo(){
@@ -602,7 +625,22 @@ function makeDemo(){
   });
   isDemo=true;
 }
+function loadAll(){
+  allMode=true; isDemo=false; lessons=[];
+  const seen=new Set(), names=[];
+  store.classes.forEach(c=>{
+    (c.lessons||[]).forEach(x=>lessons.push({id:++uid,ro:true,label:(c.subject?c.subject+': ':'')+x.label,attendees:new Map(x.att.map(([k,n,m])=>[k,{name:n,minutes:m}]))}));
+    (c.roster||'').split(/\r?\n/).forEach(n=>{n=cleanName(n);const k=norm(n);if(n&&!seen.has(k)){seen.add(k);names.push(n);}});
+  });
+  $('#roster').value=names.join('\n');
+  $('#subj').value='جميع المواد';
+  $('#klass').value=[...new Set(store.classes.map(c=>c.section).filter(Boolean))].join('، ');
+  $('#errors').innerHTML=''; $('#rosterMsg').textContent=''; $('#q').value='';
+  fillSel(); render();
+}
 function loadClass(){
+  if(store.current==='__all') return loadAll();
+  allMode=false;
   const c=cur(); isDemo=false;
   lessons=(c.lessons||[]).map(x=>({id:++uid,label:x.label,attendees:new Map(x.att.map(([k,n,m])=>[k,{name:n,minutes:m}]))}));
   $('#roster').value=c.roster||''; $('#subj').value=c.subject||''; $('#klass').value=c.section||'';
@@ -615,7 +653,8 @@ function twice(btn,fn){
   btn.dataset.label=btn.textContent;btn.dataset.armed='1';btn.textContent='اضغطي مرة ثانية للتأكيد';
   btn._t=setTimeout(()=>{delete btn.dataset.armed;btn.textContent=btn.dataset.label;},4000);
 }
-$('#clsTabs').addEventListener('click',e=>{const b=e.target.closest('[data-cls]');if(!b||b.dataset.cls===store.current)return;save();store.current=b.dataset.cls;loadClass();});
+$('#clsTabs').addEventListener('click',e=>{const b=e.target.closest('[data-cls]');if(!b)return;const id=b.dataset.cls;if(id===store.current&&!(allMode^(id==='__all')))return;
+  save(); if(id==='__all'){store._last=store.current;store.current='__all';loadAll();store.current=store._last;} else {store.current=id;loadClass();}});
 $('#clsNew').addEventListener('click',()=>{save();const c={id:newId(),subject:'',section:'',roster:'',lessons:[]};
   store.classes.push(c);store.current=c.id;isDemo=false;lessons=[];loadClass();save();$('#subj').focus();});
 $('#subj').addEventListener('input',()=>save());
