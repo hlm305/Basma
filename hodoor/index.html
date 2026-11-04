@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="author" content="فاطمة المطيري">
+<meta name="copyright" content="© 2026 فاطمة المطيري - جميع الحقوق محفوظة">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<!-- © 2026 فاطمة المطيري (Fatimah almutairi) - جميع الحقوق محفوظة. يمنع النسخ أو إعادة النشر دون إذن. -->
 <title>حصر حضور الدروس عن بعد</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Reem+Kufi:wght@500;700&display=swap">
@@ -129,7 +132,8 @@ button[data-armed]{background:var(--bad-bg);color:var(--bad);border-color:var(--
 .chips.never span{background:var(--bad);color:var(--surface);font-weight:500}
 .chips span{background:var(--bad-bg);color:var(--bad);border-radius:999px;padding:2px 10px;font-size:.85rem}
 input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
-.printhead,.printfoot{display:none}
+.printhead,.printfoot,.pagecredit{display:none}
+.pcredit{font-size:10pt;color:var(--muted)}
 @media print{
   :root,:root[data-theme="dark"]{--bg:#fff;--surface:#fff;--ink:#000;--muted:#444;--line:#bbb;--accent:#0f6b55;--accent-soft:#e1f0ea;--good:#1d7a4f;--good-bg:#dff2e7;--warn:#9a6200;--warn-bg:#fbefd6;--bad:#b03a2e;--bad-bg:#f8e1dd;color-scheme:light}
   @page{size:A4;margin:12mm 12mm 20mm}
@@ -146,6 +150,7 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
   .printhead,.stats,.stat,.chartcard,.charts,.insights li,.dist>div,.chips span,.printfoot,.sig{break-inside:avoid;page-break-inside:avoid}
   h2,h3{break-after:avoid;page-break-after:avoid}
   #analysis{page-break-before:always}
+  .pagecredit{display:block;position:fixed;bottom:0;left:0;right:0;text-align:center;font-size:8.5pt;color:#555}
   .chips{display:block}.chips span{display:inline-block;margin:0 0 6px 6px}
   .chartcard{display:block}.chartcard>*+*{margin-top:8px}
   .printfoot{page-break-before:avoid}
@@ -171,7 +176,7 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
   <header>
     <h1>حصر حضور الدروس عن بعد</h1>
     <p class="sub">ارفعي تقارير الحضور من Teams، ويطلع لك عدد مرات حضور كل طالب ونسبته.</p>
-    <span class="credit">إعداد: فاطمة المطيري</span>
+    <span class="credit" data-credit>إعداد: فاطمة المطيري</span>
   </header>
   <div class="teacherbox">
     <label for="teacher">اسم المعلمة</label>
@@ -235,6 +240,7 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
   <section>
     <div class="printhead">
       <h1>تقرير حضور الدروس عن بعد</h1>
+      <div class="pcredit" data-credit>إعداد: فاطمة المطيري</div>
       <div class="meta"><span id="pSchool"></span><span id="pTeacher"></span><span id="pClass"></span><span id="pDate"></span></div>
       <ol id="pLessons"></ol>
     </div>
@@ -275,7 +281,8 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
     </div>
   </section>
 
-  <footer>كل الحساب يتم داخل الصفحة، والملفات ما تُرفع لأي مكان.</footer>
+  <footer>كل الحساب يتم داخل الصفحة، والملفات ما تُرفع لأي مكان.<br><span data-credit-c>© 2026 جميع الحقوق محفوظة لـ فاطمة المطيري</span></footer>
+  <div class="pagecredit" data-credit-c>© 2026 جميع الحقوق محفوظة لـ فاطمة المطيري</div>
 </div>
 
 <script>
@@ -672,6 +679,19 @@ $('#clsDel').addEventListener('click',e=>twice(e.currentTarget,()=>{
   try{localStorage.setItem('hodoor_v2',JSON.stringify(store));}catch(e){}
   loadClass();}));
 loadStore(); loadClass();
+// حماية الحقوق: يرجّع اسم المُعِدّة إذا انحذف أو تغيّر
+(function(){
+  const A='إعداد: فاطمة المطيري', C='© 2026 جميع الحقوق محفوظة لـ فاطمة المطيري';
+  const fix=()=>{
+    document.querySelectorAll('[data-credit]').forEach(e=>{if(e.textContent!==A)e.textContent=A;e.hidden=false;e.style.cssText='';});
+    document.querySelectorAll('[data-credit-c]').forEach(e=>{if(e.textContent!==C)e.textContent=C;e.style.cssText='';});
+    const w=document.querySelector('.wrap');
+    if(!w.querySelector('header [data-credit]')){const h=w.querySelector('header')||w;const sp=document.createElement('span');sp.className='credit';sp.setAttribute('data-credit','');sp.textContent=A;h.appendChild(sp);}
+    if(!document.querySelector('.pagecredit')){const d=document.createElement('div');d.className='pagecredit';d.setAttribute('data-credit-c','');d.textContent=C;w.appendChild(d);}
+  };
+  fix(); setInterval(fix,1500); window.addEventListener('beforeprint',fix);
+  try{new MutationObserver(fix).observe(document.body,{subtree:true,childList:true,characterData:true});}catch(e){}
+})();
 })();
 </script>
 
