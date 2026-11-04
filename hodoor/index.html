@@ -96,6 +96,14 @@ footer{color:var(--muted);font-size:.82rem;text-align:center}
 .teacherbox input{font-size:1.1rem;padding:10px 12px;background:var(--surface)}
 .inputs2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .inputs2>*{min-width:0}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tab{display:flex;flex-direction:column;align-items:flex-start;gap:0;border:1.5px solid var(--line);border-radius:10px;padding:8px 14px;background:var(--bg);text-align:right;min-width:0}
+.tab b{font-weight:600}
+.tab small{color:var(--muted);font-size:.8rem}
+.tab[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.tab[aria-selected="true"] b{color:var(--accent)}
+#clsNew{align-self:flex-start}
+.edith{margin:6px 0 0;font-size:.95rem;font-weight:600;color:var(--muted)}
 .cbrow{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
 .cbrow .field{flex:1 1 200px;min-width:0}
 button.danger{color:var(--bad)}
@@ -113,6 +121,7 @@ button[data-armed]{background:var(--bad-bg);color:var(--bad);border-color:var(--
 .dist i em{display:block;height:100%}
 .insights{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:4px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips.never span{background:var(--bad);color:var(--surface);font-weight:500}
 .chips span{background:var(--bad-bg);color:var(--bad);border-radius:999px;padding:2px 10px;font-size:.85rem}
 input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
 .printhead,.printfoot{display:none}
@@ -156,17 +165,17 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
   </div>
 
   <section class="classbar">
-    <div class="cbrow">
-      <div class="field"><label for="clsSel">المادة والفصل</label><select id="clsSel"></select></div>
-      <button type="button" class="primary" id="clsNew">+ مادة أو فصل جديد</button>
-    </div>
+    <h2>موادي وفصولي</h2>
+    <div class="tabs" id="clsTabs" role="tablist"></div>
+    <button type="button" class="primary" id="clsNew">+ إضافة مادة أو فصل</button>
+    <h3 class="edith" id="editH">بيانات السجل المحدد</h3>
     <div class="inputs2">
       <div class="field"><label for="subj">المادة</label><input type="text" id="subj" list="subjList" placeholder="مثل: لغتي"></div>
       <div class="field"><label for="klass">الفصل</label><input type="text" id="klass" placeholder="مثل: 1/3"></div>
     </div>
     <datalist id="subjList"><option value="لغتي"><option value="الدراسات الإسلامية"><option value="الرياضيات"><option value="العلوم"><option value="اللغة الإنجليزية"><option value="المهارات الرقمية"><option value="المهارات الحياتية والأسرية"><option value="التربية الفنية"><option value="التربية البدنية والدفاع عن النفس"><option value="الدراسات الاجتماعية"></datalist>
-    <p class="hint">لكل مادة في كل فصل سجل مستقل. إذا أضفتي مادة جديدة لفصل موجود، ينتقل كشف أسمائه تلقائيًا.</p>
-    <div class="row"><button type="button" id="clsReset">بداية فترة جديدة</button><button type="button" class="danger" id="clsDel">حذف الفصل</button></div>
+    <p class="hint">لكل مادة في كل فصل سجل مستقل. لإضافة مادة ثانية اضغطي «+ إضافة مادة أو فصل»، ولا تكتبين فوق المادة الحالية لأن ذلك يغيّر اسمها. إذا أضفتي مادة لفصل موجود، ينتقل كشف أسمائه تلقائيًا.</p>
+    <div class="row"><button type="button" id="clsReset">بداية فترة جديدة</button><button type="button" class="danger" id="clsDel">حذف هذا السجل</button></div>
     <p class="hint" id="clsInfo"></p>
   </section>
 
@@ -240,7 +249,8 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
       <div class="chartcard"><h3>توزيع الطلاب حسب الانتظام</h3><div class="dist" id="chDist"></div></div>
     </div>
     <ul class="insights" id="insights"></ul>
-    <div class="chartcard"><h3>طلاب يحتاجون متابعة (حضورهم أقل من 50٪)</h3><div class="chips" id="follow"></div></div>
+    <div class="chartcard"><h3>طلاب لم يحضروا أي حصة (<span id="neverN">0</span>)</h3><div class="chips never" id="never"></div></div>
+    <div class="chartcard"><h3>طلاب يحتاجون متابعة (حضروا أقل من 50٪)</h3><div class="chips" id="follow"></div></div>
     <div class="printfoot">
       <div class="sig"><b>المعلمة</b><span id="pSign"></span><span>التوقيع: ..............</span></div>
       <div class="sig"><b>الوكيلة التعليمية</b><span id="pDeputy"></span><span>التوقيع: ..............</span></div>
@@ -260,7 +270,7 @@ const AR_DIGITS=n=>String(n);
 function norm(s){
   return String(s||'').replace(/\((guest|ضيف|external|خارجي|unverified|غير محقق)[^)]*\)/gi,'')
     .replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي')
-    .replace(/\s+/g,' ').trim().toLowerCase();
+    .replace(/\s+/g,' ').trim().toLowerCase().replace(/(^|\s)(بن|بنت)(?=\s)/g,' ').replace(/(^|\s)(عبد|ابو)\s+/g,'$1$2').replace(/\s+/g,' ').trim();
 }
 function cleanName(s){return String(s||'').replace(/\((guest|ضيف|external|خارجي|unverified|غير محقق)[^)]*\)/gi,'').replace(/\s+/g,' ').trim();}
 
@@ -352,7 +362,13 @@ function compute(){
   const rKeys=[...students.keys()];
   function match(k){
     if(students.has(k)) return k;
-    for(const r of rKeys){ if(k.startsWith(r+' ')||r.startsWith(k+' ')) return r; }
+    // مطابقة مرنة: اسم Teams المختصر (ثلاثي) مع الاسم الرباعي في الكشف
+    const kw=k.split(' ');
+    const sub=(a,b)=>{let j=0;for(const w of b){if(w===a[j])j++;if(j===a.length)return true;}return false;};
+    let c=rKeys.filter(r=>{const rw=r.split(' ');return rw[0]===kw[0]&&(sub(kw,rw)||sub(rw,kw));});
+    if(c.length===1) return c[0];
+    if(!c.length) c=rKeys.filter(r=>{const rw=r.split(' ');return rw[0]===kw[0]&&rw[rw.length-1]===kw[kw.length-1]&&(rw[1]===kw[1]||kw.length<3||rw.length<3);});
+    if(c.length===1) return c[0];
     return null;
   }
   lessons.forEach((L,li)=>{
@@ -419,7 +435,10 @@ function analysis(rows,n){
     const never=rows.filter(r=>r.count===0).length; if(never) ins.push('ما حضروا أي درس: <b>'+never+'</b> طالب.');
   }
   $('#insights').innerHTML=ins.map(x=>'<li>'+x+'</li>').join('');
-  const weak=rows.filter(r=>r.pct<50).sort((a,b)=>a.pct-b.pct);
+  const never=n?rows.filter(r=>r.count===0).sort((a,b)=>a.name.localeCompare(b.name,'ar')):[];
+  $('#neverN').textContent=never.length;
+  $('#never').innerHTML=!n?'<p class="hint">تظهر الأسماء بعد رفع ملفات الحضور.</p>':never.length?never.map(r=>'<span>'+esc(r.name)+'</span>').join(''):(rows.some(r=>!r.extra)&&$('#roster').value.trim()?'<p class="hint">كل الطلاب حضروا حصة واحدة على الأقل.</p>':'<p class="hint">ارفعي كشف أسماء الفصل عشان تظهر أسماء اللي ما حضروا أبدًا.</p>');
+  const weak=rows.filter(r=>r.pct<50&&r.count>0).sort((a,b)=>a.pct-b.pct);
   $('#follow').innerHTML=weak.length?weak.map(r=>'<span>'+esc(r.name)+' · '+r.pct+'٪</span>').join(''):'<p class="hint">ما فيه طلاب حضورهم أقل من 50٪.</p>';
 }
 
@@ -570,7 +589,8 @@ function save(){
 }
 function title(c){return [c.subject,c.section].filter(Boolean).join(' – ')||'بدون اسم';}
 function fillSel(){
-  $('#clsSel').innerHTML=store.classes.map(c=>'<option value="'+c.id+'"'+(c.id===store.current?' selected':'')+'>'+esc(title(c))+' ('+c.lessons.length+' درس)</option>').join('');
+  $('#clsTabs').innerHTML=store.classes.map(c=>'<button type="button" class="tab" role="tab" data-cls="'+c.id+'" aria-selected="'+(c.id===store.current)+'"><b>'+esc(title(c))+'</b><small>'+c.lessons.length+' حصة محفوظة</small></button>').join('');
+  $('#editH').textContent='بيانات السجل المحدد: '+title(cur());
   const c=cur(); $('#clsInfo').textContent=isDemo?'':'محفوظ في هذا الجهاز: '+c.lessons.length+' درس لهذا الفصل. ارفعي ملف كل حصة جديدة فقط، والحصر يتجمع تلقائيًا.';
 }
 function makeDemo(){
@@ -595,7 +615,7 @@ function twice(btn,fn){
   btn.dataset.label=btn.textContent;btn.dataset.armed='1';btn.textContent='اضغطي مرة ثانية للتأكيد';
   btn._t=setTimeout(()=>{delete btn.dataset.armed;btn.textContent=btn.dataset.label;},4000);
 }
-$('#clsSel').addEventListener('change',e=>{save();store.current=e.target.value;loadClass();});
+$('#clsTabs').addEventListener('click',e=>{const b=e.target.closest('[data-cls]');if(!b||b.dataset.cls===store.current)return;save();store.current=b.dataset.cls;loadClass();});
 $('#clsNew').addEventListener('click',()=>{save();const c={id:newId(),subject:'',section:'',roster:'',lessons:[]};
   store.classes.push(c);store.current=c.id;isDemo=false;lessons=[];loadClass();save();$('#subj').focus();});
 $('#subj').addEventListener('input',()=>save());
