@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>حصر حضور الدروس عن بعد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Reem+Kufi:wght@500;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+/* Layout: one calm column — load lessons, then a register-style ledger of students with a dot per lesson */
+:root{
+  --bg:#f3f6f4; --surface:#ffffff; --ink:#15302a; --muted:#5d7069; --line:#d8e2dd;
+  --accent:#0f6b55; --accent-soft:#e1f0ea;
+  --good:#1d7a4f; --good-bg:#dff2e7; --warn:#9a6200; --warn-bg:#fbefd6; --bad:#b03a2e; --bad-bg:#f8e1dd;
+  --display:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --body:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1715; --surface:#16211e; --ink:#e3ece8; --muted:#97aaa3; --line:#2a3a35;
+  --accent:#4fc3a1; --accent-soft:#1c3a32;
+  --good:#6fd39e; --good-bg:#183428; --warn:#f0bd5e; --warn-bg:#3a2e14; --bad:#f08a7d; --bad-bg:#3d1f1b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1715; --surface:#16211e; --ink:#e3ece8; --muted:#97aaa3; --line:#2a3a35;
+  --accent:#4fc3a1; --accent-soft:#1c3a32;
+  --good:#6fd39e; --good-bg:#183428; --warn:#f0bd5e; --warn-bg:#3a2e14; --bad:#f08a7d; --bad-bg:#3d1f1b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+.wrap{max-width:1000px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:22px}
+header{display:flex;flex-direction:column;gap:4px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,4.5vw,2.2rem);margin:0;text-wrap:balance;color:var(--accent)}
+.sub{color:var(--muted);margin:0}
+.credit{font-size:.85rem;color:var(--muted)}
+h2{font-family:var(--display);font-weight:500;font-size:1.15rem;margin:0}
+section{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+@media (max-width:720px){.grid2{grid-template-columns:1fr}}
+.grid2>*{min-width:0}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:22px 14px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:6px;align-items:center}
+.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop strong{font-size:1rem}
+.drop small{color:var(--muted)}
+.lessons{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.lessons li{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:8px}
+.lessons .num{font-family:var(--display);color:var(--accent);min-width:1.8em;text-align:center}
+.lessons input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;padding:2px 4px;border-radius:4px}
+.lessons input:focus{outline:2px solid var(--accent)}
+.lessons .cnt{color:var(--muted);font-size:.85rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 12px}
+button:hover{border-color:var(--accent)}
+button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.btnlike{font:inherit;font-weight:500;cursor:pointer;border-radius:8px;border:1px solid var(--accent);color:var(--accent);background:var(--surface);padding:6px 12px}
+.btnlike:hover{background:var(--accent-soft)}
+button.x{border:0;background:transparent;color:var(--muted);font-size:1.2rem;line-height:1;padding:2px 6px}
+button.x:hover{color:var(--bad)}
+label{font-weight:500;font-size:.92rem}
+textarea,select,input[type=number],input[type=search]{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+textarea{min-height:150px;resize:vertical}
+.field{display:flex;flex-direction:column;gap:6px}
+.hint{color:var(--muted);font-size:.82rem;margin:0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.banner{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:.9rem}
+.err{background:var(--bad-bg);color:var(--bad);border-radius:8px;padding:8px 12px;font-size:.9rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat b{display:block;font-family:var(--display);font-size:1.6rem;color:var(--accent);font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:.85rem}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tools input[type=search]{flex:1 1 180px;width:auto}
+.tools select{width:auto}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:600;font-size:.85rem;color:var(--muted);background:var(--bg);position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td.name{white-space:normal;min-width:150px;font-weight:500}
+th.d,td.d{text-align:center;padding:8px 4px}
+.dot{display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid var(--line)}
+.dot.on{background:var(--accent);border-color:var(--accent)}
+.bar{display:flex;align-items:center;gap:8px;min-width:130px}
+.bar i{flex:1;height:8px;border-radius:4px;background:var(--line);overflow:hidden;display:block}
+.bar i em{display:block;height:100%;background:var(--accent)}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:.8rem;font-weight:600}
+.pill.g{background:var(--good-bg);color:var(--good)} .pill.w{background:var(--warn-bg);color:var(--warn)} .pill.b{background:var(--bad-bg);color:var(--bad)}
+.tag{font-size:.72rem;color:var(--warn);background:var(--warn-bg);border-radius:4px;padding:0 6px;margin-inline-start:6px;font-weight:500}
+.empty{color:var(--muted);text-align:center;padding:24px}
+.toast{min-height:1.2em;color:var(--good);font-size:.9rem}
+footer{color:var(--muted);font-size:.82rem;text-align:center}
+.inputs3{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.inputs3 .field:first-child{grid-column:1/-1}
+.teacherbox{display:flex;flex-direction:column;gap:6px;background:var(--accent-soft);border-radius:12px;padding:14px 16px}
+.teacherbox label{font-family:var(--display);font-size:1.05rem;color:var(--accent)}
+.teacherbox input{font-size:1.1rem;padding:10px 12px;background:var(--surface)}
+.charts{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+@media (max-width:720px){.charts{grid-template-columns:1fr}}
+.charts>*{min-width:0}
+.chartcard{display:flex;flex-direction:column;gap:8px}
+.chartcard h3{margin:0;font-size:.95rem;font-weight:600}
+.chartcard svg{width:100%;height:auto;display:block}
+.dist{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.dist .lbl{display:flex;justify-content:space-between;font-size:.9rem;font-variant-numeric:tabular-nums}
+.dist i{display:block;height:14px;border-radius:7px;background:var(--line);overflow:hidden}
+.dist i em{display:block;height:100%}
+.insights{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{background:var(--bad-bg);color:var(--bad);border-radius:999px;padding:2px 10px;font-size:.85rem}
+input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+.printhead,.printfoot{display:none}
+@media print{
+  :root,:root[data-theme="dark"]{--bg:#fff;--surface:#fff;--ink:#000;--muted:#444;--line:#bbb;--accent:#0f6b55;--accent-soft:#e1f0ea;--good:#1d7a4f;--good-bg:#dff2e7;--warn:#9a6200;--warn-bg:#fbefd6;--bad:#b03a2e;--bad-bg:#f8e1dd;color-scheme:light}
+  @page{size:A4;margin:12mm}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-size:11pt}
+  .wrap{padding:0;max-width:none;gap:10px}
+  header,.teacherbox,.grid2,.tools,.toast,footer,#res-title{display:none!important}
+  #analysis{break-before:page}
+  .charts{grid-template-columns:1.4fr 1fr}
+  section{border:0;padding:0}
+  .printhead{display:flex;flex-direction:column;gap:6px}
+  .printhead h1{font-size:18pt;margin:0}
+  .printhead .meta{display:flex;flex-wrap:wrap;gap:4px 24px;font-size:10.5pt}
+  .printhead ol{margin:4px 0 0;padding-inline-start:22px;font-size:9.5pt;columns:2}
+  .printfoot{display:flex;justify-content:space-between;margin-top:28px;font-size:10.5pt}
+  .tablebox{overflow:visible;border-radius:0}
+  th{position:static}
+  th,td{padding:4px 6px}
+  tr{break-inside:avoid}
+  .bar{min-width:90px}
+  .stat{padding:6px 10px}.stat b{font-size:1.2rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap" dir="rtl" lang="ar">
+  <header>
+    <h1>حصر حضور الدروس عن بعد</h1>
+    <p class="sub">ارفعي تقارير الحضور من Teams، ويطلع لك عدد مرات حضور كل طالب ونسبته.</p>
+    <span class="credit">إعداد: فاطمة المطيري</span>
+  </header>
+  <div class="teacherbox">
+    <label for="teacher">اسم المعلمة</label>
+    <input type="text" id="teacher" placeholder="اكتبي اسمك هنا، ويظهر في التقرير وملف PDF">
+  </div>
+
+  <div class="grid2">
+    <section>
+      <h2>الدروس</h2>
+      <label class="drop" id="drop" for="files">
+        <strong>اسحبي ملفات الحضور هنا أو اضغطي للاختيار</strong>
+        <small>ملف لكل درس · CSV أو Excel من تقرير الحضور في Teams · تقدرين ترفعين عدة ملفات مرة وحدة</small>
+      </label>
+      <input type="file" id="files" accept=".csv,.txt,.xlsx,.xls" multiple hidden>
+      <div id="demo" class="banner" hidden>هذي بيانات تجريبية للعرض فقط، وتنحذف أول ما ترفعين ملفاتك.</div>
+      <div id="errors"></div>
+      <ul class="lessons" id="lessons"></ul>
+    </section>
+
+    <section>
+      <h2>الإعدادات</h2>
+      <div class="inputs3">
+        <div class="field"><label for="school">المدرسة</label><input type="text" id="school" value="الابتدائية 179 – الطفولة المبكرة"></div>
+        <div class="field"><label for="klass">المادة والفصل</label><input type="text" id="klass" placeholder="مثل: لغتي – 1/3"></div>
+      </div>
+      <div class="field">
+        <label for="roster">كشف أسماء الفصل (اختياري)</label>
+        <textarea id="roster" placeholder="اسم في كل سطر&#10;عشان يظهر الطالب اللي ما حضر أبدًا"></textarea>
+        <div class="row"><label class="btnlike" for="rosterFile">رفع كشف الأسماء من Excel</label><button type="button" id="rosterClear">مسح الكشف</button></div>
+        <input type="file" id="rosterFile" accept=".xlsx,.xls,.csv" hidden>
+        <p class="hint">ارفعي ملف Excel فيه أسماء الطلاب (مثل كشف نور)، والصفحة تلقط عمود الأسماء تلقائيًا. أو الصقي الأسماء هنا، اسم في كل سطر.</p>
+        <div class="toast" id="rosterMsg" role="status"></div>
+      </div>
+      <div class="field">
+        <label for="minmin">أقل مدة تُحسب حضورًا (بالدقائق)</label>
+        <input type="number" id="minmin" min="0" max="120" value="0">
+        <p class="hint">مثلًا 10: الطالب اللي دخل أقل من 10 دقائق ما ينحسب حاضر. اتركيها 0 لحساب أي دخول.</p>
+      </div>
+    </section>
+  </div>
+
+  <section>
+    <div class="printhead">
+      <h1>تقرير حضور الدروس عن بعد</h1>
+      <div class="meta"><span id="pSchool"></span><span id="pTeacher"></span><span id="pClass"></span><span id="pDate"></span></div>
+      <ol id="pLessons"></ol>
+    </div>
+    <h2 id="res-title">النتيجة</h2>
+    <div class="stats">
+      <div class="stat"><b id="sL">0</b><span>عدد الدروس</span></div>
+      <div class="stat"><b id="sS">0</b><span>عدد الطلاب</span></div>
+      <div class="stat"><b id="sA">0٪</b><span>متوسط الحضور</span></div>
+      <div class="stat"><b id="sF">0</b><span>حضوره أقل من 50٪</span></div>
+    </div>
+    <div class="tools">
+      <input type="search" id="q" placeholder="ابحثي عن طالب">
+      <select id="sort" aria-label="الترتيب">
+        <option value="low">الأقل حضورًا أولًا</option>
+        <option value="high">الأكثر حضورًا أولًا</option>
+        <option value="abc">أبجديًا</option>
+      </select>
+      <button class="primary" id="pdf">حفظ PDF</button>
+      <button id="copy">نسخ الجدول للإكسل</button>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+    <div class="tablebox"><table id="tbl"></table></div>
+  </section>
+
+  <section id="analysis">
+    <h2>تحليل الحضور</h2>
+    <div class="charts">
+      <div class="chartcard"><h3>عدد الحاضرين في كل درس</h3><div id="chLessons"></div></div>
+      <div class="chartcard"><h3>توزيع الطلاب حسب الانتظام</h3><div class="dist" id="chDist"></div></div>
+    </div>
+    <ul class="insights" id="insights"></ul>
+    <div class="chartcard"><h3>طلاب يحتاجون متابعة (حضورهم أقل من 50٪)</h3><div class="chips" id="follow"></div></div>
+    <div class="printfoot"><span>المعلمة: <span id="pSign"></span></span><span>التوقيع: ..................</span></div>
+  </section>
+
+  <footer>كل الحساب يتم داخل الصفحة، والملفات ما تُرفع لأي مكان.</footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+let lessons=[]; let isDemo=false; let uid=0;
+const AR_DIGITS=n=>String(n);
+
+function norm(s){
+  return String(s||'').replace(/\((guest|ضيف|external|خارجي|unverified|غير محقق)[^)]*\)/gi,'')
+    .replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي')
+    .replace(/\s+/g,' ').trim().toLowerCase();
+}
+function cleanName(s){return String(s||'').replace(/\((guest|ضيف|external|خارجي|unverified|غير محقق)[^)]*\)/gi,'').replace(/\s+/g,' ').trim();}
+
+function decode(buf){
+  const b=new Uint8Array(buf);
+  if(b[0]===0xFF&&b[1]===0xFE) return new TextDecoder('utf-16le').decode(b);
+  if(b[0]===0xFE&&b[1]===0xFF) return new TextDecoder('utf-16be').decode(b);
+  let z=0; for(let i=1;i<Math.min(b.length,400);i+=2) if(b[i]===0) z++;
+  if(z>50) return new TextDecoder('utf-16le').decode(b);
+  return new TextDecoder('utf-8').decode(b);
+}
+function splitLine(line){
+  if(line.includes('\t')) return line.split('\t').map(c=>c.replace(/^"|"$/g,'').trim());
+  const out=[];let cur='',q=false;
+  for(let i=0;i<line.length;i++){const ch=line[i];
+    if(q){ if(ch==='"'){ if(line[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=ch; }
+    else if(ch==='"') q=true; else if(ch===','){out.push(cur.trim());cur='';} else cur+=ch;}
+  out.push(cur.trim()); return out;
+}
+function parseMinutes(s){
+  s=String(s||'').trim(); if(!s) return null;
+  let m=s.match(/^(\d+):(\d{1,2})(?::(\d{1,2}))?$/);
+  if(m) return m[3]!=null? (+m[1])*60+(+m[2])+(+m[3])/60 : (+m[1])+(+m[2])/60;
+  let tot=0,found=false; const re=/(\d+)\s*([a-zA-Z؀-ۿ]+)/g; let t;
+  while((t=re.exec(s))){const n=+t[1],u=t[2][0].toLowerCase();
+    if(u==='h'||u==='س'){tot+=n*60;found=true}else if(u==='m'||u==='د'){tot+=n;found=true}else if(u==='s'||u==='ث'){tot+=n/60;found=true}}
+  return found?tot:null;
+}
+const NAME_KEYS=['name','full name','الاسم','الاسم الكامل','اسم','الاسم بالكامل'];
+const ORG=/organi[sz]er|منظم|المنظم/i;
+
+function parseRows(rows,fileName){
+  let date='',title='';
+  for(const r of rows){const k=norm(r[0]);
+    if(!date&&/(start time|وقت البدء|بدء الاجتماع|meeting start)/.test(k)&&r[1]) date=r[1];
+    if(!title&&/(meeting title|عنوان الاجتماع)/.test(k)&&r[1]) title=r[1];}
+  let h=-1,ni=-1;
+  for(let i=0;i<rows.length;i++){const idx=rows[i].findIndex(c=>NAME_KEYS.includes(norm(c)));
+    if(idx>-1){h=i;ni=idx;break;}}
+  if(h<0) throw new Error('ما لقيت عمود الأسماء في الملف "'+fileName+'". تأكدي إنه تقرير الحضور المنزّل من Teams.');
+  const hdr=rows[h].map(norm);
+  const ri=hdr.findIndex(c=>/role|الدور/.test(c));
+  const di=hdr.findIndex(c=>/in-meeting duration|المده داخل|^مده الاجتماع$|^duration$|^المده$/.test(c));
+  const map=new Map();
+  for(let i=h+1;i<rows.length;i++){const r=rows[i];
+    if(!r.some(c=>c&&c.trim())) break;
+    if(/^\d+\.\s/.test(r[0])) break;
+    const nm=cleanName(r[ni]); if(!nm) continue;
+    if(ri>-1&&ORG.test(r[ri]||'')) continue;
+    const key=norm(nm); const mins=di>-1?parseMinutes(r[di]):null;
+    const prev=map.get(key);
+    if(prev){ if(mins!=null) prev.minutes=(prev.minutes||0)+mins; }
+    else map.set(key,{name:nm,minutes:mins});
+  }
+  let label=title||fileName.replace(/\.(csv|txt|xlsx?|)$/i,'');
+  if(date) label+=' — '+String(date).split(/[ ,،]/)[0];
+  return {id:++uid,label,attendees:map};
+}
+
+async function readFile(f){
+  const buf=await f.arrayBuffer();
+  let rows;
+  if(/\.xlsx?$/i.test(f.name)){
+    if(!window.XLSX) throw new Error('تعذّر فتح ملف Excel. احفظيه CSV وارفعيه مرة ثانية.');
+    const wb=XLSX.read(buf,{type:'array'}); rows=[];
+    wb.SheetNames.forEach(n=>{XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:'',raw:false}).forEach(r=>rows.push(r.map(c=>String(c).trim())));rows.push([]);});
+  } else rows=decode(buf).replace(/^﻿/,'').split(/\r?\n/).map(splitLine);
+  return parseRows(rows,f.name);
+}
+
+async function addFiles(list){
+  const errs=[]; const added=[];
+  for(const f of list){try{added.push(await readFile(f));}catch(e){errs.push(e.message);}}
+  if(added.length&&isDemo){lessons=[];isDemo=false;}
+  lessons.push(...added);
+  $('#errors').innerHTML=errs.map(e=>'<div class="err">'+esc(e)+'</div>').join('');
+  render();
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+function compute(){
+  const minM=+$('#minmin').value||0;
+  const rosterNames=$('#roster').value.split(/\r?\n/).map(cleanName).filter(Boolean);
+  const students=new Map();
+  rosterNames.forEach(n=>{const k=norm(n); if(!students.has(k)) students.set(k,{name:n,inRoster:true,att:[]});});
+  const rKeys=[...students.keys()];
+  function match(k){
+    if(students.has(k)) return k;
+    for(const r of rKeys){ if(k.startsWith(r+' ')||r.startsWith(k+' ')) return r; }
+    return null;
+  }
+  lessons.forEach((L,li)=>{
+    L.attendees.forEach((a,k)=>{
+      if(minM>0&&a.minutes!=null&&a.minutes<minM) return;
+      let key=match(k);
+      if(!key){key=k; if(!students.has(k)) students.set(k,{name:a.name,inRoster:!rosterNames.length,att:[]});}
+      const s=students.get(key); if(!s.att.includes(li)) s.att.push(li);
+    });
+  });
+  const n=lessons.length;
+  return [...students.values()].map(s=>({...s,count:s.att.length,pct:n?Math.round(s.att.length/n*100):0,extra:rosterNames.length>0&&!s.inRoster}));
+}
+
+let lastRows=[];
+function render(){
+  $('#demo').hidden=!isDemo;
+  $('#lessons').innerHTML=lessons.map((L,i)=>'<li><span class="num">'+(i+1)+'</span><input id="lbl'+L.id+'" data-id="'+L.id+'" value="'+esc(L.label)+'" aria-label="اسم الدرس"><span class="cnt">'+L.attendees.size+' حاضر</span><button class="x" data-del="'+L.id+'" aria-label="حذف الدرس">×</button></li>').join('');
+  const rows=compute(); lastRows=rows; const n=lessons.length;
+  $('#sL').textContent=n; $('#sS').textContent=rows.length;
+  $('#sA').textContent=(rows.length?Math.round(rows.reduce((a,r)=>a+r.pct,0)/rows.length):0)+'٪';
+  $('#sF').textContent=rows.filter(r=>r.pct<50).length;
+  const q=norm($('#q').value); const sort=$('#sort').value;
+  let view=rows.filter(r=>!q||norm(r.name).includes(q));
+  view.sort((a,b)=>sort==='abc'?a.name.localeCompare(b.name,'ar'):sort==='high'?b.count-a.count||a.name.localeCompare(b.name,'ar'):a.count-b.count||a.name.localeCompare(b.name,'ar'));
+  analysis(rows,n);
+  if(!n&&!rows.length){$('#tbl').innerHTML='<tr><td class="empty">ارفعي ملفات الحضور عشان يظهر الحصر هنا.</td></tr>';return;}
+  let h='<thead><tr><th>#</th><th>اسم الطالب</th>'+lessons.map((L,i)=>'<th class="d" title="'+esc(L.label)+'">د'+(i+1)+'</th>').join('')+'<th>الحضور</th><th>النسبة</th><th>الحالة</th></tr></thead><tbody>';
+  view.forEach((r,i)=>{
+    const st=r.pct>=80?['g','منتظم']:r.pct>=50?['w','متوسط']:['b','ضعيف'];
+    h+='<tr><td>'+(i+1)+'</td><td class="name">'+esc(r.name)+(r.extra?'<span class="tag">ليس في الكشف</span>':'')+'</td>'+
+      lessons.map((L,li)=>'<td class="d"><span class="dot'+(r.att.includes(li)?' on':'')+'" title="'+(r.att.includes(li)?'حاضر':'غائب')+'"></span></td>').join('')+
+      '<td>'+r.count+' من '+n+'</td><td><div class="bar"><i><em style="width:'+r.pct+'%"></em></i>'+r.pct+'٪</div></td><td><span class="pill '+st[0]+'">'+st[1]+'</span></td></tr>';
+  });
+  if(!view.length) h+='<tr><td colspan="'+(5+n)+'" class="empty">ما فيه نتيجة للبحث.</td></tr>';
+  $('#tbl').innerHTML=h+'</tbody>';
+}
+
+function analysis(rows,n){
+  const total=rows.length;
+  const per=lessons.map((L,li)=>rows.filter(r=>r.att.includes(li)).length);
+  if(!n){$('#chLessons').innerHTML='<p class="hint">يظهر الرسم بعد رفع ملفات الحضور.</p>';}
+  else{
+    const W=600,H=260,top=28,bot=40,side=36,ph=H-top-bot,max=Math.max(1,total);
+    const slot=(W-side*2)/n,bw=Math.min(56,slot*0.6);
+    let g='';
+    [0,0.5,1].forEach(f=>{const y=top+ph*(1-f);g+='<line x1="'+side+'" x2="'+(W-side)+'" y1="'+y+'" y2="'+y+'" style="stroke:var(--line)" stroke-width="1"/><text x="'+(W-side+6)+'" y="'+(y+4)+'" font-size="12" style="fill:var(--muted)">'+Math.round(max*f)+'</text>';});
+    per.forEach((c,i)=>{const cx=W-side-slot*(i+0.5),h=ph*c/max,y=top+ph-h;
+      g+='<rect x="'+(cx-bw/2)+'" y="'+y+'" width="'+bw+'" height="'+Math.max(h,1)+'" rx="4" style="fill:var(--accent)"><title>'+esc(lessons[i].label)+'</title></rect>'+
+         '<text x="'+cx+'" y="'+(y-7)+'" text-anchor="middle" font-size="13" font-weight="700" style="fill:var(--ink)">'+c+'</text>'+
+         '<text x="'+cx+'" y="'+(H-bot+20)+'" text-anchor="middle" font-size="13" style="fill:var(--muted)">د'+(i+1)+'</text>';});
+    $('#chLessons').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="عدد الحاضرين في كل درس">'+g+'</svg>';
+  }
+  const groups=[['منتظم (80٪ فأكثر)',r=>r.pct>=80,'var(--good)'],['متوسط (50–79٪)',r=>r.pct>=50&&r.pct<80,'var(--warn)'],['ضعيف (أقل من 50٪)',r=>r.pct<50,'var(--bad)']];
+  $('#chDist').innerHTML=groups.map(([t,f,c])=>{const k=rows.filter(f).length,p=total?Math.round(k/total*100):0;
+    return '<div><div class="lbl"><span>'+t+'</span><span>'+k+' طالب · '+p+'٪</span></div><i><em style="width:'+p+'%;background:'+c+'"></em></i></div>';}).join('');
+  const ins=[];
+  if(n){
+    const mx=Math.max(...per),mn=Math.min(...per),avg=per.reduce((a,b)=>a+b,0)/n;
+    ins.push('متوسط عدد الحاضرين في الدرس: <b>'+avg.toFixed(1)+'</b> من '+total+' طالب.');
+    if(n>1){ins.push('أعلى حضور: <b>'+esc(lessons[per.indexOf(mx)].label)+'</b> ('+mx+' حاضر).');
+      ins.push('أقل حضور: <b>'+esc(lessons[per.indexOf(mn)].label)+'</b> ('+mn+' حاضر).');}
+    const full=rows.filter(r=>r.count===n).length; ins.push('حضروا كل الدروس: <b>'+full+'</b> طالب.');
+    const never=rows.filter(r=>r.count===0).length; if(never) ins.push('ما حضروا أي درس: <b>'+never+'</b> طالب.');
+  }
+  $('#insights').innerHTML=ins.map(x=>'<li>'+x+'</li>').join('');
+  const weak=rows.filter(r=>r.pct<50).sort((a,b)=>a.pct-b.pct);
+  $('#follow').innerHTML=weak.length?weak.map(r=>'<span>'+esc(r.name)+' · '+r.pct+'٪</span>').join(''):'<p class="hint">ما فيه طلاب حضورهم أقل من 50٪.</p>';
+}
+
+function tsv(){
+  const n=lessons.length; const rows=[...lastRows].sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  const head=['م','اسم الطالب',...lessons.map(L=>L.label),'عدد مرات الحضور','عدد الدروس','نسبة الحضور'];
+  const body=rows.map((r,i)=>[i+1,r.name,...lessons.map((L,li)=>r.att.includes(li)?'حاضر':'غائب'),r.count,n,r.pct+'%']);
+  return [head,...body].map(r=>r.join('\t')).join('\n');
+}
+$('#copy').addEventListener('click',()=>{
+  const t=tsv(); const done=()=>{$('#toast').textContent='انسخ الجدول. افتحي Excel والصقيه (Ctrl+V).';setTimeout(()=>$('#toast').textContent='',4000);};
+  const fb=()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){$('#toast').textContent='حددي النص وانسخيه يدويًا.';}ta.remove();};
+  try{navigator.clipboard.writeText(t).then(done,fb);}catch(e){fb();}
+});
+
+const drop=$('#drop');
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>addFiles([...e.dataTransfer.files]));
+$('#files').addEventListener('change',e=>{addFiles([...e.target.files]);e.target.value='';});
+$('#lessons').addEventListener('click',e=>{const d=e.target.dataset.del;if(d){lessons=lessons.filter(L=>L.id!=d);render();}});
+$('#lessons').addEventListener('input',e=>{const id=e.target.dataset.id;const L=lessons.find(x=>x.id==id);if(L)L.label=e.target.value;});
+$('#lessons').addEventListener('change',()=>render());
+['#q','#sort','#minmin'].forEach(s=>$(s).addEventListener('input',render));
+$('#roster').addEventListener('input',()=>{try{localStorage.setItem('roster',$('#roster').value)}catch(e){};render();});
+$('#minmin').addEventListener('input',()=>{try{localStorage.setItem('minmin',$('#minmin').value)}catch(e){}});
+try{const r=localStorage.getItem('roster');if(r)$('#roster').value=r;const m=localStorage.getItem('minmin');if(m)$('#minmin').value=m;}catch(e){}
+
+async function loadRoster(f){
+  const msg=$('#rosterMsg');
+  try{
+    const buf=await f.arrayBuffer(); let rows;
+    if(/\.csv$/i.test(f.name)) rows=decode(buf).replace(/^\uFEFF/,'').split(/\r?\n/).map(splitLine);
+    else{ if(!window.XLSX) throw 0; const wb=XLSX.read(buf,{type:'array'}); rows=[];
+      wb.SheetNames.forEach(n=>XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:'',raw:false}).forEach(r=>rows.push(r.map(c=>String(c).trim())))); }
+    const isName=c=>/^[\u0600-\u06FF\s]+$/.test(c)&&c.trim().split(/\s+/).length>=2&&!/(اسم|الاسم|الطالب|الفصل|الصف|المدرسه|المدرسة|ابتدائي|الابتدائي)$/.test(c.trim());
+    let best=-1,bestN=0; const w=Math.max(0,...rows.map(r=>r.length));
+    for(let c=0;c<w;c++){const n=rows.filter(r=>isName(r[c]||'')).length; if(n>bestN){bestN=n;best=c;}}
+    if(best<0) throw 0;
+    const seen=new Set(); const names=[];
+    rows.forEach(r=>{const v=cleanName(r[best]||''); if(isName(v)&&!seen.has(norm(v))){seen.add(norm(v));names.push(v);}});
+    $('#roster').value=names.join('\n');
+    try{localStorage.setItem('roster',$('#roster').value)}catch(e){}
+    msg.style.color='';msg.textContent='تمت إضافة '+names.length+' اسم. راجعي القائمة وصححي أي اسم إذا لزم.';
+    render();
+  }catch(e){msg.style.color='var(--bad)';msg.textContent='ما قدرت ألقى عمود الأسماء في الملف. انسخي الأسماء من Excel والصقيها في المربع.';}
+}
+$('#rosterFile').addEventListener('change',e=>{if(e.target.files[0])loadRoster(e.target.files[0]);e.target.value='';});
+$('#rosterClear').addEventListener('click',()=>{$('#roster').value='';try{localStorage.removeItem('roster')}catch(e){};$('#rosterMsg').textContent='';render();});
+
+['school','teacher','klass'].forEach(id=>{const el=$('#'+id);
+  try{const v=localStorage.getItem('f_'+id);if(v!==null)el.value=v;}catch(e){}
+  el.addEventListener('input',()=>{try{localStorage.setItem('f_'+id,el.value)}catch(e){}});});
+$('#pdf').addEventListener('click',()=>{
+  $('#q').value=''; render();
+  const v=id=>$('#'+id).value.trim();
+  $('#pSchool').textContent=v('school')?'المدرسة: '+v('school'):'';
+  $('#pTeacher').textContent=v('teacher')?'المعلمة: '+v('teacher'):'';
+  $('#pClass').textContent=v('klass')?'المادة والفصل: '+v('klass'):'';
+  $('#pDate').textContent='تاريخ التقرير: '+new Date().toLocaleDateString('ar-SA-u-ca-gregory-nu-latn');
+  $('#pSign').textContent=v('teacher');
+  $('#pLessons').innerHTML=lessons.map((L,i)=>'<li>د'+(i+1)+': '+esc(L.label)+'</li>').join('');
+  try{window.print();}catch(e){}
+});
+
+// بيانات تجريبية
+const demoNames=['طالب مثال ١','طالب مثال ٢','طالب مثال ٣','طالب مثال ٤','طالب مثال ٥','طالب مثال ٦'];
+const pattern=[[1,1,1,1],[1,0,1,1],[1,1,0,0],[0,0,1,0],[1,1,1,0],[1,1,1,1]];
+['الدرس الأول','الدرس الثاني','الدرس الثالث','الدرس الرابع'].forEach((lbl,li)=>{
+  const m=new Map(); demoNames.forEach((nm,i)=>{if(pattern[i][li]) m.set(norm(nm),{name:nm,minutes:40});});
+  lessons.push({id:++uid,label:lbl+' (مثال)',attendees:m});
+});
+isDemo=true; render();
+})();
+</script>
+
+</body>
+</html>
