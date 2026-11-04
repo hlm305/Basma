@@ -94,6 +94,11 @@ footer{color:var(--muted);font-size:.82rem;text-align:center}
 .teacherbox{display:flex;flex-direction:column;gap:6px;background:var(--accent-soft);border-radius:12px;padding:14px 16px}
 .teacherbox label{font-family:var(--display);font-size:1.05rem;color:var(--accent)}
 .teacherbox input{font-size:1.1rem;padding:10px 12px;background:var(--surface)}
+.cbrow{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.cbrow .field{flex:1 1 200px;min-width:0}
+button.danger{color:var(--bad)}
+button.danger:hover{border-color:var(--bad)}
+button[data-armed]{background:var(--bad-bg);color:var(--bad);border-color:var(--bad)}
 .charts{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
 @media (max-width:720px){.charts{grid-template-columns:1fr}}
 .charts>*{min-width:0}
@@ -115,7 +120,7 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{font-size:11pt}
   .wrap{padding:0;max-width:none;gap:10px}
-  header,.teacherbox,.grid2,.tools,.toast,footer,#res-title{display:none!important}
+  header,.teacherbox,.classbar,.grid2,.tools,.toast,footer,#res-title{display:none!important}
   #analysis{break-before:page}
   .charts{grid-template-columns:1.4fr 1fr}
   section{border:0;padding:0}
@@ -123,7 +128,8 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
   .printhead h1{font-size:18pt;margin:0}
   .printhead .meta{display:flex;flex-wrap:wrap;gap:4px 24px;font-size:10.5pt}
   .printhead ol{margin:4px 0 0;padding-inline-start:22px;font-size:9.5pt;columns:2}
-  .printfoot{display:flex;justify-content:space-between;margin-top:28px;font-size:10.5pt}
+  .printfoot{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;font-size:10.5pt;text-align:center}
+  .sig{display:flex;flex-direction:column;gap:10px}
   .tablebox{overflow:visible;border-radius:0}
   th{position:static}
   th,td{padding:4px 6px}
@@ -147,6 +153,16 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
     <input type="text" id="teacher" placeholder="اكتبي اسمك هنا، ويظهر في التقرير وملف PDF">
   </div>
 
+  <section class="classbar">
+    <div class="cbrow">
+      <div class="field"><label for="clsSel">الفصل</label><select id="clsSel"></select></div>
+      <button type="button" class="primary" id="clsNew">+ فصل جديد</button>
+    </div>
+    <div class="field"><label for="klass">اسم الفصل والمادة</label><input type="text" id="klass" placeholder="مثل: لغتي – 1/3"></div>
+    <div class="row"><button type="button" id="clsReset">بداية فترة جديدة</button><button type="button" class="danger" id="clsDel">حذف الفصل</button></div>
+    <p class="hint" id="clsInfo"></p>
+  </section>
+
   <div class="grid2">
     <section>
       <h2>الدروس</h2>
@@ -164,14 +180,15 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
       <h2>الإعدادات</h2>
       <div class="inputs3">
         <div class="field"><label for="school">المدرسة</label><input type="text" id="school" value="الابتدائية 179 – الطفولة المبكرة"></div>
-        <div class="field"><label for="klass">المادة والفصل</label><input type="text" id="klass" placeholder="مثل: لغتي – 1/3"></div>
+        <div class="field"><label for="deputy">الوكيلة التعليمية</label><input type="text" id="deputy" value="فاطمة الغامدي"></div>
+        <div class="field"><label for="principal">مديرة المدرسة</label><input type="text" id="principal" value="عزيزة الحربي"></div>
       </div>
       <div class="field">
         <label for="roster">كشف أسماء الفصل (اختياري)</label>
         <textarea id="roster" placeholder="اسم في كل سطر&#10;عشان يظهر الطالب اللي ما حضر أبدًا"></textarea>
-        <div class="row"><label class="btnlike" for="rosterFile">رفع كشف الأسماء من Excel</label><button type="button" id="rosterClear">مسح الكشف</button></div>
-        <input type="file" id="rosterFile" accept=".xlsx,.xls,.csv" hidden>
-        <p class="hint">ارفعي ملف Excel فيه أسماء الطلاب (مثل كشف نور)، والصفحة تلقط عمود الأسماء تلقائيًا. أو الصقي الأسماء هنا، اسم في كل سطر.</p>
+        <div class="row"><label class="btnlike" for="rosterFile">رفع كشف الأسماء</label><button type="button" id="rosterClear">مسح الكشف</button></div>
+        <input type="file" id="rosterFile" accept=".xlsx,.xls,.csv,.pdf,.docx,.doc" hidden>
+        <p class="hint">ارفعي كشف الأسماء بصيغة Excel أو PDF أو Word. الصفحة تلقط الأسماء تلقائيًا، وراجعيها بعدها. أو الصقي الأسماء هنا، اسم في كل سطر.</p>
         <div class="toast" id="rosterMsg" role="status"></div>
       </div>
       <div class="field">
@@ -217,7 +234,11 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px s
     </div>
     <ul class="insights" id="insights"></ul>
     <div class="chartcard"><h3>طلاب يحتاجون متابعة (حضورهم أقل من 50٪)</h3><div class="chips" id="follow"></div></div>
-    <div class="printfoot"><span>المعلمة: <span id="pSign"></span></span><span>التوقيع: ..................</span></div>
+    <div class="printfoot">
+      <div class="sig"><b>المعلمة</b><span id="pSign"></span><span>التوقيع: ..............</span></div>
+      <div class="sig"><b>الوكيلة التعليمية</b><span id="pDeputy"></span><span>التوقيع: ..............</span></div>
+      <div class="sig"><b>مديرة المدرسة</b><span id="pPrincipal"></span><span>التوقيع: ..............</span></div>
+    </div>
   </section>
 
   <footer>كل الحساب يتم داخل الصفحة، والملفات ما تُرفع لأي مكان.</footer>
@@ -307,7 +328,10 @@ async function addFiles(list){
   const errs=[]; const added=[];
   for(const f of list){try{added.push(await readFile(f));}catch(e){errs.push(e.message);}}
   if(added.length&&isDemo){lessons=[];isDemo=false;}
-  lessons.push(...added);
+  const sig=L=>L.label+'|'+[...L.attendees.keys()].sort().join(',');
+  const have=new Set(lessons.map(sig));
+  added.forEach(L=>{const k=sig(L); if(have.has(k)) errs.push('الدرس «'+L.label+'» مرفوع من قبل في هذا الفصل، فما أضفته مرة ثانية.'); else {have.add(k);lessons.push(L);}});
+  save();
   $('#errors').innerHTML=errs.map(e=>'<div class="err">'+esc(e)+'</div>').join('');
   render();
 }
@@ -409,37 +433,99 @@ const drop=$('#drop');
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
 drop.addEventListener('drop',e=>addFiles([...e.dataTransfer.files]));
 $('#files').addEventListener('change',e=>{addFiles([...e.target.files]);e.target.value='';});
-$('#lessons').addEventListener('click',e=>{const d=e.target.dataset.del;if(d){lessons=lessons.filter(L=>L.id!=d);render();}});
-$('#lessons').addEventListener('input',e=>{const id=e.target.dataset.id;const L=lessons.find(x=>x.id==id);if(L)L.label=e.target.value;});
+$('#lessons').addEventListener('click',e=>{const d=e.target.dataset.del;if(d){lessons=lessons.filter(L=>L.id!=d);save();render();}});
+$('#lessons').addEventListener('input',e=>{const id=e.target.dataset.id;const L=lessons.find(x=>x.id==id);if(L){L.label=e.target.value;save();}});
 $('#lessons').addEventListener('change',()=>render());
 ['#q','#sort','#minmin'].forEach(s=>$(s).addEventListener('input',render));
-$('#roster').addEventListener('input',()=>{try{localStorage.setItem('roster',$('#roster').value)}catch(e){};render();});
+$('#roster').addEventListener('input',()=>{save();render();});
 $('#minmin').addEventListener('input',()=>{try{localStorage.setItem('minmin',$('#minmin').value)}catch(e){}});
-try{const r=localStorage.getItem('roster');if(r)$('#roster').value=r;const m=localStorage.getItem('minmin');if(m)$('#minmin').value=m;}catch(e){}
+try{const m=localStorage.getItem('minmin');if(m)$('#minmin').value=m;}catch(e){}
 
+function loadScript(src){return new Promise((ok,no)=>{if(document.querySelector('script[src="'+src+'"]'))return ok();const t=document.createElement('script');t.src=src;t.onload=ok;t.onerror=()=>no(new Error('load'));document.head.appendChild(t);});}
+const SKIP=/^(اسم|الاسم|اسم الطالب|الطالب|الطلاب|الفصل|الصف|المدرسه|المدرسة|ابتدائي|الابتدائي|الصف الاول|الاول|سعودي|سعوديه|سعودية|غير سعودي|منتظم|ذكر|انثى|الجنسية|الجنسيه|رقم الهوية|السجل المدني|م|ملاحظات)$/;
+function isName(c){c=c.trim();return !/(^|\s)(اسم|الاسم|الطالب|الطالبه|الطالبة|الطلاب|الطالبات|الهويه|الهوية|المدرسه|المدرسة|مدارس|الصف|الفصل|رقم|السجل|الجنسيه|الجنسية|المرحله|المرحلة|الابتدائيه|الابتدائية|كشف|المملكه|المملكة|العربيه|العربية|السعوديه|السعودية|وزاره|وزارة|التعليم|الاداره|الإدارة|الادارة|العامه|العامة|العام|الدراسي|القسم|بنين|البنات|بنات|الطفوله|الطفولة|المبكره|المبكرة|بمحافظه|بمحافظة|محافظه|محافظة|التوقيع|عدد|المائه|المائة)(\s|$)/.test(c)&&/^[؀-ۿ\s]+$/.test(c)&&c.split(/\s+/).length>=2&&c.split(/\s+/).length<=7&&!SKIP.test(c)&&!/(اسم|الاسم|الطالب|الفصل|الصف|المدرسه|المدرسة|ابتدائي|الابتدائي)$/.test(c);}
+function namesFromLines(lines){
+  // تنظيف السطر: إزالة الأرقام والرموز والكلمات الإنجليزية وكلمات الأعمدة الشائعة
+  const out=[];
+  lines.forEach(l=>{
+    let t=String(l).replace(/[0-9٠-٩]+/g,' ').replace(/[A-Za-z@._\-\/\\|:;,،()\[\]{}"'*#+=–—]+/g,' ')
+      .replace(/(^|\s)[\u0600-\u06FF](?=\s|$)/g,' ')
+      .replace(/(^|\s)(سعودي|سعوديه|سعودية|غير|منتظم|منتظمة|ابتدائي|الابتدائي|الاول|الأول|أول|اول|ثاني|ثالث|ذكر|انثى|أنثى)(?=\s|$)/g,' ').replace(/\s+/g,' ').trim();
+    if(isName(t)) out.push(t);
+  });
+  return out;
+}
+function fixReversed(lines){
+  let fw=0,rv=0; lines.join(' ').split(/\s+/).forEach(w=>{if(/^ال/.test(w))fw++; if(/لا$/.test(w))rv++;});
+  if(rv>fw*1.5&&rv>3) return lines.map(l=>[...l].reverse().join(''));
+  return lines;
+}
+// بعض ملفات PDF (مثل المصدّرة من Excel في الماك) تخزن الحروف العربية برموز غلط وبالمقلوب، فنصلحها هنا
+function fixBrokenPdf(str){
+  let bad=0,ar=0; for(const ch of str){const c=ch.codePointAt(0); if(c>=0x370&&c<=0x5FF)bad++; else if(c>=0x600&&c<=0x6FF)ar++;}
+  if(bad<=ar||bad<2) return str;
+  const LIG={0xFEF5:'آل',0xFEF6:'آل',0xFEF7:'أل',0xFEF8:'أل',0xFEF9:'إل',0xFEFA:'إل',0xFEFB:'ال',0xFEFC:'ال'};
+  let o='';
+  for(const ch of str){const c=ch.codePointAt(0);
+    if(ch==='\x03') o+=' ';
+    else if(ch==='\u0BCC') o+='هللا';
+    else if(c>=0x370&&c<=0x5FF){const m=c+0xFB00; o+=LIG[m]||String.fromCharCode(m).normalize('NFKC');}
+    else o+=ch;}
+  return [...o].reverse().join('');
+}
+async function linesFromPdf(buf){
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const doc=await pdfjsLib.getDocument({data:buf}).promise; const lines=[];
+  for(let i=1;i<=doc.numPages;i++){
+    const tc=await (await doc.getPage(i)).getTextContent(); const rowsY={};
+    tc.items.forEach(it=>{it.str=fixBrokenPdf(it.str);if(!it.str.trim())return;const y=Math.round(it.transform[5]/3);(rowsY[y]=rowsY[y]||[]).push(it);});
+    Object.keys(rowsY).sort((a,b)=>b-a).forEach(y=>{
+      const items=rowsY[y].sort((a,b)=>b.transform[4]-a.transform[4]);
+      // كل خلية لوحدها + السطر كامل
+      items.forEach(it=>lines.push(it.str)); lines.push(items.map(it=>it.str).join(' '));
+    });
+  }
+  return fixReversed(lines);
+}
+async function linesFromDocx(buf){
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+  const r=await mammoth.extractRawText({arrayBuffer:buf}); return r.value.split(/\r?\n|\t/);
+}
 async function loadRoster(f){
-  const msg=$('#rosterMsg');
+  const msg=$('#rosterMsg'); msg.style.color=''; msg.textContent='جاري قراءة الملف…';
   try{
-    const buf=await f.arrayBuffer(); let rows;
-    if(/\.csv$/i.test(f.name)) rows=decode(buf).replace(/^\uFEFF/,'').split(/\r?\n/).map(splitLine);
-    else{ if(!window.XLSX) throw 0; const wb=XLSX.read(buf,{type:'array'}); rows=[];
-      wb.SheetNames.forEach(n=>XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:'',raw:false}).forEach(r=>rows.push(r.map(c=>String(c).trim())))); }
-    const isName=c=>/^[\u0600-\u06FF\s]+$/.test(c)&&c.trim().split(/\s+/).length>=2&&!/(اسم|الاسم|الطالب|الفصل|الصف|المدرسه|المدرسة|ابتدائي|الابتدائي)$/.test(c.trim());
-    let best=-1,bestN=0; const w=Math.max(0,...rows.map(r=>r.length));
-    for(let c=0;c<w;c++){const n=rows.filter(r=>isName(r[c]||'')).length; if(n>bestN){bestN=n;best=c;}}
-    if(best<0) throw 0;
-    const seen=new Set(); const names=[];
-    rows.forEach(r=>{const v=cleanName(r[best]||''); if(isName(v)&&!seen.has(norm(v))){seen.add(norm(v));names.push(v);}});
-    $('#roster').value=names.join('\n');
-    try{localStorage.setItem('roster',$('#roster').value)}catch(e){}
-    msg.style.color='';msg.textContent='تمت إضافة '+names.length+' اسم. راجعي القائمة وصححي أي اسم إذا لزم.';
+    const buf=await f.arrayBuffer(); let names=[];
+    const n=f.name.toLowerCase();
+    if(/\.(xlsx|xls|csv)$/.test(n)){
+      let rows;
+      if(n.endsWith('.csv')) rows=decode(buf).replace(/^﻿/,'').split(/\r?\n/).map(splitLine);
+      else{ if(!window.XLSX) throw 0; const wb=XLSX.read(buf,{type:'array'}); rows=[];
+        wb.SheetNames.forEach(s=>XLSX.utils.sheet_to_json(wb.Sheets[s],{header:1,defval:'',raw:false}).forEach(r=>rows.push(r.map(c=>String(c).trim())))); }
+      let best=-1,bestN=0; const w=Math.max(0,...rows.map(r=>r.length));
+      for(let c=0;c<w;c++){const k=rows.filter(r=>isName(cleanName(r[c]||''))).length; if(k>bestN){bestN=k;best=c;}}
+      if(best>-1) names=rows.map(r=>cleanName(r[best]||'')).filter(isName);
+      else names=namesFromLines(rows.map(r=>r.join(' ')));
+    } else if(n.endsWith('.pdf')) names=namesFromLines(await linesFromPdf(buf));
+    else if(n.endsWith('.docx')) names=namesFromLines(await linesFromDocx(buf));
+    else if(n.endsWith('.doc')) {msg.style.color='var(--bad)';msg.textContent='ملف Word القديم (.doc) ما يُقرأ. احفظيه بصيغة .docx أو PDF وارفعيه.';return;}
+    else throw 0;
+    // إزالة التكرار، وإذا كان السطر الكامل يحتوي اسمًا موجودًا كخلية نكتفي بالخلية
+    const seen=new Set(), list=[];
+    names.forEach(v=>{const k=norm(v); if(!seen.has(k)){seen.add(k);list.push(v);}});
+    const keys=list.map(norm);
+    const final=list.filter((v,i)=>!keys.some((k,j)=>j!==i&&k.length<keys[i].length&&keys[i].includes(k)&&k.split(' ').length>=3));
+    if(!final.length) throw new Error('empty');
+    $('#roster').value=final.join('\n');
+    save();
+    msg.style.color=''; msg.textContent='تمت إضافة '+final.length+' اسم. راجعي القائمة في المربع وصححي أو احذفي أي سطر غلط.';
     render();
-  }catch(e){msg.style.color='var(--bad)';msg.textContent='ما قدرت ألقى عمود الأسماء في الملف. انسخي الأسماء من Excel والصقيها في المربع.';}
+  }catch(e){console.error(e);msg.style.color='var(--bad)';msg.textContent=(e&&e.message==='load'?'تعذّر تحميل أداة القراءة. تأكدي من الإنترنت وجربي مرة ثانية. ':'')+'ما قدرت أقرأ الأسماء من هذا الملف. جربي صيغة ثانية (Excel أو PDF)، أو الصقي الأسماء في المربع.'+(e&&e.message&&e.message!=='load'?' (تفاصيل: '+e.message+')':'');}
 }
 $('#rosterFile').addEventListener('change',e=>{if(e.target.files[0])loadRoster(e.target.files[0]);e.target.value='';});
-$('#rosterClear').addEventListener('click',()=>{$('#roster').value='';try{localStorage.removeItem('roster')}catch(e){};$('#rosterMsg').textContent='';render();});
+$('#rosterClear').addEventListener('click',()=>{$('#roster').value='';save();$('#rosterMsg').textContent='';render();});
 
-['school','teacher','klass'].forEach(id=>{const el=$('#'+id);
+['school','teacher','deputy','principal'].forEach(id=>{const el=$('#'+id);
   try{const v=localStorage.getItem('f_'+id);if(v!==null)el.value=v;}catch(e){}
   el.addEventListener('input',()=>{try{localStorage.setItem('f_'+id,el.value)}catch(e){}});});
 $('#pdf').addEventListener('click',()=>{
@@ -449,19 +535,68 @@ $('#pdf').addEventListener('click',()=>{
   $('#pTeacher').textContent=v('teacher')?'المعلمة: '+v('teacher'):'';
   $('#pClass').textContent=v('klass')?'المادة والفصل: '+v('klass'):'';
   $('#pDate').textContent='تاريخ التقرير: '+new Date().toLocaleDateString('ar-SA-u-ca-gregory-nu-latn');
-  $('#pSign').textContent=v('teacher');
+  $('#pSign').textContent=v('teacher');$('#pDeputy').textContent=v('deputy');$('#pPrincipal').textContent=v('principal');
   $('#pLessons').innerHTML=lessons.map((L,i)=>'<li>د'+(i+1)+': '+esc(L.label)+'</li>').join('');
   try{window.print();}catch(e){}
 });
 
-// بيانات تجريبية
-const demoNames=['طالب مثال ١','طالب مثال ٢','طالب مثال ٣','طالب مثال ٤','طالب مثال ٥','طالب مثال ٦'];
-const pattern=[[1,1,1,1],[1,0,1,1],[1,1,0,0],[0,0,1,0],[1,1,1,0],[1,1,1,1]];
-['الدرس الأول','الدرس الثاني','الدرس الثالث','الدرس الرابع'].forEach((lbl,li)=>{
-  const m=new Map(); demoNames.forEach((nm,i)=>{if(pattern[i][li]) m.set(norm(nm),{name:nm,minutes:40});});
-  lessons.push({id:++uid,label:lbl+' (مثال)',attendees:m});
-});
-isDemo=true; render();
+// ===== الفصول: كل فصل له كشف ودروس محفوظة في جهاز المعلمة =====
+let store={classes:[],current:null}; let firstRun=false;
+function newId(){return 'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function loadStore(){
+  try{const r=localStorage.getItem('hodoor_v2');if(r)store=JSON.parse(r);}catch(e){}
+  if(!store||!Array.isArray(store.classes)||!store.classes.length){
+    let roster='',name='';try{roster=localStorage.getItem('roster')||'';name=localStorage.getItem('f_klass')||'';}catch(e){}
+    firstRun=!roster;
+    store={classes:[{id:newId(),name:name||'فصلي',roster,lessons:[]}],current:null};
+  }
+  if(!store.classes.find(c=>c.id===store.current)) store.current=store.classes[0].id;
+}
+function cur(){return store.classes.find(c=>c.id===store.current);}
+function save(){
+  const c=cur(); if(!c) return;
+  if(!isDemo) c.lessons=lessons.map(L=>({label:L.label,att:[...L.attendees.entries()].map(([k,a])=>[k,a.name,a.minutes])}));
+  c.roster=$('#roster').value; c.name=$('#klass').value.trim()||c.name;
+  try{localStorage.setItem('hodoor_v2',JSON.stringify(store));}catch(e){}
+  fillSel();
+}
+function fillSel(){
+  $('#clsSel').innerHTML=store.classes.map(c=>'<option value="'+c.id+'"'+(c.id===store.current?' selected':'')+'>'+esc(c.name)+' ('+c.lessons.length+' درس)</option>').join('');
+  const c=cur(); $('#clsInfo').textContent=isDemo?'':'محفوظ في هذا الجهاز: '+c.lessons.length+' درس لهذا الفصل. ارفعي ملف كل حصة جديدة فقط، والحصر يتجمع تلقائيًا.';
+}
+function makeDemo(){
+  const demoNames=['طالب مثال ١','طالب مثال ٢','طالب مثال ٣','طالب مثال ٤','طالب مثال ٥','طالب مثال ٦'];
+  const pattern=[[1,1,1,1],[1,0,1,1],[1,1,0,0],[0,0,1,0],[1,1,1,0],[1,1,1,1]];
+  ['الدرس الأول','الدرس الثاني','الدرس الثالث','الدرس الرابع'].forEach((lbl,li)=>{
+    const m=new Map(); demoNames.forEach((nm,i)=>{if(pattern[i][li]) m.set(norm(nm),{name:nm,minutes:40});});
+    lessons.push({id:++uid,label:lbl+' (مثال)',attendees:m});
+  });
+  isDemo=true;
+}
+function loadClass(){
+  const c=cur(); isDemo=false;
+  lessons=(c.lessons||[]).map(x=>({id:++uid,label:x.label,attendees:new Map(x.att.map(([k,n,m])=>[k,{name:n,minutes:m}]))}));
+  $('#roster').value=c.roster||''; $('#klass').value=c.name||'';
+  $('#errors').innerHTML=''; $('#rosterMsg').textContent=''; $('#q').value='';
+  if(firstRun&&!lessons.length){makeDemo();firstRun=false;}
+  fillSel(); render();
+}
+function twice(btn,fn){
+  if(btn.dataset.armed){delete btn.dataset.armed;btn.textContent=btn.dataset.label;clearTimeout(btn._t);fn();return;}
+  btn.dataset.label=btn.textContent;btn.dataset.armed='1';btn.textContent='اضغطي مرة ثانية للتأكيد';
+  btn._t=setTimeout(()=>{delete btn.dataset.armed;btn.textContent=btn.dataset.label;},4000);
+}
+$('#clsSel').addEventListener('change',e=>{save();store.current=e.target.value;loadClass();});
+$('#clsNew').addEventListener('click',()=>{save();const c={id:newId(),name:'فصل جديد '+(store.classes.length+1),roster:'',lessons:[]};
+  store.classes.push(c);store.current=c.id;isDemo=false;lessons=[];loadClass();save();const k=$('#klass');k.focus();k.select();});
+$('#klass').addEventListener('input',()=>save());
+$('#clsReset').addEventListener('click',e=>twice(e.currentTarget,()=>{lessons=[];isDemo=false;$('#errors').innerHTML='';save();render();}));
+$('#clsDel').addEventListener('click',e=>twice(e.currentTarget,()=>{
+  if(store.classes.length===1){const c=cur();c.lessons=[];c.roster='';c.name='فصلي';}
+  else{store.classes=store.classes.filter(c=>c.id!==store.current);store.current=store.classes[0].id;}
+  try{localStorage.setItem('hodoor_v2',JSON.stringify(store));}catch(e){}
+  loadClass();}));
+loadStore(); loadClass();
 })();
 </script>
 
