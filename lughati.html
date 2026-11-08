@@ -342,12 +342,30 @@ const saveLocal=()=>{try{localStorage.setItem('lg_name',NAME);localStorage.setIt
 const open=L=>!PUB||PUB.includes(L);
 const total=()=>Object.values(DONE).reduce((a,b)=>a+b,0)+Object.values(GS).reduce((a,b)=>a+b,0);
 function updHd(){$('#who').innerHTML=NAME?`<span class="chip">${esc(NAME)}</span><span class="chip"><i>★</i> ${total()}</span>`:'';updV()}
-const FB='https://defense-fingerprint-default-rtdb.firebaseio.com',TPIN='922727';
+const FB='https://defense-fingerprint-default-rtdb.firebaseio.com',WANT_T=new URLSearchParams(location.search).has('t');
+const AK='AIzaSyC67BxojfxIV02NBh461CK5Z5c7KdRVZ4s',AUTH_KEY='lg_auth';
+let TOK='',TEXP=0;
+const authGet=()=>{try{return JSON.parse(localStorage.getItem(AUTH_KEY)||'null')}catch(e){return null}};
+const authSet=v=>{try{v?localStorage.setItem(AUTH_KEY,JSON.stringify(v)):localStorage.removeItem(AUTH_KEY)}catch(e){}};
+async function signIn(em,pw){
+ if(AK.indexOf('PUT_')===0)throw new Error('NOKEY');
+ const r=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='+AK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw,returnSecureToken:true})});
+ const d=await r.json();if(!r.ok)throw new Error((d.error&&d.error.message)||'ERR');
+ TOK=d.idToken;TEXP=Date.now()+(+d.expiresIn||3600)*1000;authSet({rt:d.refreshToken,em});return d}
+async function idTok(){
+ if(TOK&&Date.now()<TEXP-60000)return TOK;
+ const a=authGet();if(!a||!a.rt||AK.indexOf('PUT_')===0)return '';
+ try{const r=await fetch('https://securetoken.googleapis.com/v1/token?key='+AK,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(a.rt)});
+ const d=await r.json();if(!r.ok){authSet(null);TOK='';return ''}
+ TOK=d.id_token;TEXP=Date.now()+(+d.expires_in||3600)*1000;authSet({rt:d.refresh_token,em:a.em});return TOK}catch(e){return ''}}
+function signOut(){TOK='';authSet(null)}
+const authMsg=m=>/INVALID_LOGIN|INVALID_PASSWORD|EMAIL_NOT_FOUND|INVALID_EMAIL|MISSING_PASSWORD/.test(m)?'البريد أو كلمة المرور غير صحيحة.':/TOO_MANY/.test(m)?'محاولات كثيرة. انتظري قليلًا ثم حاولي.':m==='NOKEY'?'لم يُضبط مفتاح تسجيل الدخول بعد.':'تعذّر الدخول. تأكدي من الإنترنت.';
+async function fbA(p,o){const t=await idTok();return fetch(fbU(p)+(t?'?auth='+encodeURIComponent(t):''),o)}
 const fbOn=()=>FB.indexOf('PUT_')!==0,fbU=p=>FB.replace(/\/$/,'')+'/'+p+'.json';
 async function pullCfg(){if(!fbOn())return;try{const r=await fetch(fbU('config/open'));const d=await r.json();const n=d&&d.length!==undefined?d:null;if(JSON.stringify(n)!==JSON.stringify(PUB)){PUB=n;if(!S&&!$('#dash'))home()}}catch(e){}
  try{const rv=await (await fetch(fbU('config/voice'))).json();const nv=rv==='on'?'on':'off';if(nv!==VPUB){VPUB=nv;updVB()}}catch(e){}}
-function init(){
- isT=new URLSearchParams(location.search).get('t')===TPIN;updVB();try{new MutationObserver(updVB).observe(document.getElementById('app'),{childList:true,subtree:true})}catch(e){}home();pullCfg();setInterval(pullCfg,30000);
+async function init(){
+ if(WANT_T)isT=!!(await idTok());updVB();try{new MutationObserver(updVB).observe(document.getElementById('app'),{childList:true,subtree:true})}catch(e){}home();pullCfg();setInterval(pullCfg,30000);
 }
 function log(rec){if(!fbOn())return;try{fetch(fbU('results'),{method:'POST',body:JSON.stringify(Object.assign({name:NAME,ts:Date.now()},rec))}).catch(()=>{})}catch(e){}}
 const reduce=(()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}})();
@@ -430,7 +448,13 @@ function ach(){
 /* ---- home ---- */
 const ok0=i=>isT||open(ORD[i]);
 const stars=n=>'★'.repeat(n||0);
+function loginView(){
+ S=null;if(unsub){clearInterval(unsub);unsub=null}updHd();
+ $('#app').innerHTML=`<section class="card hero"><span class="owl">🦉</span><h1>دخول المعلمة</h1><label for="lem">البريد الإلكتروني</label><input id="lem" type="email" dir="ltr" autocomplete="username" value="${esc((authGet()||{}).em||'')}"><label for="lpw">كلمة المرور</label><input id="lpw" type="password" dir="ltr" autocomplete="current-password"><p id="lerr" style="color:#c0392b;font-weight:700;min-height:1.5em;margin:6px 0"></p><button class="go" id="lgo">دخول</button><p class="mut" style="margin:10px 0 0"><a href="lughati">العودة لصفحة الطلاب</a></p></section>`;
+ const go=async()=>{const e=$('#lem').value.trim(),p=$('#lpw').value;if(!e||!p){$('#lerr').textContent='اكتبي البريد وكلمة المرور.';return}$('#lgo').disabled=true;$('#lerr').textContent='';try{await signIn(e,p);isT=true;home()}catch(x){$('#lerr').textContent=authMsg(String(x.message||x));$('#lgo').disabled=false}};
+ $('#lgo').onclick=go;$('#lpw').addEventListener('keydown',ev=>{if(ev.key==='Enter')go()})}
 function home(t){
+ if(WANT_T&&!isT){loginView();return}
  S=null;if(unsub){clearInterval(unsub);unsub=null}updHd();const a=$('#app');
  if(!NAME){a.innerHTML=`<section class="card hero"><span class="owl">🦉</span><h1>أهلًا بك في رحلة الحروف</h1><p class="mut" style="font-size:18px;margin:0">نتعلّم الحروف الثمانية والعشرين، ونقرأ كلمات وجملًا، ونلعب ونتعلّم.</p><label for="nm">ما اسمك؟</label><input id="nm" placeholder="اكتب اسمك هنا" maxlength="30" autocomplete="off"><button class="go" onclick="setName()">هيّا نبدأ الرحلة</button></section>${isT?'<p class="row"><button class="alt" onclick="dash()">لوحة المعلمة</button></p>':''}`;
   const nm=$('#nm');if(nm)nm.addEventListener('keydown',e=>{if(e.key==='Enter')setName()});return}
@@ -954,7 +978,7 @@ function anBuild(){
 async function qLoad(){
  const el=$('#qs');if(!el)return;el.innerHTML='<h3>🎙️ استخدام «قراءتي»</h3><p class="mut">جارٍ التحميل…</p>';
  try{
-  const o=await (await fetch(FB+'/qr2/stats.json')).json()||{},L=Object.values(o).sort((a,b)=>(b.last||0)-(a.last||0));
+  const o=await (await fbA('qr2/stats')).json()||{},L=Object.values(o).sort((a,b)=>(b.last||0)-(a.last||0));
   if(!L.length){el.innerHTML='<h3>🎙️ استخدام «قراءتي»</h3><p class="mut">لم تستخدم أي معلمة «قراءتي» بعد.</p>';return}
   const tot=t=>Object.values(t.cls||{}).reduce((a,c)=>({r:a.r+(c.r||0),s:a.s+(c.s||0)}),{r:0,s:0});
   const rated=L.filter(t=>t.rate&&t.rate.stars),avg=rated.length?(rated.reduce((a,t)=>a+t.rate.stars,0)/rated.length).toFixed(1):'—';
@@ -974,10 +998,10 @@ function dash(sel){
  const a=$('#app');
  if(!isT){a.innerHTML='<div class="card">لوحة المعلمة تظهر لصاحبة الصفحة فقط.</div><button onclick="home()">رجوع</button>';return}
  if(!fbOn()){a.innerHTML='<div class="card">لم يُربط الحفظ بقاعدة بيانات Firebase بعد.</div><button onclick="home()">رجوع</button>';return}
- a.innerHTML='<div id="dash"><div class="top"><h2>لوحة المعلمة</h2><button class="alt" onclick="home()">رجوع</button></div><div id="dc" class="card">جارٍ التحميل…</div><div id="qs" class="card"></div></div>';
+ a.innerHTML='<div id="dash"><div class="top"><h2>لوحة المعلمة</h2><span class="row"><button class="alt" onclick="home()">رجوع</button><button class="alt" onclick="signOut();isT=false;home()">خروج</button></span></div><div id="dc" class="card">جارٍ التحميل…</div><div id="qs" class="card"></div></div>';
  qLoad();
  if(unsub)clearInterval(unsub);
- const pull=async()=>{try{const r=await fetch(fbU('results')),o=await r.json()||{};const all=Object.values(o).sort((x,y)=>y.ts-x.ts);CERTS=all.filter(r=>r.cert);DATA=all.filter(r=>!r.cert).slice(0,3000);paint(sel)}catch(e){const c=$('#dc');if(c)c.textContent='تعذّر تحميل البيانات'}};
+ const pull=async()=>{try{const r=await fbA('results');if(!r.ok){if(r.status===401||r.status===403){signOut();isT=false;loginView();return}throw 0}const o=await r.json()||{};const all=Object.values(o).sort((x,y)=>y.ts-x.ts);CERTS=all.filter(r=>r.cert);DATA=all.filter(r=>!r.cert).slice(0,3000);paint(sel)}catch(e){const c=$('#dc');if(c)c.textContent='تعذّر تحميل البيانات'}};
  pull();unsub=setInterval(pull,15000);
 }
 function bars(map,keys){return keys.filter(k=>map[k]).map(k=>{const p=pct(map[k]),l=lvl(p);return `<div class="br"><span class="bk">${esc(k)}</span><div class="bar2"><i style="width:${Math.max(p,3)}%;background:${l[1]}"></i></div><span class="bp">${p}%</span></div>`}).join('')}
@@ -1072,11 +1096,11 @@ async function xlsxBlob(T){
 function tail(){return `<div class="noprint"><hr><h3>الصوت للطلاب</h3><p class="mut">الصوت الحالي مولَّد بالذكاء الاصطناعي. القرار الافتراضي لجميع الطلاب (يستطيع الطالب تغييره من الزر أعلى الصفحة):</p><p class="row"><button class="${VPUB==='on'?'':'alt'}" onclick="setVD('on')">تشغيل</button><button class="${VPUB==='on'?'alt':''}" onclick="setVD('off')">إيقاف (الافتراضي)</button></p><h3>الحروف المنشورة للطلاب</h3><div class="minis">${W.map(w=>`<button class="mini ${open(w[0])?'on':''}" onclick="tog('${w[0]}')">${w[0]}</button>`).join('')}</div>
  <p class="mut">الأخضر منشور، والرمادي مغلق. اضغطي لتغيير الحالة.</p><p class="row">${XLOK?'<button onclick="xl()">تنزيل Excel بالرسوم</button>':''}${PRINTOK?'<button class="alt" onclick="window.print()">طباعة / حفظ PDF</button>':''}<button class="alt" onclick="csv()">تنزيل البيانات CSV</button></p></div>`}
 
-function setVD(v){VPUB=v;if(fbOn())try{fetch(fbU('config/voice'),{method:'PUT',body:JSON.stringify(v)}).catch(()=>{})}catch(e){}updVB();paint()}
+function setVD(v){VPUB=v;if(fbOn())try{fbA('config/voice',{method:'PUT',body:JSON.stringify(v)}).catch(()=>{})}catch(e){}updVB();paint()}
 function tog(L){
  const cur=PUB||W.map(w=>w[0]);
  const nx=cur.includes(L)?cur.filter(x=>x!==L):[...cur,L];
- PUB=nx;if(fbOn())try{fetch(fbU('config/open'),{method:'PUT',body:JSON.stringify(nx)}).catch(()=>{})}catch(e){}
+ PUB=nx;if(fbOn())try{fbA('config/open',{method:'PUT',body:JSON.stringify(nx)}).catch(()=>{})}catch(e){}
  paint();
 }
 function csv(){
