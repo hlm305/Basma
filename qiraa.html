@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>قراءتي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff7e6;--card:#fff;--ink:#1d2b53;--mut:#5b6486;--line:#eadcb3;--green:#12a36f;--green-d:#0b6e4b;--sun:#ffc23d;--sun-d:#d99a00;--red:#e24b3b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,Tahoma,sans-serif;font-size:18px;line-height:1.7;padding:12px max(16px,env(safe-area-inset-left)) 40px max(16px,env(safe-area-inset-right))}
+.wrap{max-width:640px;margin:0 auto}
+h1,h2,h3{margin:0;line-height:1.4}
+.hd{background:var(--green-d);color:#fff;border-radius:22px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.hd .ic{font-size:40px}.hd h1{font-size:24px}.hd small{display:block;color:#ffd777;font-weight:700}
+.card{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:16px;margin-bottom:14px}
+.mut{color:var(--mut)}.sm{font-size:15px}
+button,.btn{font:inherit;font-weight:800;border-radius:16px;padding:10px 18px;cursor:pointer;background:var(--card);color:var(--ink);border:3px solid var(--line);box-shadow:0 4px 0 var(--line);text-decoration:none;display:inline-block}
+button:active{transform:translateY(2px);box-shadow:0 2px 0 var(--line)}
+button:disabled{opacity:.5}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.go{background:var(--green);color:#fff;border-color:var(--green-d);box-shadow:0 4px 0 var(--green-d)}
+.bad{color:var(--red)}
+.big{display:block;width:100%;font-size:22px;padding:16px;margin-bottom:12px;text-align:center}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=text],input[type=tel],textarea,select{width:100%;font:inherit;font-weight:700;border:3px solid var(--line);border-radius:16px;padding:10px 14px;background:#fff;color:var(--ink);margin:6px 0 10px}
+textarea{min-height:90px;resize:vertical}
+label{font-weight:800;display:block}
+.code{font-size:34px;font-weight:900;letter-spacing:4px;color:var(--green-d);direction:ltr;text-align:center;background:#eafaf2;border-radius:16px;padding:6px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}.tabs button{flex:1;padding:10px 6px;font-size:16px}.tabs .on{background:var(--sun);border-color:var(--sun-d);box-shadow:0 4px 0 var(--sun-d)}
+.item{border:3px solid var(--line);border-radius:18px;padding:12px;margin-bottom:10px;background:#fffdf6}
+.item h3{font-size:19px}
+.pg{display:block;width:100%;border-radius:14px;border:2px solid var(--line);margin:8px 0}
+.txt{font-size:30px;line-height:2.1;font-weight:700;background:#fffdf6;border-radius:14px;padding:10px;white-space:pre-wrap}
+.stars{display:flex;gap:6px;flex-wrap:wrap}.stars button{font-size:24px;padding:2px 10px;line-height:1.4}.stars .on{background:var(--sun);border-color:var(--sun-d)}
+.rec{width:96px;height:96px;border-radius:50%;font-size:40px;padding:0;background:var(--red);color:#fff;border-color:#a8321f;box-shadow:0 6px 0 #a8321f}
+.rec.stop{background:var(--ink);border-color:#000}
+.pulse{animation:pl 1s infinite}@keyframes pl{50%{transform:scale(1.08)}}
+.tm{font-size:34px;font-weight:900;direction:ltr}
+.fb{border-radius:16px;padding:10px 14px;font-weight:800;margin:10px 0}.fb.ok{background:#e6f8ef;color:var(--green-d)}.fb.hint{background:#fff1cf;color:#8a5b00}
+audio{width:100%;margin:8px 0}
+.ft{text-align:center;color:var(--mut);margin-top:24px;font-size:15px}.ft b{color:var(--green-d)}
+.tag{display:inline-block;background:#eee7ff;color:#5a36d6;border-radius:999px;padding:0 10px;font-size:14px;font-weight:800}
+.tag.g{background:#e6f8ef;color:var(--green-d)}
+.priv{background:#eefaf4;border:2px solid #bfe9d3;border-radius:14px;padding:8px 12px;font-size:15px;font-weight:700;color:var(--green-d)}
+.rep table{width:100%;border-collapse:collapse;font-size:15px}.rep th,.rep td{border:2px solid var(--line);padding:6px 8px;text-align:right}.rep th{background:#fff1cf}
+.rep h3{margin-bottom:4px}.tw{overflow-x:auto;max-width:100%}.rep table{min-width:420px}.rep th,.rep td{padding:5px 6px}
+.over{position:fixed;inset-inline:16px;top:25%;z-index:9;text-align:center;box-shadow:0 10px 40px #0004}
+@media print{body{background:#fff;padding:0}.np{display:none!important}.rep{border:0!important}}
+@media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<footer class="ft wrap np">إعداد: <b>فاطمة المطيري</b> · © الحقوق محفوظة</footer>
+<script>
+/* ===== قراءتي: تسجيلات الطلاب مشفّرة في المتصفح، ولا يقرؤها إلا من يملك رمز الفصل أو مفتاح المعلمة ===== */
+const FB='https://defense-fingerprint-default-rtdb.firebaseio.com/qr2';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MAXS=90,te=new TextEncoder(),td=new TextDecoder();
+let ST={};
+const lsG=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+const lsS=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+async function api(path,method,body){
+  const r=await fetch(FB+'/'+path+'.json',{method:method||'GET',body:body===undefined?undefined:JSON.stringify(body)});
+  if(!r.ok)throw new Error('net');
+  return r.json();
+}
+/* ---- تشفير ---- */
+const b64=u=>{let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)};
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const sha=async s=>new Uint8Array(await crypto.subtle.digest('SHA-256',te.encode(s)));
+const hex=u=>[...u].map(x=>x.toString(16).padStart(2,'0')).join('');
+const IDC={};
+const DV=()=>{let v=lsG('qr_dv',null);if(!v){v=rnd(8);lsS('qr_dv',v)}return v};
+function normCode(x){
+  x=String(x||'').replace(/[\u064B-\u0652\u0640]/g,'').replace(/[\u0660-\u0669]/g,d=>d.charCodeAt(0)-0x660).replace(/[\u06F0-\u06F9]/g,d=>d.charCodeAt(0)-0x6F0)
+   .replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,'').toLowerCase();
+  return x;
+}
+const codeOK=c=>/^[^\d]{2,12}\d{2,4}$/.test(c);
+async function ids(cc){
+  if(IDC[cc])return IDC[cc];
+  const base=await crypto.subtle.importKey('raw',te.encode('qr:'+cc),'PBKDF2',false,['deriveBits']);
+  const bits=new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt:te.encode('qiraa-v2'),iterations:250000,hash:'SHA-256'},base,384));
+  return IDC[cc]={cid:hex(bits.slice(0,16)),Ks:await crypto.subtle.importKey('raw',bits.slice(16),'AES-GCM',false,['encrypt','decrypt'])};
+}
+async function aE(key,str){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,te.encode(str)));return b64(iv)+'.'+b64(ct)}
+async function aD(key,s){const[i,c]=s.split('.');return td.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(i)},key,unb64(c)))}
+async function newKP(){const k=await crypto.subtle.generateKey({name:'RSA-OAEP',modulusLength:2048,publicExponent:new Uint8Array([1,0,1]),hash:'SHA-256'},true,['encrypt','decrypt']);return{pub:await crypto.subtle.exportKey('jwk',k.publicKey),priv:await crypto.subtle.exportKey('jwk',k.privateKey)}}
+const impPub=j=>crypto.subtle.importKey('jwk',j,{name:'RSA-OAEP',hash:'SHA-256'},false,['encrypt']);
+const impPriv=j=>crypto.subtle.importKey('jwk',j,{name:'RSA-OAEP',hash:'SHA-256'},false,['decrypt']);
+async function sealFor(pubJwk,metaObj,audioStr){
+  const Ka=await crypto.subtle.generateKey({name:'AES-GCM',length:256},true,['encrypt','decrypt']);
+  const w=b64(new Uint8Array(await crypto.subtle.encrypt({name:'RSA-OAEP'},await impPub(pubJwk),await crypto.subtle.exportKey('raw',Ka))));
+  return{meta:{w,d:await aE(Ka,JSON.stringify(metaObj)),dv:DV()},audio:await aE(Ka,audioStr)};
+}
+async function openKa(privKey,w){return crypto.subtle.importKey('raw',await crypto.subtle.decrypt({name:'RSA-OAEP'},privKey,unb64(w)),'AES-GCM',false,['decrypt'])}
+/* ---- أدوات ---- */
+const ago=ts=>{const m=Math.round((Date.now()-ts)/60000);if(m<1)return'الآن';if(m<60)return'قبل '+m+' دقيقة';const h=Math.round(m/60);if(h<24)return'قبل '+h+' ساعة';return'قبل '+Math.round(h/24)+' يوم'};
+const AR=s=>String(s).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const dstr=ts=>{const d=new Date(ts);return d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()};
+const rnd=n=>{const a=new Uint32Array(n);crypto.getRandomValues(a);return[...a].map(x=>x%10).join('')};
+const rid=()=>'r'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);
+const nkey=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
+const grp=c=>c.replace(/^(\D+)(\d+)$/,'$1 $2');
+const ORIG=()=>location.origin.replace(/^file:.*/,'https://msfatimah.com').replace('null','https://msfatimah.com');
+function head(sub,back){return `<div class="hd np"><span class="ic">🦉</span><div><h1>قراءتي</h1><small>${esc(sub||'اقرأ بصوتك وأرسل قراءتك لمعلمتك')}</small></div></div>`+(back===0||!/[?&]from=l/.test(location.search)?'':`<p class="np" style="margin:0 4px 10px"><a href="/lughati" style="color:var(--green-d);font-weight:800">← العودة إلى رحلة الحروف</a></p>`)}
+function msg(t,k){const m=$('#msg');if(m)m.innerHTML=t?`<div class="fb ${k||'hint'}">${t}</div>`:''}
+function toast(t){const b=document.createElement('div');b.className='fb ok';b.textContent=t;b.style.cssText='position:fixed;bottom:20px;inset-inline:16px;z-index:9;text-align:center';document.body.appendChild(b);setTimeout(()=>b.remove(),1800)}
+function ask(q,fn){const b=document.createElement('div');b.className='card over';b.innerHTML=`<p>${esc(q)}</p><div class="row" style="justify-content:center"><button class="go" id="cy">نعم</button><button id="cn2">إلغاء</button></div>`;document.body.appendChild(b);b.querySelector('#cy').onclick=()=>{b.remove();fn()};b.querySelector('#cn2').onclick=()=>b.remove()}
+function copyTxt(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('تم النسخ ✓')).catch(()=>{const b=document.createElement('div');b.className='card over';b.innerHTML=`<p>انسخي النص:</p><textarea readonly>${esc(t)}</textarea><button onclick="this.parentNode.remove()">إغلاق</button>`;document.body.appendChild(b);b.querySelector('textarea').select()})}
+
+/* ---------------- الرئيسية ---------------- */
+function home(){
+  stopRec(true);
+  $('#app').innerHTML=head()+`<div class="card"><h3>من أنتِ؟</h3><p class="mut">اختاري لتبدأي.</p>
+  <button class="go big" onclick="stHome()">🧒 أنا طالب</button>
+  <button class="big" onclick="tHome()">👩‍🏫 أنا معلمة</button></div>`;
+}
+
+/* ---------------- المعلمة ---------------- */
+const TM=()=>lsG('qr_t',null);
+function syncStats(extra){
+  const t=TM();if(!t)return;
+  api('stats/'+t.tid,'PATCH',Object.assign({name:t.name,school:t.school||'',last:Date.now()},extra||{})).catch(()=>{});
+}
+function tHome(){
+  const t=TM();
+  if(!t||!t.school||ST.editT){
+    $('#app').innerHTML=head('لوحة المعلمة')+`<div class="card"><button onclick="ST.editT=false;${t&&t.school?'tHome()':'home()'}">رجوع</button><h3 style="margin-top:10px">${t&&t.school?'تعديل بياناتي':'مرحبًا بكِ'}</h3>
+    <label for="tn">اسمكِ</label><input type="text" id="tn" maxlength="40" autocomplete="off" value="${esc(t?t.name:'')}">
+    <label for="ts">رقم مدرستكِ</label><input type="tel" id="ts" maxlength="4" dir="ltr" autocomplete="off" placeholder="مثال: 245" value="${esc(t&&t.school||'')}">
+    <p class="mut sm" style="margin:0 0 8px">رمز فصلكِ سيكون: اسمكِ الأول + رقم المدرسة (مثال: منى245)، سهل على الطلاب.</p>
+    <p class="priv">🔒 يُحفظ اسمكِ وعدد استخدامكِ فقط لإحصائية استفادة المعلمات من التطبيق. أما تسجيلات الطلاب وأسماؤهم وقراءاتكِ فمشفّرة ولا يطّلع عليها أحد غيركِ، ولا حتى صاحبة التطبيق.</p>
+    <button class="go" onclick="tReg()">${t&&t.school?'حفظ':'متابعة'}</button><div id="msg"></div></div>
+    <div class="card"><h3>لدي مفتاح استرجاع</h3><p class="mut sm">للدخول من جهاز آخر، الصقي مفتاح الاسترجاع الذي نسختِه من فصلكِ.</p>
+    <textarea id="rk" dir="ltr" placeholder="الصقي المفتاح هنا"></textarea><button onclick="tRestore()">استرجاع</button><div id="msg2"></div></div>`;
+    return}
+  const cl=lsG('qr_classes',[]);
+  $('#app').innerHTML=head('لوحة المعلمة')+`<div class="card"><div class="row"><button onclick="home()">رجوع</button><button onclick="ST.editT=1;tHome()">✏️ تعديل اسمي ورقم مدرستي</button></div><p class="mut sm" style="margin:8px 0 0">الاسم: <b>${esc(t.name)}</b></p></div>
+  ${cl.length?`<div class="card"><h3>فصولي</h3>${cl.map((c,i)=>`<button class="big" onclick="tOpen(${i})">📚 ${esc(c.name)}</button>`).join('')}</div>`:''}
+  <div class="card"><h3>إنشاء فصل جديد</h3><label for="cn">اسم الفصل (مثال: أول/٣)</label><input type="text" id="cn" maxlength="30" autocomplete="off">
+  <label for="cw">كلمة الرمز (اسمكِ الأول، ويُضاف بعدها رقم مدرستكِ تلقائيًا)</label><input type="text" id="cw" maxlength="12" autocomplete="off" value="${esc(t.name.replace(/^(أ\.|الأستاذة|الاستاذة|المعلمة|معلمة)\s*/,'').trim().split(/\s+/)[0])}">
+  <button class="go" id="cb" onclick="tCreate()">إنشاء الفصل</button><div id="msg"></div></div>
+  <div class="card"><h3>استرجاع فصل من جهاز آخر</h3><textarea id="rk" dir="ltr" placeholder="الصقي مفتاح الاسترجاع هنا"></textarea><button onclick="tRestore()">استرجاع</button><div id="msg2"></div></div>
+  ${rateCard()}`;
+  bindRate();
+}
+function tReg(){
+  const name=($('#tn').value||'').trim(),sc=normCode($('#ts').value);if(!name){msg('اكتبي اسمكِ.');return}
+  if(!/^\d{2,4}$/.test(sc)){msg('اكتبي رقم المدرسة (٢ إلى ٤ أرقام).');return}
+  ST.editT=false;const old=TM();lsS('qr_t',{tid:old?old.tid:'t'+rnd(4)+Date.now().toString(36),name,school:sc});syncStats({ts:Date.now()});tHome();
+}
+async function tCreate(){
+  const t=TM(),name=($('#cn').value||'').trim(),word=normCode($('#cw').value).replace(/\d/g,'').slice(0,12);
+  if(!name){msg('اكتبي اسم الفصل أولًا.');return}
+  if(word.length<2){msg('اكتبي كلمة الرمز (حرفان على الأقل).');return}
+  const cc=word+t.school,cl=lsG('qr_classes',[]);
+  const mine=cl.findIndex(c=>c.cc===cc);
+  if(mine>=0){msg('لديكِ فصل بهذا الرمز بالفعل ('+esc(grp(cc))+'). غيّري كلمة الرمز لإنشاء فصل آخر.');return}
+  const b=$('#cb');b.disabled=true;msg('جارٍ إنشاء الفصل وتجهيز التشفير…');
+  try{
+    const{cid,Ks}=await ids(cc);
+    if(await api('classes/'+cid+'/meta')){b.disabled=false;msg('⚠ تنبيه: الرمز '+esc(grp(cc))+' مستخدم عند معلمة أخرى (نفس الاسم ورقم المدرسة). غيّري كلمة الرمز، مثل إضافة حرف من اسم عائلتكِ.');return}
+    const kp=await newKP();
+    await api('classes/'+cid+'/meta','PUT',{pub:kp.pub,nm:await aE(Ks,JSON.stringify({name})),ts:Date.now()});
+    cl.push({cc,name,priv:kp.priv,disp:($('#cw').value||'').trim().replace(/\d/g,'').slice(0,12)+' '+t.school});lsS('qr_classes',cl);
+    tOpen(cl.length-1);
+  }catch(e){b.disabled=false;msg('تعذّر الإنشاء. تأكدي من الإنترنت وحاولي مرة أخرى.')}
+}
+async function tRestore(){
+  const raw=($('#rk').value||'').trim(),m=$('#msg2');
+  try{const o=JSON.parse(td.decode(unb64(raw)));
+    const{cid,Ks}=await ids(o.cc),meta=await api('classes/'+cid+'/meta');if(!meta)throw 0;
+    const nm=JSON.parse(await aD(Ks,meta.nm)).name;
+    if(!TM()||!TM().school)lsS('qr_t',{tid:o.tid,name:o.tname,school:o.tschool||''});
+    const cl=lsG('qr_classes',[]);if(!cl.some(c=>c.cc===o.cc)){cl.push({cc:o.cc,name:nm,priv:o.priv,disp:o.disp});lsS('qr_classes',cl)}
+    tHome();
+  }catch(e){m.innerHTML='<div class="fb hint">المفتاح غير صحيح أو ناقص.</div>'}
+}
+async function tOpen(i){
+  const c=lsG('qr_classes',[])[i];ST.cl=Object.assign({},c);ST.tab=ST.tab||'r';ST.f='';
+  const k=await ids(c.cc);ST.cl.cid=k.cid;ST.cl.Ks=k.Ks;ST.cl.pk=await impPriv(c.priv);tClass();
+}
+function rateCard(){
+  const r=lsG('qr_rate',{stars:0,sug:''});
+  return `<div class="card np"><h3>⭐ قيّمي التطبيق</h3><p class="mut sm" style="margin:4px 0 8px">رأيكِ يساعد صاحبة التطبيق على تطويره.</p>
+  <div class="stars" id="rs" role="group" aria-label="تقييم التطبيق">${[1,2,3,4,5].map(n=>`<button data-n="${n}" class="${r.stars>=n?'on':''}" aria-label="${n} من ٥">⭐</button>`).join('')}</div>
+  <label for="rg" style="margin-top:8px">اقتراحاتكِ لتطوير التطبيق</label><textarea id="rg" maxlength="400">${esc(r.sug)}</textarea>
+  <button class="go" id="rsend">إرسال</button><div id="rmsg"></div></div>`;
+}
+function bindRate(){
+  const r=lsG('qr_rate',{stars:0,sug:''});let st=r.stars;
+  document.querySelectorAll('#rs button').forEach(b=>b.onclick=()=>{st=+b.dataset.n;document.querySelectorAll('#rs button').forEach(x=>x.classList.toggle('on',+x.dataset.n<=st))});
+  const s=$('#rsend');if(!s)return;
+  s.onclick=()=>{const sug=($('#rg').value||'').trim();if(!st&&!sug){$('#rmsg').innerHTML='<div class="fb hint">اختاري نجومًا أو اكتبي اقتراحًا.</div>';return}
+    lsS('qr_rate',{stars:st,sug});const t=TM();
+    api('stats/'+t.tid+'/rate','PUT',{stars:st,sug,ts:Date.now()}).then(()=>{$('#rmsg').innerHTML='<div class="fb ok">شكرًا لكِ 🌷 وصل رأيكِ.</div>'}).catch(()=>{$('#rmsg').innerHTML='<div class="fb hint">تعذّر الإرسال، حاولي لاحقًا.</div>'})};
+}
+async function tClass(tab){
+  if(tab)ST.tab=tab;const c=ST.cl;
+  $('#app').innerHTML=head(c.name,0)+`<div class="card np"><button onclick="tHome()">رجوع</button>
+  <p class="mut" style="margin:10px 0 4px">رمز الفصل (أعطيه لطلابك، يكتبونه كما هو):</p><div class="code">${esc(c.disp||grp(c.cc))}</div>
+  <div class="row" style="margin-top:8px"><button onclick="tCopy()">📋 نسخ رسالة للطلاب</button><button onclick="tCopyKey()">🔑 نسخ مفتاح الاسترجاع</button></div>
+  <p class="mut sm" style="margin:8px 0 0">مفتاح الاسترجاع يفتح هذا الفصل على جهاز آخر. احتفظي به ولا تعطيه للطلاب. إن فقدتِ جوالكِ بدونه فلن يمكن استرجاع التسجيلات.</p></div>
+  <div class="tabs np"><button class="${ST.tab==='r'?'on':''}" onclick="tClass('r')">📖 القراءات</button><button class="${ST.tab==='s'?'on':''}" onclick="tClass('s')">🎧 التسجيلات</button><button class="${ST.tab==='p'?'on':''}" onclick="tClass('p')">📄 تقرير</button></div>
+  <div id="tb"><p class="mut">جارٍ التحميل…</p></div>`;
+  try{await tLoad()}catch(e){$('#tb').innerHTML='<div class="fb hint">تعذّر التحميل. تأكدي من الإنترنت.</div>';return}
+  ST.tab==='r'?tReadings():ST.tab==='s'?tSubs():tReport();
+}
+function tCopy(){copyTxt(`رمز فصلنا في «قراءتي»: ${(ST.cl.disp||grp(ST.cl.cc)).replace(' ','')}\nرابط مباشر: ${ORIG()}/qiraa#c=${encodeURIComponent(ST.cl.cc)}\nافتحوا الرابط، أو ادخلوا msfatimah.com/qiraa واختاروا «أنا طالب»، ثم اكتبوا اسمكم الأول والرمز.`)}
+function tCopyKey(){const t=TM();copyTxt(b64(te.encode(JSON.stringify({cc:ST.cl.cc,priv:ST.cl.priv,tid:t.tid,tname:t.name,tschool:t.school,disp:ST.cl.disp}))))}
+async function tLoad(){
+  const c=ST.cl;
+  const rd=await api('classes/'+c.cid+'/readings')||{},sb=await api('subs/'+c.cid)||{},fb=await api('fb/'+c.cid)||{};
+  ST.rd={};for(const[id,v]of Object.entries(rd)){try{ST.rd[id]=JSON.parse(await aD(c.Ks,v))}catch(e){}}
+  ST.sb={};for(const[id,v]of Object.entries(sb)){try{const Ka=await openKa(c.pk,v.w);const m=JSON.parse(await aD(Ka,v.d));m.Ka=Ka;m.dv=v.dv||'';ST.sb[id]=m}catch(e){}}
+  for(const[id,v]of Object.entries(fb)){if(ST.sb[id]){try{ST.sb[id].fb=JSON.parse(await aD(c.Ks,v))}catch(e){}}}
+  syncStats({['cls/'+c.cid]:{r:Object.keys(ST.rd).length,s:Object.keys(ST.sb).length}});
+}
+function tReadings(){
+  const ids_=Object.keys(ST.rd).sort((a,b)=>ST.rd[b].ts-ST.rd[a].ts);
+  $('#tb').innerHTML=`<div class="card np"><h3>إضافة قراءة جديدة</h3>
+  <label for="rt">العنوان (مثال: قراءة حرف الميم)</label><input type="text" id="rt" maxlength="60" autocomplete="off">
+  <label for="rf">صورة صفحة القراءة (من الكاميرا أو المعرض)</label><input type="file" id="rf" accept="image/*" style="margin:6px 0 10px;font:inherit;max-width:100%">
+  <img id="pv" class="pg" alt="" hidden>
+  <label for="rx">أو اكتبي النص هنا (اختياري)</label><textarea id="rx" maxlength="1500"></textarea>
+  <button class="go" id="pub" onclick="tPublish()">نشر القراءة للطلاب</button><div id="msg"></div></div>
+  <h3 class="np" style="margin:6px 4px 10px">القراءات المنشورة (${AR(ids_.length)})</h3>
+  ${ids_.length?ids_.map(id=>{const r=ST.rd[id],n=Object.values(ST.sb).filter(s=>s.rid===id).length;return `<div class="item np"><h3>${esc(r.title)}</h3><span class="mut sm">${ago(r.ts)} · ${AR(n)} تسجيل</span>
+  <div class="row" style="margin-top:8px"><button onclick="tDelR('${id}')" class="bad">حذف</button></div></div>`}).join(''):'<p class="mut">لا توجد قراءات بعد.</p>'}`;
+  $('#rf').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{ST.img=await shrink(f);const p=$('#pv');p.src=ST.img;p.hidden=false}catch(x){ST.img=null;msg('تعذّر قراءة الصورة.')}};
+  ST.img=null;
+}
+function shrink(file){return new Promise((ok,no)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{const M=1100,k=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.72))};im.onerror=no;im.src=u})}
+async function tPublish(){
+  const title=($('#rt').value||'').trim(),text=($('#rx').value||'').trim(),c=ST.cl;
+  if(!title){msg('اكتبي عنوان القراءة.');return}
+  if(!ST.img&&!text){msg('أضيفي صورة الصفحة أو اكتبي النص.');return}
+  const b=$('#pub');b.disabled=true;msg('جارٍ التشفير والنشر…');
+  try{const id=rid();
+    if(ST.img)await api('img/'+c.cid+'/'+id,'PUT',await aE(c.Ks,ST.img));
+    await api('classes/'+c.cid+'/readings/'+id,'PUT',await aE(c.Ks,JSON.stringify({title,text,hasImg:!!ST.img,ts:Date.now()})));
+    tClass('r');
+  }catch(e){b.disabled=false;msg('تعذّر النشر. حاولي مرة أخرى.')}
+}
+function tDelR(id){ask('حذف هذه القراءة وتسجيلاتها؟',async()=>{
+  const c=ST.cl.cid;try{
+    for(const[sid,s]of Object.entries(ST.sb))if(s.rid===id){await api('subs/'+c+'/'+sid,'DELETE');await api('audio/'+c+'/'+sid,'DELETE');await api('fb/'+c+'/'+sid,'DELETE')}
+    await api('img/'+c+'/'+id,'DELETE');await api('classes/'+c+'/readings/'+id,'DELETE');tClass('r');
+  }catch(e){toast('تعذّر الحذف')}})}
+function dupNames(){const g={};Object.values(ST.sb).forEach(s=>{const k=s.rid+'|'+nkey(s.name);(g[k]=g[k]||new Set()).add(s.dv||'?')});const d=new Set();Object.entries(g).forEach(([k,v])=>{if(v.size>1)d.add(k.split('|')[1])});return d}
+function tSubs(){
+  const dn=dupNames();
+  const ids_=Object.keys(ST.sb).sort((a,b)=>ST.sb[b].ts-ST.sb[a].ts),f=ST.f||'';
+  const opts=Object.keys(ST.rd).map(id=>`<option value="${id}" ${f===id?'selected':''}>${esc(ST.rd[id].title)}</option>`).join('');
+  const list=ids_.filter(id=>!f||ST.sb[id].rid===f);
+  $('#tb').innerHTML=`${dn.size?`<div class="fb hint np">⚠ تنبيه: يوجد طلاب بنفس الاسم (${[...dn].map(esc).join('، ')}). اطلبي من أحدهم إضافة حرف من اسم أبيه ليسهل التمييز.</div>`:''}<div class="card np"><label for="ff">عرض تسجيلات قراءة:</label><select id="ff" onchange="ST.f=this.value;tSubs()"><option value="">كل القراءات</option>${opts}</select></div>
+  ${list.length?list.map(id=>{const s=ST.sb[id],r=ST.rd[s.rid],fb=s.fb||{};return `<div class="item np" id="s_${id}"><h3>🧒 ${esc(s.name)} ${dn.has(nkey(s.name))?'<span class="tag" style="background:#ffe3df;color:#b02a1c">⚠ اسم مكرر</span>':''}</h3>
+  <span class="mut sm">${esc(r?r.title:'قراءة محذوفة')} · ${ago(s.ts)} · ${AR(s.dur||0)} ث</span>
+  <div id="au_${id}"><button onclick="tPlay('${id}')">▶ استمعي</button></div>
+  <div class="stars" role="group" aria-label="التقييم">${[1,2,3].map(n=>`<button class="${(fb.stars||0)>=n?'on':''}" onclick="tStar('${id}',${n})" aria-label="${n} نجوم">⭐</button>`).join('')}</div>
+  <input type="text" id="cm_${id}" maxlength="80" placeholder="تعليق قصير للطالب (اختياري)" value="${esc(fb.comment||'')}" onchange="tCom('${id}')">
+  <div class="row"><button onclick="tDelS('${id}')" class="bad">حذف</button></div></div>`}).join(''):'<p class="mut">لا توجد تسجيلات بعد.</p>'}`;
+}
+async function tPlay(id){
+  const box=$('#au_'+id);box.innerHTML='<span class="mut">جارٍ فكّ التشفير…</span>';
+  try{const e=await api('audio/'+ST.cl.cid+'/'+id);if(!e)throw 0;const d=await aD(ST.sb[id].Ka,e);box.innerHTML=`<audio controls src="${d}" id="a_${id}"></audio>`;$('#a_'+id).play().catch(()=>{})}
+  catch(e){box.innerHTML='<span class="bad">تعذّر تحميل التسجيل.</span>'}
+}
+async function saveFb(id){const s=ST.sb[id];await api('fb/'+ST.cl.cid+'/'+id,'PUT',await aE(ST.cl.Ks,JSON.stringify(s.fb)))}
+async function tStar(id,n){const s=ST.sb[id];s.fb=Object.assign({},s.fb,{stars:n});try{await saveFb(id)}catch(e){toast('تعذّر الحفظ')}tSubs()}
+async function tCom(id){const s=ST.sb[id];s.fb=Object.assign({},s.fb,{comment:$('#cm_'+id).value.trim()});try{await saveFb(id);toast('تم الحفظ ✓')}catch(e){toast('تعذّر الحفظ')}}
+function tDelS(id){ask('حذف هذا التسجيل؟',async()=>{const c=ST.cl.cid;try{await api('subs/'+c+'/'+id,'DELETE');await api('audio/'+c+'/'+id,'DELETE');await api('fb/'+c+'/'+id,'DELETE');delete ST.sb[id];tSubs()}catch(e){toast('تعذّر الحذف')}})}
+/* ---- التقرير ---- */
+function repRows(){const f=ST.f||'';return Object.keys(ST.sb).map(id=>ST.sb[id]).filter(s=>!f||s.rid===f).sort((a,b)=>a.name.localeCompare(b.name,'ar')||a.ts-b.ts)}
+function tReport(){
+  const f=ST.f||'',rows=repRows(),t=TM();
+  const opts=Object.keys(ST.rd).map(id=>`<option value="${id}" ${f===id?'selected':''}>${esc(ST.rd[id].title)}</option>`).join('');
+  const ttl=f&&ST.rd[f]?ST.rd[f].title:'جميع القراءات';
+  const stars=s=>s.fb&&s.fb.stars?'⭐'.repeat(s.fb.stars):'—';
+  $('#tb').innerHTML=`<div class="card np"><label for="ff">تقرير عن:</label><select id="ff" onchange="ST.f=this.value;tReport()"><option value="">جميع القراءات</option>${opts}</select>
+  <div class="row"><button class="go" onclick="window.print()">🖨 طباعة / حفظ PDF</button><button onclick="repCSV()">⬇ ملف Excel</button><button onclick="repTxt()">📋 نسخ نصي</button></div></div>
+  <div class="card rep" id="rep"><h3>تقرير قراءتي — ${esc(ST.cl.name)}</h3>
+  <p class="mut sm" style="margin:0 0 8px">المعلمة: ${esc(t.name)} · القراءة: ${esc(ttl)} · التاريخ: ${dstr(Date.now())}</p>
+  <p class="sm" style="margin:0 0 8px">عدد التسجيلات: <b>${AR(rows.length)}</b> · عدد الطلاب: <b>${AR(new Set(rows.map(r=>nkey(r.name))).size)}</b></p>
+  ${rows.length?`<div class="tw"><table><thead><tr><th>الطالب</th><th>القراءة</th><th>التاريخ</th><th>المدة</th><th>التقييم</th><th>تعليق</th></tr></thead><tbody>${rows.map(s=>`<tr><td>${esc(s.name)}</td><td>${esc(ST.rd[s.rid]?ST.rd[s.rid].title:'—')}</td><td>${dstr(s.ts)}</td><td>${AR(s.dur||0)} ث</td><td>${stars(s)}</td><td>${esc(s.fb&&s.fb.comment||'')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="mut">لا توجد تسجيلات لعرضها.</p>'}
+  <p class="ft" style="margin-top:14px">إعداد: <b>فاطمة المطيري</b> · © الحقوق محفوظة</p></div>`;
+}
+function repTxt(){const rows=repRows();copyTxt(`تقرير قراءتي — ${ST.cl.name}\n`+rows.map(s=>`${s.name} | ${ST.rd[s.rid]?ST.rd[s.rid].title:'—'} | ${dstr(s.ts)} | ${s.fb&&s.fb.stars?s.fb.stars+'/3':'—'} | ${s.fb&&s.fb.comment||''}`).join('\n'))}
+function repCSV(){
+  const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  const csv='﻿'+['الطالب','القراءة','التاريخ','المدة (ثانية)','التقييم من 3','تعليق'].map(q).join(',')+'\n'+repRows().map(s=>[s.name,ST.rd[s.rid]?ST.rd[s.rid].title:'',dstr(s.ts),s.dur||0,s.fb&&s.fb.stars||'',s.fb&&s.fb.comment||''].map(q).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='تقرير-قراءتي.csv';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),500);
+}
+
+/* ---------------- الطالب ---------------- */
+function stHome(pre){
+  const me=lsG('qr_me',{code:'',name:''});
+  $('#app').innerHTML=head('صفحة الطالب')+`<div class="card"><button onclick="home()">رجوع</button>
+  <h3 style="margin-top:10px">اكتب اسمك ورمز الفصل</h3>
+  <label for="sn">اسمك الأول فقط</label><input type="text" id="sn" maxlength="20" value="${esc(me.name)}" autocomplete="off">
+  <label for="sc">رمز الفصل (اسم المعلمة ورقم المدرسة، مثال: منى245)</label><input type="text" id="sc" maxlength="20" value="${esc(pre||me.code)}" autocomplete="off" autocapitalize="off">
+  <button class="go big" onclick="stGo()">ابدأ القراءة 📖</button><div id="msg"></div></div>`;
+}
+async function stGo(){
+  const name=($('#sn').value||'').trim(),code=normCode($('#sc').value);
+  if(!name||!codeOK(code)){msg('اكتب اسمك ورمز الفصل: اسم المعلمة ورقم المدرسة.');return}
+  msg('لحظة…');
+  try{const k=await ids(code),meta=await api('classes/'+k.cid+'/meta');
+    if(!meta){msg('الرمز غير صحيح. اسأل معلمتك.');return}
+    const cls=JSON.parse(await aD(k.Ks,meta.nm)).name;
+    ST.me={name,cc:code,cid:k.cid,Ks:k.Ks,pub:meta.pub,cls};lsS('qr_me',{name,code});stList();
+  }catch(e){msg('تعذّر الاتصال بالإنترنت.')}
+}
+const sidOf=async id=>hex(await sha('s:'+ST.me.cc+':'+id+':'+nkey(ST.me.name))).slice(0,20);
+async function stList(){
+  const m=ST.me;
+  $('#app').innerHTML=head(m.cls)+`<div class="card"><button onclick="stHome()">رجوع</button><h3 style="margin-top:10px">أهلًا يا ${esc(m.name)} 👋</h3><p class="mut">اختر القراءة ثم سجّل صوتك.</p></div><div id="sl"><p class="mut">جارٍ التحميل…</p></div>`;
+  let rd,fbs;
+  try{rd=await api('classes/'+m.cid+'/readings')||{};fbs=await api('fb/'+m.cid)||{}}catch(e){$('#sl').innerHTML='<div class="fb hint">تعذّر التحميل.</div>';return}
+  ST.rd={};for(const[id,v]of Object.entries(rd)){try{ST.rd[id]=JSON.parse(await aD(m.Ks,v))}catch(e){}}
+  const idl=Object.keys(ST.rd).sort((a,b)=>ST.rd[b].ts-ST.rd[a].ts),subs=lsG('qr_sent',{}),out=[];
+  for(const id of idl){const base=await sidOf(id),sv=subs[m.cid+base],sid=typeof sv==='string'?sv:base;let fb=null;if(fbs[sid]){try{fb=JSON.parse(await aD(m.Ks,fbs[sid]))}catch(e){}}
+    out.push(`<div class="item"><h3>📖 ${esc(ST.rd[id].title)}</h3>
+    ${sv?`<span class="tag g">أرسلت قراءتك ✓</span>`:''}
+    ${fb&&fb.stars?`<div style="font-size:26px">${'⭐'.repeat(fb.stars)}</div>`:''}
+    ${fb&&fb.comment?`<div class="fb ok">💬 ${esc(fb.comment)}</div>`:''}
+    <div class="row" style="margin-top:8px"><button class="go" onclick="stRead('${id}')">${sv?'اقرأ من جديد':'اقرأ'}</button></div></div>`)}
+  $('#sl').innerHTML=out.length?out.join(''):'<div class="card"><p>لم تضف المعلمة قراءة بعد. ارجع لاحقًا 🌷</p></div>';
+}
+async function stRead(id){
+  const r=ST.rd[id];ST.cur=id;ST.blob=null;
+  $('#app').innerHTML=head(ST.me.cls)+`<div class="card"><button onclick="stList()">رجوع</button><h3 style="margin:10px 0">${esc(r.title)}</h3>
+  <div id="pgc">${r.hasImg?'<p class="mut">جارٍ تحميل الصفحة…</p>':''}</div>${r.text?`<div class="txt">${esc(r.text)}</div>`:''}</div>
+  <div class="card" style="text-align:center"><p class="mut" style="margin:0 0 8px">اقرأ بصوت واضح، ثم أرسل قراءتك لمعلمتك.</p>
+  <div class="tm" id="tm">0:00</div>
+  <button class="rec" id="rb" onclick="recTog()" aria-label="ابدأ التسجيل">🎤</button>
+  <div id="pl"></div><div id="msg"></div></div>`;
+  if(r.hasImg){try{const e=await api('img/'+ST.me.cid+'/'+id);$('#pgc').innerHTML=e?`<img class="pg" alt="صفحة القراءة" src="${await aD(ST.me.Ks,e)}">`:''}catch(e){$('#pgc').innerHTML='<div class="fb hint">تعذّر تحميل الصورة.</div>'}}
+}
+let MR=null,MS=null,CH=[],TI=null,T0=0;
+function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+async function recTog(){
+  if(MR&&MR.state==='recording'){stopRec();return}
+  msg('');$('#pl').innerHTML='';ST.blob=null;
+  if(!navigator.mediaDevices||!window.MediaRecorder){msg('جهازك لا يدعم التسجيل. جرّب متصفح Safari أو Chrome الحديث.');return}
+  try{MS=await navigator.mediaDevices.getUserMedia({audio:true})}
+  catch(e){msg('اسمح للمتصفح باستخدام الميكروفون ثم حاول مرة أخرى 🎤');return}
+  const types=['audio/webm;codecs=opus','audio/mp4','audio/webm'],mt=types.find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
+  CH=[];MR=new MediaRecorder(MS,Object.assign({audioBitsPerSecond:24000},mt?{mimeType:mt}:{}));
+  MR.ondataavailable=e=>{if(e.data&&e.data.size)CH.push(e.data)};
+  MR.onstop=()=>{MS&&MS.getTracks().forEach(t=>t.stop());if(MR._cancel)return;ST.blob=new Blob(CH,{type:MR.mimeType||mt||'audio/webm'});ST.dur=Math.max(1,Math.round((Date.now()-T0)/1000));showPl()};
+  MR.start();T0=Date.now();
+  const b=$('#rb');b.textContent='⏹';b.classList.add('stop','pulse');b.setAttribute('aria-label','إيقاف التسجيل');
+  TI=setInterval(()=>{const s=Math.round((Date.now()-T0)/1000);$('#tm').textContent=fmt(s);if(s>=MAXS)stopRec()},250);
+}
+function stopRec(cancel){
+  clearInterval(TI);
+  if(MR&&MR.state==='recording'){MR._cancel=!!cancel;try{MR.stop()}catch(e){}}
+  else if(MS)MS.getTracks().forEach(t=>t.stop());
+  const b=$('#rb');if(b){b.textContent='🎤';b.classList.remove('stop','pulse');b.setAttribute('aria-label','ابدأ التسجيل')}
+}
+function showPl(){
+  const u=URL.createObjectURL(ST.blob);
+  $('#pl').innerHTML=`<audio controls src="${u}"></audio><div class="row" style="justify-content:center"><button class="go" id="sd" onclick="stSend()">📤 أرسل لمعلمتي</button><button onclick="recTog()">🔁 أعد التسجيل</button></div>`;
+}
+let dupWarn=false;
+function b2d(b){return new Promise((ok,no)=>{const f=new FileReader();f.onload=()=>ok(f.result);f.onerror=no;f.readAsDataURL(b)})}
+async function stSend(){
+  const b=$('#sd');b.disabled=true;msg('جارٍ التشفير والإرسال…');
+  try{const m=ST.me,base=await sidOf(ST.cur),d=await b2d(ST.blob);
+    let sid=base;const ex=await api('subs/'+m.cid+'/'+base).catch(()=>null);
+    if(ex&&ex.dv&&ex.dv!==DV()){sid=base+DV().slice(0,4);dupWarn=true}
+    const sl=await sealFor(m.pub,{name:m.name,rid:ST.cur,ts:Date.now(),dur:ST.dur},d);
+    await api('audio/'+m.cid+'/'+sid,'PUT',sl.audio);
+    await api('subs/'+m.cid+'/'+sid,'PUT',sl.meta);
+    await api('fb/'+m.cid+'/'+sid,'DELETE').catch(()=>{});
+    const sent=lsG('qr_sent',{});sent[m.cid+base]=sid;lsS('qr_sent',sent);
+    $('#pl').innerHTML='';$('#rb').style.display='none';
+    msg('أحسنت يا '+esc(m.name)+'! 🌟 وصلت قراءتك إلى معلمتك.'+(dupWarn?'<br>⚠ يوجد طالب آخر بنفس اسمك، سنخبر معلمتك. الأفضل أن تضيف حرفًا من اسم أبيك إلى اسمك.':''),'ok');
+    $('#msg').insertAdjacentHTML('beforeend','<p><button class="go" onclick="stList()">رجوع للقراءات</button></p>');
+  }catch(e){b.disabled=false;msg('تعذّر الإرسال. تأكد من الإنترنت وحاول مرة أخرى.')}
+}
+/* ---- رابط الفصل يفتح صفحة الطالب مباشرة ---- */
+(function(){const m=/#c=([^&]+)/.exec(location.hash);if(m)stHome(decodeURIComponent(m[1]));else home()})();
+</script>
+</body>
+</html>
