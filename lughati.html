@@ -62,6 +62,8 @@ input{font-family:inherit;font-size:22px;padding:12px 14px;border-radius:16px;bo
 .ptop{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
 .pb{position:relative;height:16px;background:var(--line);border-radius:99px}
 .pb i{display:block;height:100%;background:var(--green);border-radius:99px;min-width:8px;transition:width .4s}
+.pbm{position:relative;height:40px;margin-top:6px}.pbm button{position:absolute;top:0;width:34px;height:34px;padding:0;border-radius:50%;font-size:18px;line-height:1;display:grid;place-items:center;background:#efe6cc;border:2px solid #d9c892;box-shadow:none;filter:grayscale(1);opacity:.65;inset-inline-start:calc(var(--f)*(100% - 34px))}.pbm button.on{background:#ffd45a;border-color:#d99a00;filter:none;opacity:1}.pbm button.on::after{content:'';}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.duo button{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 8px;font-size:18px;border-radius:18px}.duo button small{font-size:13px;font-weight:600;opacity:.85}.duo .ic{font-size:22px;line-height:1}
 .rk{position:absolute;top:-14px;font-size:28px;inset-inline-start:max(0px,calc(var(--x,0%) - 20px));transition:inset-inline-start .4s}
 .path{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:30px 12px;padding-bottom:22px}
 .st{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;font-size:40px;font-weight:900;line-height:1.15;padding:10px 4px 8px;border-radius:24px;
@@ -210,6 +212,8 @@ body.nv .sp,body.nv .sayb,body.nv .lhero button{display:none!important}
 .tbl{margin-bottom:14px}.xt th{background:#0f9d6b;color:#fff;text-align:center}.xt td{text-align:center;border:1px solid var(--line)}.xt tr:nth-child(even) td{background:var(--paper2)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:420px){h1{font-size:25px}.lhero .big{font-size:96px}.forms b{font-size:36px}.wline{font-size:44px}.syl2{font-size:52px}.win{font-size:30px}.win.l3{font-size:23px}}
+.cm{position:fixed;inset:0;background:rgba(20,28,60,.8);z-index:80;display:grid;place-items:center;padding:14px;overflow:auto}.cmb{background:var(--card);color:var(--ink);border-radius:24px;padding:16px;max-width:760px;width:100%;text-align:center}.cmb img{max-width:100%;border-radius:14px;border:2px solid var(--line)}
+.crt{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px;border:2px solid var(--line);border-radius:16px;margin:8px 0}.crt.on{background:var(--okbg);border-color:#12a36f}.crt .cl{display:flex;gap:6px}.crt .cl i{font-style:normal;width:40px;height:40px;border-radius:12px;background:#e8dcc0;color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px}.crt .cl i.y{background:#12a36f}
 </style>
 <div id="wrap">
 <header class="hd"><div class="brand"><span class="logo">🦉</span><div><b>رحلة الحروف</b><small>لغتي • الصف الأول الابتدائي</small><span class="by">إعداد: فاطمة المطيري</span></div></div><div class="chips" id="who"></div></header>
@@ -332,7 +336,7 @@ function say(t){try{t=t.replace(/ـ/g,'');const k=plain(t).trim().replace(/\s+/g
 function updV(){const e=$('#vn');if(e)e.textContent=isT?('الصوت المستخدم الآن: '+(VN||'الصوت الافتراضي للجهاز')):''}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-say]');if(b)say(b.getAttribute('data-say'))});
 /* ---- state ---- */
-let isT=false,NAME='',PUB=null,DATA=[],DONE={},GS={},S=null,unsub=null;
+let CERTS=[],isT=false,NAME='',PUB=null,DATA=[],DONE={},GS={},S=null,unsub=null;
 try{NAME=localStorage.getItem('lg_name')||'';DONE=JSON.parse(localStorage.getItem('lg_done')||'{}');GS=JSON.parse(localStorage.getItem('lg_g')||'{}')}catch(e){}
 const saveLocal=()=>{try{localStorage.setItem('lg_name',NAME);localStorage.setItem('lg_done',JSON.stringify(DONE));localStorage.setItem('lg_g',JSON.stringify(GS))}catch(e){}};
 const open=L=>!PUB||PUB.includes(L);
@@ -353,6 +357,76 @@ function burst(){if(reduce)return;const f=document.createElement('div');f.classN
 const PRAISE=['ما شاء الله! إجابة صحيحة','رائع جدًا!','أحسنت!','ممتاز!','بطل في القراءة!'];
 const praise=()=>PRAISE[Math.floor(Math.random()*PRAISE.length)];
 const mascot=(t,s)=>`<div class="mascot"><span class="owl">🦉</span><div class="bub"><span>${esc(t)}</span><button class="sp" data-say="${esc(s||t)}" aria-label="اقرأ">🔊</button></div></div>`;
+
+/* ---- certificates & my achievements ---- */
+const CB=(()=>{const a=[];for(let i=0;i<ORD.length;i+=6)a.push(ORD.slice(i,i+6));return a})();
+let CERT={};try{CERT=JSON.parse(localStorage.getItem('lg_cert')||'{}')}catch(e){}
+const saveCert=()=>{try{localStorage.setItem('lg_cert',JSON.stringify(CERT))}catch(e){}};
+const bDone=b=>CB[b].every(l=>DONE[l]),bAvg=b=>CB[b].reduce((q,l)=>q+(DONE[l]||0),0)/CB[b].length;
+const bLvl=b=>bAvg(b)>=2.5?'ممتاز':bAvg(b)>=1.8?'جيد جدًا':'جيد';
+const earned=()=>CB.filter((x,b)=>CERT[b]).length;
+function certNew(){for(let b=0;b<CB.length;b++){if(bDone(b)&&!CERT[b]){CERT[b]={ts:Date.now()};saveCert();log({cert:b+1,skill:'شهادة',letter:'—',ok:true,n:CB[b].join(''),lv:bLvl(b)});return b}}return -1}
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function cDia(c,x,y,r,col){c.fillStyle=col;c.beginPath();c.moveTo(x,y-r);c.lineTo(x+r,y);c.lineTo(x,y+r);c.lineTo(x-r,y);c.closePath();c.fill()}
+function cStar(c,x,y,R,col){c.fillStyle=col;c.beginPath();for(let i=0;i<10;i++){const r=i%2?R*.45:R,a=-1.5708+i*0.6283;c.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r)}c.closePath();c.fill()}
+function cCorner(c,x,y,sx,sy,G,N){c.save();c.translate(x,y);c.scale(sx,sy);c.strokeStyle=G;c.lineWidth=5;c.beginPath();c.moveTo(0,110);c.lineTo(0,18);c.quadraticCurveTo(0,0,18,0);c.lineTo(110,0);c.stroke();c.lineWidth=3;c.beginPath();c.moveTo(18,84);c.lineTo(18,34);c.quadraticCurveTo(18,18,34,18);c.lineTo(84,18);c.stroke();cDia(c,38,38,13,N);cDia(c,38,38,6,G);c.restore()}
+async function drawCert(b,nm){
+ try{await Promise.all([document.fonts.load('800 100px "Baloo Bhaijaan 2"'),document.fonts.load('700 50px Cairo'),document.fonts.load('900 50px Cairo')])}catch(e){}
+ const cv=document.createElement('canvas'),W=1600,H=1130;cv.width=W;cv.height=H;const c=cv.getContext('2d');
+ const grand=b===CB.length-1,NAVY='#14264f',GOLD='#b8892b',GOLD2='#e2b84d',INK='#1b2547';
+ c.fillStyle='#fffaf0';c.fillRect(0,0,W,H);
+ const bg=c.createRadialGradient(W/2,H/2,100,W/2,H/2,900);bg.addColorStop(0,'rgba(255,255,255,.9)');bg.addColorStop(1,'rgba(240,222,180,.55)');c.fillStyle=bg;c.fillRect(0,0,W,H);
+ c.strokeStyle='rgba(184,137,43,.07)';c.lineWidth=2;for(let x=-H;x<W;x+=44){c.beginPath();c.moveTo(x,0);c.lineTo(x+H,H);c.stroke()}
+ c.lineWidth=14;c.strokeStyle=NAVY;rr(c,46,46,W-92,H-92,10);c.stroke();
+ c.lineWidth=4;c.strokeStyle=GOLD;rr(c,74,74,W-148,H-148,6);c.stroke();
+ c.lineWidth=2;rr(c,86,86,W-172,H-172,4);c.stroke();
+ cCorner(c,96,96,1,1,GOLD,NAVY);cCorner(c,W-96,96,-1,1,GOLD,NAVY);cCorner(c,96,H-96,1,-1,GOLD,NAVY);cCorner(c,W-96,H-96,-1,-1,GOLD,NAVY);
+ c.direction='rtl';c.textAlign='center';c.textBaseline='alphabetic';
+ c.fillStyle=GOLD;c.font='700 30px Cairo,sans-serif';c.fillText('المملكة العربية السعودية',W/2,150);
+ c.fillStyle=NAVY;c.font='900 118px Cairo,sans-serif';c.fillText(grand?'شهادة إتمام الرحلة':'شهادة إتقان',W/2,285);
+ c.strokeStyle=GOLD;c.lineWidth=3;c.beginPath();c.moveTo(W/2-300,348);c.lineTo(W/2-26,348);c.moveTo(W/2+26,348);c.lineTo(W/2+300,348);c.stroke();cDia(c,W/2,348,11,GOLD);cDia(c,W/2-300,348,6,GOLD);cDia(c,W/2+300,348,6,GOLD);
+ c.fillStyle='#4a5578';c.font='600 36px Cairo,sans-serif';c.fillText('تشهد منصة رحلة الحروف بأن الطالب / الطالبة',W/2,410);
+ let fs=104;c.fillStyle=NAVY;do{c.font=`800 ${fs}px "Baloo Bhaijaan 2",Cairo,sans-serif`;fs-=6}while(c.measureText(nm).width>800&&fs>50);c.fillText(nm,W/2,512);
+ const nw=Math.max(c.measureText(nm).width+160,560);c.strokeStyle=GOLD;c.lineWidth=4;c.beginPath();c.moveTo(W/2-nw/2,540);c.lineTo(W/2+nw/2,540);c.stroke();c.strokeStyle=GOLD2;c.lineWidth=2;c.beginPath();c.moveTo(W/2-nw/2,549);c.lineTo(W/2+nw/2,549);c.stroke();
+ c.fillStyle=GOLD;c.font='700 32px Cairo,sans-serif';c.fillText('بارك الله فيه وزاده علمًا ونفعًا',W/2,598);
+ const y1=662;c.fillStyle=INK;c.font='700 38px Cairo,sans-serif';c.fillText(grand?'قد أتمّ تعلّم الحروف الثمانية والعشرين في المنصة التعليمية':'قد أتقن الحروف الآتية في المنصة التعليمية',W/2,y1);
+ const t='رحلة الحروف',y2=y1+96;c.font='900 96px Cairo,sans-serif';const tw0=c.measureText(t).width;
+ const g=c.createLinearGradient(0,y2-80,0,y2+10);g.addColorStop(0,GOLD2);g.addColorStop(.5,GOLD);g.addColorStop(1,'#8a6416');
+ c.lineJoin='round';c.lineWidth=12;c.strokeStyle=NAVY;c.strokeText(t,W/2,y2);c.fillStyle=g;c.fillText(t,W/2,y2);
+ cStar(c,W/2+tw0/2+62,y2-34,22,GOLD);cStar(c,W/2-tw0/2-62,y2-34,22,GOLD);
+ const L=CB[b],tw=84,gp=18,tot=L.length*(tw+gp)-gp;let sx=W/2+tot/2-tw,ty=y2+64;
+ L.forEach((l,i)=>{const x=sx-i*(tw+gp);c.fillStyle=NAVY;rr(c,x,ty,tw,tw,12);c.fill();c.lineWidth=3;c.strokeStyle=GOLD2;rr(c,x+5,ty+5,tw-10,tw-10,8);c.stroke();c.fillStyle=GOLD2;c.font='800 56px "Baloo Bhaijaan 2",Cairo,sans-serif';c.fillText(l==='ه'?'هـ':l,x+tw/2,ty+62)});
+ const st=Math.max(1,Math.round(bAvg(b)));
+ c.direction='ltr';c.textAlign='right';c.fillStyle=GOLD;c.font='44px sans-serif';c.fillText('★'.repeat(st)+'☆'.repeat(3-st),W/2-24,ty+tw+50);
+ c.direction='rtl';c.textAlign='left';c.fillStyle=NAVY;c.font='800 34px Cairo,sans-serif';c.fillText('المستوى: '+bLvl(b),W/2+24,ty+tw+48);
+ const rx=270,ry=H-250;c.fillStyle=NAVY;c.beginPath();c.moveTo(rx-38,ry+50);c.lineTo(rx-68,ry+150);c.lineTo(rx-28,ry+128);c.lineTo(rx-4,ry+160);c.lineTo(rx+10,ry+60);c.closePath();c.fill();c.beginPath();c.moveTo(rx+38,ry+50);c.lineTo(rx+68,ry+150);c.lineTo(rx+28,ry+128);c.lineTo(rx+4,ry+160);c.lineTo(rx-10,ry+60);c.closePath();c.fill();
+ for(let i=0;i<32;i++){const a=i/32*6.283;c.fillStyle=GOLD;c.beginPath();c.arc(rx+Math.cos(a)*78,ry+Math.sin(a)*78,10,0,7);c.fill()}
+ const sg=c.createRadialGradient(rx-20,ry-20,10,rx,ry,80);sg.addColorStop(0,'#f6dc86');sg.addColorStop(1,GOLD);c.fillStyle=sg;c.beginPath();c.arc(rx,ry,76,0,7);c.fill();
+ c.lineWidth=4;c.strokeStyle=NAVY;c.beginPath();c.arc(rx,ry,58,0,7);c.stroke();c.fillStyle=NAVY;c.textAlign='center';c.font='800 62px sans-serif';c.fillText('★',rx,ry+22);
+ const d=new Date(CERT[b]?CERT[b].ts:Date.now()).toLocaleDateString('ar-SA');
+ c.fillStyle=INK;c.font='700 30px Cairo,sans-serif';c.textAlign='center';c.fillText('التاريخ: '+d,640,1024);
+ const sx2=1225;c.strokeStyle=NAVY;c.lineWidth=2.5;c.beginPath();c.moveTo(sx2-160,988);c.lineTo(sx2+160,988);c.stroke();c.font='700 28px Cairo,sans-serif';c.fillText('مُعدّة المنصة: فاطمة المطيري',sx2,1022);
+ const ar=n=>String(n).replace(/\d/g,x=>'٠١٢٣٤٥٦٧٨٩'[x]),sn=(CERT[b]?CERT[b].ts:Date.now())%100000;
+ c.textAlign='right';c.fillStyle=GOLD;c.font='700 26px Cairo,sans-serif';c.fillText('رقم الشهادة: '+ar(b+1)+'-'+ar(String(sn).padStart(5,'0')),W-180,150);
+ return cv}
+async function showCert(b){
+ const cv=await drawCert(b,NAME||'المشارك'),url=cv.toDataURL('image/png');
+ const m=document.createElement('div');m.className='cm';m.id='cm';
+ m.innerHTML=`<div class="cmb"><h3 style="margin:0 0 8px">🏅 مبارك! حصلت على شهادة</h3><img id="cmi" alt="الشهادة" src="${url}"><p class="mut" style="margin:8px 0">اضغط على الصورة مطوّلًا لحفظها، أو استخدم زر المشاركة.</p><div class="row"><button id="cms">مشاركة / حفظ</button><button class="alt" onclick="document.getElementById('cm').remove()">إغلاق</button></div></div>`;
+ document.body.appendChild(m);burst();
+ $('#cms').onclick=()=>cv.toBlob(async bl=>{const f=new File([bl],'شهادة-إتقان.png',{type:'image/png'});try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'شهادة إتقان'});return}}catch(e){return}const a=document.createElement('a');a.href=url;a.download='شهادة-إتقان.png';document.body.appendChild(a);a.click();a.remove()})}
+function skAvg(){const o={};Object.keys(GS).forEach(k=>{const p=k.split(':'),sk=p[1];if(!GN[sk]||!GS[k])return;(o[sk]=o[sk]||[]).push(GS[k])});return Object.keys(o).map(k=>({k,v:o[k].reduce((a,b)=>a+b,0)/o[k].length}))}
+const sLv=v=>v>=2.5?['متقن','#12a36f']:v>=1.8?['جيد','#e08a00']:['يحتاج مراجعة','#e5483f'];
+function ach(){
+ certNew();const n=ORD.filter(l=>DONE[l]).length,tot=ORD.reduce((a,l)=>a+(DONE[l]||0),0),sk=skAvg().sort((a,b)=>a.v-b.v),wk=sk.filter(x=>x.v<1.8).slice(0,2);
+ $('#app').innerHTML=`<div class="top"><h2>إنجازاتي</h2><button class="alt" onclick="home()">رجوع</button></div>
+ <section class="card"><div class="ptop"><h3>${esc(NAME)}</h3><span class="mut">${new Date().toLocaleDateString('ar-SA')}</span></div>
+ <div class="kpis" style="grid-template-columns:repeat(3,1fr)"><div><b>${n}/${ORD.length}</b><span>حرفًا أنجزت</span></div><div><b>${tot}</b><span>نجمة</span></div><div><b>${earned()}/${CB.length}</b><span>شهادات</span></div></div>
+ <div class="pb" style="--x:${Math.round(n/ORD.length*100)}%"><i style="width:${Math.round(n/ORD.length*100)}%"></i><span class="rk">🚀</span></div>
+ <p class="mut" style="margin:10px 0 0">${wk.length?'يحتاج إلى مراجعة: '+wk.map(x=>GN[x.k]).join('، ')+'.':(sk.length?'أداء رائع في المهارات التي جرّبتها!':'ابدأ بلعب مهارات الحروف لتظهر مستوياتك هنا.')}</p></section>
+ ${sk.length?`<section class="card"><h3>مستواي في المهارات</h3><div class="chart">${sk.map(x=>{const l=sLv(x.v),p=Math.round(x.v/3*100);return `<div class="br"><span class="bk" style="width:auto;min-width:110px">${esc(GN[x.k])}</span><div class="bar2"><i style="width:${Math.max(p,5)}%;background:${l[1]}"></i></div><span class="bp" style="width:auto;min-width:80px;color:${l[1]}">${l[0]}</span></div>`}).join('')}</div></section>`:''}
+ <section class="card"><h3>شهاداتي</h3><p class="mut" style="margin:0 0 8px">تظهر شهادة إتقان بعد كل ٦ حروف تُنجزها.</p>
+ ${CB.map((g,b)=>{const d=g.filter(l=>DONE[l]).length;return `<div class="crt ${CERT[b]?'on':''}"><div class="cl">${g.map(l=>`<i class="${DONE[l]?'y':''}">${LD(l)}</i>`).join('')}</div>${CERT[b]?`<button onclick="showCert(${b})">عرض الشهادة 🏅</button>`:`<span class="mut">${d} من ${g.length}</span>`}</div>`}).join('')}</section>`;scrollTo(0,0)}
 /* ---- home ---- */
 const ok0=i=>isT||open(ORD[i]);
 const stars=n=>'★'.repeat(n||0);
@@ -364,8 +438,8 @@ function home(t){
  a.innerHTML=`<div class="top"><h2>أهلًا يا ${esc(NAME)}</h2><span class="row">${vbH()}${isT?'<button class="alt" onclick="dash()">لوحة المعلمة</button>':''}<button class="alt" onclick="NAME=\'\';saveLocal();home()">تغيير الاسم</button></span></div>
  <div class="seg"><button class="${t==='i'?'':'on'}" onclick="home()">رحلتي</button><button class="${t==='i'?'on':''}" onclick="home('i')">جزيرة الحروف</button></div>`+(t==='i'?
  `<p class="mut">اضغط على أي حرف لتتعرّف عليه وتسمع اسمه</p><div class="path">${ALPHA.map((l,i)=>`<button class="bal" style="--h:${HUE(i)}" onclick="showL('${l}',${i})">${LD(l)}</button>`).join('')}</div><div id="fm"></div>`:
- `<section class="card"><div class="ptop"><h3>رحلتي</h3><span class="mut">أنجزت ${n} من 28 حرفًا</span></div><div class="pb" style="--x:${p}%"><i style="width:${p}%"></i><span class="rk">🚀</span></div></section>
- <section class="card"><div class="ptop"><h3>🎙️ قراءتي</h3></div><p class="mut" style="margin:4px 0 10px">تسجيل القراءة بالصوت وإرسالها إلى المعلمة لتستمع إليها وتقيّمها.</p><button class="go" onclick="location.href='qiraa?from=l'">افتح قراءتي</button></section>
+ `<section class="card"><div class="ptop"><h3>رحلتي</h3><span class="mut">أنجزت ${n} من 28 حرفًا</span></div><div class="pb" style="--x:${p}%"><i style="width:${p}%"></i><span class="rk">🚀</span></div><div class="pbm">${CB.map((g,b)=>{const e=ORD.indexOf(g[g.length-1])+1;return `<button class="${CERT[b]?'on':''}" style="--f:${(e/28).toFixed(3)}" aria-label="شهادة إتقان بعد الحرف ${e}" onclick="${CERT[b]?`showCert(${b})`:'ach()'}">🏅</button>`}).join('')}</div><p class="mut" style="margin:2px 0 0;font-size:14px;text-align:center">🏅 شهادة إتقان بعد كل ٦ حروف · ${earned()}/${CB.length}</p></section>
+ <div class="duo"><button class="go" onclick="location.href='qiraa?from=l'"><span class="ic">🎙️</span>قراءتي</button><button class="alt" onclick="ach()"><span class="ic">📊</span>إنجازاتي</button></div>
  <div class="path">${ORD.map((l,i)=>ok0(i)?`<button class="st ${DONE[l]?'done':''}" style="--h:${HUE(i)}" onclick="learn(${i})">${LD(l)}<small>${stars(DONE[l])}</small></button>`:`<button class="st lock" style="--h:${HUE(i)}" disabled>${l}<small>مغلق</small></button>`).join('')}</div>`);
 }
 function setName(){const v=$('#nm').value.trim();if(!v)return;NAME=v.slice(0,30);saveLocal();home()}
@@ -494,6 +568,7 @@ function end(){
  <button style="--c:var(--plum);--cd:var(--plum-d)" onclick="learn(${S.i});setTimeout(()=>$('#gm').scrollIntoView(),30)">ألعاب المهارات</button>
  ${nx?`<button onclick="learn(${S.i+1})">الحرف التالي</button>`:''}<button class="alt" onclick="home()">الرئيسية</button></div>`;
  burst();
+ if(!S.enrich)setTimeout(()=>{const b=certNew();if(b>=0)showCert(b)},1200);
 }
 /* ================= skill games ================= */
 function holeH(a,h){   // the word as two joined runs around an empty box; tatweel shows the missing letter's connections
@@ -902,7 +977,7 @@ function dash(sel){
  a.innerHTML='<div id="dash"><div class="top"><h2>لوحة المعلمة</h2><button class="alt" onclick="home()">رجوع</button></div><div id="dc" class="card">جارٍ التحميل…</div><div id="qs" class="card"></div></div>';
  qLoad();
  if(unsub)clearInterval(unsub);
- const pull=async()=>{try{const r=await fetch(fbU('results')),o=await r.json()||{};DATA=Object.values(o).sort((x,y)=>y.ts-x.ts).slice(0,3000);paint(sel)}catch(e){const c=$('#dc');if(c)c.textContent='تعذّر تحميل البيانات'}};
+ const pull=async()=>{try{const r=await fetch(fbU('results')),o=await r.json()||{};const all=Object.values(o).sort((x,y)=>y.ts-x.ts);CERTS=all.filter(r=>r.cert);DATA=all.filter(r=>!r.cert).slice(0,3000);paint(sel)}catch(e){const c=$('#dc');if(c)c.textContent='تعذّر تحميل البيانات'}};
  pull();unsub=setInterval(pull,15000);
 }
 function bars(map,keys){return keys.filter(k=>map[k]).map(k=>{const p=pct(map[k]),l=lvl(p);return `<div class="br"><span class="bk">${esc(k)}</span><div class="bar2"><i style="width:${Math.max(p,3)}%;background:${l[1]}"></i></div><span class="bp">${p}%</span></div>`}).join('')}
@@ -912,7 +987,7 @@ function paint(sel){
  const el=$('#dc');if(!el)return;
  const by=group(DATA,r=>r.name),names=Object.keys(by).sort();
  let h='';
- if(!names.length){el.innerHTML='<h3>لا توجد نتائج بعد</h3><p class="mut">عندما يجيب الطلاب عن الأسئلة تظهر هنا الرسوم والتحليل. شاركي رابط الطلاب معهم.</p>'+tail();return}
+ if(!names.length){el.innerHTML='<h3>لا توجد نتائج بعد</h3><p class="mut">عندما يجيب الطلاب عن الأسئلة تظهر هنا الرسوم والتحليل. شاركي رابط الطلاب معهم.</p>'+certSec()+tail();return}
  const all=pct(DATA),pr=names.map(n=>pct(by[n])),cnt={m:0,g:0,w:0};pr.forEach(p=>{p>=85?cnt.m++:p>=60?cnt.g++:cnt.w++});
  const byL=group(DATA,r=>r.letter),bySk=group(DATA,r=>sk0(r.skill));
  const lk=ORD.filter(k=>byL[k]),sk=Object.keys(bySk).sort((a,b)=>pct(bySk[a])-pct(bySk[b]));
@@ -942,7 +1017,11 @@ function paint(sel){
   ${need.length?`<h3>طلاب يحتاجون معالجة</h3><div class="note" style="background:#ffe3e0;color:#7a1e16">${need.map(n=>{const s3=group(by[n],x=>sk0(x.skill)),w=Object.keys(s3).filter(k=>pct(s3[k])<60).slice(0,2);return `<div><b>${esc(n)}</b> ${pct(by[n])}%${w.length?' — '+w.map(esc).join('، '):''}</div>`}).join('')}</div>`:''}
   <h3>جداول البيانات</h3>${(()=>{const T=reportTables();return xtab(T[0])+xtab(T[1])+xtab(T[2])})()}<h3>الطلاب</h3><div class="chart">${names.map((n,i)=>{const p=pr[i],l=lvl(p);return `<div class="br" onclick='dash(${JSON.stringify(n).replace(/'/g,"&#39;")})' style="cursor:pointer"><span class="bk" style="width:auto;min-width:70px">${esc(n)}</span><div class="bar2"><i style="width:${Math.max(p,3)}%;background:${l[1]}"></i></div><span class="bp">${p}%</span></div>`}).join('')}</div><p class="mut noprint">اضغطي اسم الطالب لعرض تقريره.</p>`;
  }
- el.innerHTML=h+tail();
+ el.innerHTML=h+certSec()+tail();
+}
+function certSec(){
+ const ds=ts=>new Date(ts).toLocaleDateString('ar-SA'),by=group(CERTS,r=>r.name),names=Object.keys(by).sort(),per=CB.map((g,b)=>({b,n:new Set(CERTS.filter(r=>r.cert===b+1).map(r=>r.name)).size}));
+ return `<h3>🏅 الشهادات</h3><div class="kpis"><div><b>${CERTS.length}</b><span>شهادة صدرت</span></div><div><b>${names.length}</b><span>طالبًا حصل عليها</span></div></div>${CERTS.length?`<div class="leg">${per.map(x=>`<span>الشهادة ${x.b+1}: ${x.n}</span>`).join('')}</div><div class="note" style="background:#e8f6ee;color:#0a5a3d">${names.map(n=>`<div><b>${esc(n)}</b> — ${by[n].sort((x,y)=>x.cert-y.cert).map(r=>'شهادة '+r.cert+' ('+esc(r.lv||'')+') '+ds(r.ts)).join('، ')}</div>`).join('')}</div>`:'<p class="mut">لم يحصل أي طالب على شهادة بعد.</p>'}`
 }
 function reportTables(){
  const by=group(DATA,r=>r.name),byL=group(DATA,r=>r.letter),bySk=group(DATA,r=>sk0(r.skill));
