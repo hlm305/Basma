@@ -37,38 +37,55 @@ input{width:100%;padding:12px;border:3px solid var(--line);border-radius:14px;fo
 <header><h1>🎙️ إحصائيات قراءتي</h1><p class="by">للمشرفة فقط · إعداد: فاطمة المطيري</p></header>
 
 <div id="lock" class="card">
- <p style="margin:0 0 8px;font-weight:700;text-align:center">أدخلي رمز الدخول</p>
- <input id="pw" type="password" autocomplete="current-password" aria-label="رمز الدخول">
+ <p style="margin:0 0 8px;font-weight:700;text-align:center">تسجيل دخول المشرفة</p>
+ <input id="em" type="email" dir="ltr" autocomplete="username" aria-label="البريد الإلكتروني" placeholder="البريد الإلكتروني" style="margin-bottom:8px">
+ <input id="pw" type="password" dir="ltr" autocomplete="current-password" aria-label="كلمة المرور" placeholder="كلمة المرور">
  <p class="err" id="er"></p>
  <div style="text-align:center"><button class="btn" id="go">دخول</button></div>
 </div>
 
 <div id="main" hidden>
  <div class="sum" id="sum"></div>
- <div class="row" style="margin:6px 0"><span class="mut" id="upd"></span><button class="btn g" id="rf">🔄 تحديث</button></div>
+ <div class="row" style="margin:6px 0"><span class="mut" id="upd"></span><span><button class="btn g" id="rf">🔄 تحديث</button> <button class="btn g" onclick="out_()">خروج</button></span></div>
  <div id="list"></div>
 </div>
 </div>
 <script>
-const FB='https://defense-fingerprint-default-rtdb.firebaseio.com',H='d3430978f7532f3ec288c789447e99ff4871f161966b83d678101af4f84ffa8d';
+const FB='https://defense-fingerprint-default-rtdb.firebaseio.com';
+const AK='AIzaSyC67BxojfxIV02NBh461CK5Z5c7KdRVZ4s',AUTH_KEY='lg_auth';
+let TOK='',TEXP=0;
+const authGet=()=>{try{return JSON.parse(localStorage.getItem(AUTH_KEY)||'null')}catch(e){return null}};
+const authSet=v=>{try{v?localStorage.setItem(AUTH_KEY,JSON.stringify(v)):localStorage.removeItem(AUTH_KEY)}catch(e){}};
+async function signIn(em,pw){
+ if(AK.indexOf('PUT_')===0)throw new Error('NOKEY');
+ const r=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='+AK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw,returnSecureToken:true})});
+ const d=await r.json();if(!r.ok)throw new Error((d.error&&d.error.message)||'ERR');
+ TOK=d.idToken;TEXP=Date.now()+(+d.expiresIn||3600)*1000;authSet({rt:d.refreshToken,em});return d}
+async function idTok(){
+ if(TOK&&Date.now()<TEXP-60000)return TOK;
+ const a=authGet();if(!a||!a.rt||AK.indexOf('PUT_')===0)return '';
+ try{const r=await fetch('https://securetoken.googleapis.com/v1/token?key='+AK,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(a.rt)});
+ const d=await r.json();if(!r.ok){authSet(null);TOK='';return ''}
+ TOK=d.id_token;TEXP=Date.now()+(+d.expires_in||3600)*1000;authSet({rt:d.refresh_token,em:a.em});return TOK}catch(e){return ''}}
+function signOut(){TOK='';authSet(null)}
+const authMsg=m=>/INVALID_LOGIN|INVALID_PASSWORD|EMAIL_NOT_FOUND|INVALID_EMAIL|MISSING_PASSWORD/.test(m)?'البريد أو كلمة المرور غير صحيحة.':/TOO_MANY/.test(m)?'محاولات كثيرة. انتظري قليلًا ثم حاولي.':m==='NOKEY'?'لم يُضبط مفتاح تسجيل الدخول بعد.':'تعذّر الدخول. تأكدي من الإنترنت.';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nf=n=>Number(n||0).toLocaleString('ar-SA');
 const ds=ts=>ts?new Date(ts).toLocaleDateString('ar-SA'):'—';
-async function sha(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function enter(){
- const v=$('#pw').value.trim();
- if(!v){return}
- let ok=false;try{ok=(await sha('qs2|'+v))===H}catch(e){}
- if(!ok){$('#er').textContent='الرمز غير صحيح';return}
- try{sessionStorage.setItem('qsok','1')}catch(e){}
- open_()
+ const e=$('#em').value.trim(),v=$('#pw').value;
+ if(!e||!v){$('#er').textContent='اكتبي البريد وكلمة المرور.';return}
+ $('#go').disabled=true;$('#er').textContent='';
+ try{await signIn(e,v);open_()}catch(x){$('#er').textContent=authMsg(String(x.message||x));$('#go').disabled=false}
 }
-function open_(){$('#lock').hidden=true;$('#main').hidden=false;load();setInterval(load,60000)}
+let TM_=null;function open_(){$('#lock').hidden=true;$('#main').hidden=false;load();if(!TM_)TM_=setInterval(load,60000)}
+function out_(){signOut();location.reload()}
 async function load(){
  const l=$('#list');if(!$('#sum').innerHTML)l.innerHTML='<p class="mut" style="text-align:center">جارٍ التحميل…</p>';
  try{
-  const r=await fetch(FB+'/qr2/stats.json');if(!r.ok)throw 0;
+  const t=await idTok();if(!t){$('#lock').hidden=false;$('#main').hidden=true;return}
+  const r=await fetch(FB+'/qr2/stats.json?auth='+encodeURIComponent(t));if(r.status===401||r.status===403){signOut();$('#lock').hidden=false;$('#main').hidden=true;return}if(!r.ok)throw 0;
   const o=await r.json()||{},L=Object.values(o).sort((a,b)=>(b.last||0)-(a.last||0));
   const tot=t=>Object.values(t.cls||{}).reduce((a,c)=>({r:a.r+(c.r||0),s:a.s+(c.s||0)}),{r:0,s:0});
   const rated=L.filter(t=>t.rate&&t.rate.stars);
@@ -82,7 +99,7 @@ async function load(){
   ${r.stars?`<div style="margin-top:4px">${'⭐'.repeat(r.stars)}</div>`:''}${r.sug?`<div class="sug">💡 ${esc(r.sug)}</div>`:''}</div>`}).join(''):'<div class="card mut" style="text-align:center">لم تستخدم أي معلمة «قراءتي» بعد.</div>';
  }catch(e){l.innerHTML='<div class="card mut" style="text-align:center">تعذّر تحميل الإحصائية. جرّبي التحديث.</div>'}
 }
-$('#go').onclick=enter;$('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')enter()});$('#rf').onclick=load;
-try{if(sessionStorage.getItem('qsok')==='1')open_()}catch(e){}
+$('#go').onclick=enter;$('#em').addEventListener('keydown',e=>{if(e.key==='Enter')enter()});$('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')enter()});$('#rf').onclick=load;
+idTok().then(t=>{if(t)open_()}).catch(()=>{});
 </script>
 </body></html>
