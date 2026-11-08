@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>إحصائيات قراءتي</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;800&family=Cairo:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fff7e4;--ink:#1d2b53;--green:#0b6e4f;--sun:#ffc23d;--org:#d9622b;--card:#fff;--line:#ecdcb0;--mut:#5f6a8f}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink);font-family:'Cairo',Tahoma,sans-serif;line-height:1.6;padding:0 max(16px,env(safe-area-inset-left,0px)) 40px max(16px,env(safe-area-inset-right,0px))}
+.w{max-width:760px;margin:0 auto}
+header{text-align:center;padding:26px 0 8px}
+h1{font-family:'Baloo Bhaijaan 2','Cairo',sans-serif;font-size:32px;margin:0;color:var(--org)}
+.by{color:var(--mut);font-size:14px;margin:0}
+.card{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:16px;margin:12px 0;box-shadow:0 5px 0 var(--line)}
+input,button{font:inherit}
+input{width:100%;padding:12px;border:3px solid var(--line);border-radius:14px;font-size:18px;text-align:center;direction:ltr}
+.btn{background:var(--org);color:#fff;border:0;border-radius:14px;padding:11px 18px;font-weight:900;font-size:17px;box-shadow:0 4px 0 #a8461a;cursor:pointer}
+.btn.g{background:var(--paper);color:var(--ink);box-shadow:0 4px 0 var(--line);border:2px solid var(--line)}
+.sum{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.sum div{background:var(--card);border:3px solid var(--line);border-radius:18px;padding:12px 8px;text-align:center}
+.sum b{display:block;font-size:30px;font-family:'Baloo Bhaijaan 2',sans-serif;color:var(--green);line-height:1.2}
+.sum span{font-size:14px;color:var(--mut);font-weight:700}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.t b{font-size:19px}.t .m{font-size:15px;color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chips span{background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:0 10px;font-weight:700;font-size:14px}
+.sug{margin-top:8px;background:#fff3cf;border-radius:12px;padding:8px 12px;font-size:15px}
+.mut{color:var(--mut)}
+.err{color:#c0392b;font-weight:700;min-height:1.5em;text-align:center}
+[hidden]{display:none!important}
+</style>
+</head>
+<body><div class="w">
+<header><h1>🎙️ إحصائيات قراءتي</h1><p class="by">للمشرفة فقط · إعداد: فاطمة المطيري</p></header>
+
+<div id="lock" class="card">
+ <p style="margin:0 0 8px;font-weight:700;text-align:center">أدخلي رمز الدخول</p>
+ <input id="pw" type="password" autocomplete="current-password" aria-label="رمز الدخول">
+ <p class="err" id="er"></p>
+ <div style="text-align:center"><button class="btn" id="go">دخول</button></div>
+</div>
+
+<div id="main" hidden>
+ <div class="sum" id="sum"></div>
+ <div class="row" style="margin:6px 0"><span class="mut" id="upd"></span><button class="btn g" id="rf">🔄 تحديث</button></div>
+ <div id="list"></div>
+</div>
+</div>
+<script>
+const FB='https://defense-fingerprint-default-rtdb.firebaseio.com',H='4120508d5e0c683c357aa4c6e8c573aec6b5ffcf9c1f004e93a54a71c92eaf24';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf=n=>Number(n||0).toLocaleString('ar-SA');
+const ds=ts=>ts?new Date(ts).toLocaleDateString('ar-SA'):'—';
+async function sha(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function enter(){
+ const v=$('#pw').value.trim();
+ if(!v){return}
+ let ok=false;try{ok=(await sha('qs2|'+v))===H}catch(e){}
+ if(!ok){$('#er').textContent='الرمز غير صحيح';return}
+ try{sessionStorage.setItem('qsok','1')}catch(e){}
+ open_()
+}
+function open_(){$('#lock').hidden=true;$('#main').hidden=false;load();setInterval(load,60000)}
+async function load(){
+ const l=$('#list');if(!$('#sum').innerHTML)l.innerHTML='<p class="mut" style="text-align:center">جارٍ التحميل…</p>';
+ try{
+  const r=await fetch(FB+'/qr2/stats.json');if(!r.ok)throw 0;
+  const o=await r.json()||{},L=Object.values(o).sort((a,b)=>(b.last||0)-(a.last||0));
+  const tot=t=>Object.values(t.cls||{}).reduce((a,c)=>({r:a.r+(c.r||0),s:a.s+(c.s||0)}),{r:0,s:0});
+  const rated=L.filter(t=>t.rate&&t.rate.stars);
+  const avg=rated.length?(rated.reduce((a,t)=>a+t.rate.stars,0)/rated.length).toFixed(1):'—';
+  const sum=L.reduce((a,t)=>{const c=tot(t);return{r:a.r+c.r,s:a.s+c.s,c:a.c+Object.keys(t.cls||{}).length}},{r:0,s:0,c:0});
+  $('#sum').innerHTML=`<div><b>${nf(L.length)}</b><span>معلمة استخدمت قراءتي</span></div><div><b>${nf(sum.c)}</b><span>فصل</span></div><div><b>${nf(sum.r)}</b><span>قراءة مفتوحة</span></div><div><b>${nf(sum.s)}</b><span>تسجيلات الطلاب</span></div><div style="grid-column:1/-1"><b>${avg}${avg==='—'?'':' ⭐'}</b><span>متوسط تقييم التطبيق (${nf(rated.length)} تقييم)</span></div>`;
+  $('#upd').textContent='آخر تحديث: '+new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'});
+  l.innerHTML=L.length?L.map(t=>{const c=tot(t),r=t.rate||{};return `<div class="card t"><div class="row"><b>${esc(t.name||'معلمة')}</b>${t.school?`<span class="m">مدرسة ${esc(t.school)}</span>`:''}</div>
+  <div class="chips"><span>الفصول: ${nf(Object.keys(t.cls||{}).length)}</span><span>القراءات: ${nf(c.r)}</span><span>تسجيلات الطلاب: ${nf(c.s)}</span></div>
+  <div class="m" style="margin-top:6px">بدأت: ${ds(t.ts)} · آخر استخدام: ${ds(t.last)}</div>
+  ${r.stars?`<div style="margin-top:4px">${'⭐'.repeat(r.stars)}</div>`:''}${r.sug?`<div class="sug">💡 ${esc(r.sug)}</div>`:''}</div>`}).join(''):'<div class="card mut" style="text-align:center">لم تستخدم أي معلمة «قراءتي» بعد.</div>';
+ }catch(e){l.innerHTML='<div class="card mut" style="text-align:center">تعذّر تحميل الإحصائية. جرّبي التحديث.</div>'}
+}
+$('#go').onclick=enter;$('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')enter()});$('#rf').onclick=load;
+try{if(sessionStorage.getItem('qsok')==='1')open_()}catch(e){}
+</script>
+</body></html>
