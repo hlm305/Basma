@@ -365,6 +365,7 @@ function home(t){
  <div class="seg"><button class="${t==='i'?'':'on'}" onclick="home()">رحلتي</button><button class="${t==='i'?'on':''}" onclick="home('i')">جزيرة الحروف</button></div>`+(t==='i'?
  `<p class="mut">اضغط على أي حرف لتتعرّف عليه وتسمع اسمه</p><div class="path">${ALPHA.map((l,i)=>`<button class="bal" style="--h:${HUE(i)}" onclick="showL('${l}',${i})">${LD(l)}</button>`).join('')}</div><div id="fm"></div>`:
  `<section class="card"><div class="ptop"><h3>رحلتي</h3><span class="mut">أنجزت ${n} من 28 حرفًا</span></div><div class="pb" style="--x:${p}%"><i style="width:${p}%"></i><span class="rk">🚀</span></div></section>
+ <section class="card"><div class="ptop"><h3>🎙️ قراءتي</h3></div><p class="mut" style="margin:4px 0 10px">تسجيل القراءة بالصوت وإرسالها إلى المعلمة لتستمع إليها وتقيّمها.</p><button class="go" onclick="location.href='qiraa?from=l'">افتح قراءتي</button></section>
  <div class="path">${ORD.map((l,i)=>ok0(i)?`<button class="st ${DONE[l]?'done':''}" style="--h:${HUE(i)}" onclick="learn(${i})">${LD(l)}<small>${stars(DONE[l])}</small></button>`:`<button class="st lock" style="--h:${HUE(i)}" disabled>${l}<small>مغلق</small></button>`).join('')}</div>`);
 }
 function setName(){const v=$('#nm').value.trim();if(!v)return;NAME=v.slice(0,30);saveLocal();home()}
@@ -385,7 +386,7 @@ const GK=['w','f','m','s','a','p','r'];
 const VID={'م':'xNW2AzqrFk4','ب':'PrumakGHnXE','ل':'vlFpG5iCJNo','د':'TAj7-08Ik94','ن':'39oRFEK7r4M','ر':'wZR1lKdZ2kM','ف':'gb60NNsACiA','ت':'Yvp6AJUJCDY','ح':'6Vq3WZf1wOc','ش':'JimStf4YXts','أ':'-O7S6E5Vp6g','ق':'fFf1i0glmQ4','ع':'cw2_rqC-WpE','ث':'eAC7ApyBK9o',
  'ص':'c_GJYxBB3J8','س':'ZBbohtuxx6o','ك':'gVNRBXgXMic','ي':'_r5KxUn5YPs','غ':'JpCrjjEPXyM','خ':'GXNADNDcK7U','ذ':'jpcvhVDCE_U','ظ':'Dc2gkuX1NS4',
  'ط':'zrAZLAmsiaI','ز':'GdVi6EzVejk','و':'S94q9Ckb-oQ','ج':'56jjrDid0qA','ه':'ceJgkFUrIYY','ض':'jj7nokpjwf0'};
-function gtiles(i){const L=ORD[i];const T=k=>`<button class="gt" style="--c:var(${GC[k][0]});--cd:var(${GC[k][1]})" onclick="G('${k}',${i})"><span class="gi">${GC[k][2]}</span><b>${GN[k]}</b><small>${GC[k][3]}</small><em>${stars(GS[L+':'+k])}</em></button>`;return `<div class="games" id="gm">${VID[L]?`<button class="gt" style="--c:var(--green);--cd:var(--green-d)" onclick="vid(${i})"><span class="gi">🎬</span><b>قراءة القطعة</b><small>شاهد واقرأ مع الفيديو</small><em>${stars(GS[L+':v'])}</em></button>`:''}<button class="gt" style="--c:var(--plum);--cd:var(--plum-d)" onclick="tut(${i})"><span class="gi">📺</span><b>مقاطع تعليمية</b><small>شرح السكون والمدود والشدّة وغيرها</small><em></em></button>${['f','w','m','s','a'].map(T).join('')}<button class="gt" style="--c:var(--sun-d);--cd:var(--sun-d)" onclick="an(${i})"><span class="gi">✍️</span><b>حلّل كلمتك</b><small>اكتب أي كلمة وشاهد مقاطعها</small><em></em></button>${['p','r'].map(T).join('')}<button class="gt" style="--c:var(--plum);--cd:var(--plum-d)" onclick="tnHome(${i})"><span class="gi">🌟</span><b>التنوين</b><small>ضم وفتح وكسر</small><em>${stars(Math.max(tnGS('ٌ'),tnGS('ً'),tnGS('ٍ'),tnGS('all')))}</em></button>${['h','l'].map(T).join('')}</div>`}
+function gtiles(i){const L=ORD[i];const T=k=>`<button class="gt" style="--c:var(${GC[k][0]});--cd:var(${GC[k][1]})" onclick="G('${k}',${i})"><span class="gi">${GC[k][2]}</span><b>${GN[k]}</b><small>${GC[k][3]}</small><em>${stars(GS[L+':'+k])}</em></button>`;return `<div class="games" id="gm">${VID[L]?`<button class="gt" style="--c:var(--green);--cd:var(--green-d)" onclick="vid(${i})"><span class="gi">🎬</span><b>قراءة القطعة</b><small>شاهد واقرأ مع الفيديو</small><em>${stars(GS[L+':v'])}</em></button>`:''}<button class="gt" style="--c:var(--plum);--cd:var(--plum-d)" onclick="tut(${i})"><span class="gi">📺</span><b>مقاطع تعليمية</b><small>شرح السكون والمدود والشدّة وغيرها</small><em></em></button><button class="gt" style="--c:#d9622b;--cd:#a8461a" onclick="location.href='qiraa?from=l'"><span class="gi">🎙️</span><b>قراءتي</b><small>سجّل قراءتك وأرسلها للمعلمة</small><em></em></button>${['f','w','m','s','a'].map(T).join('')}<button class="gt" style="--c:var(--sun-d);--cd:var(--sun-d)" onclick="an(${i})"><span class="gi">✍️</span><b>حلّل كلمتك</b><small>اكتب أي كلمة وشاهد مقاطعها</small><em></em></button>${['p','r'].map(T).join('')}<button class="gt" style="--c:var(--plum);--cd:var(--plum-d)" onclick="tnHome(${i})"><span class="gi">🌟</span><b>التنوين</b><small>ضم وفتح وكسر</small><em>${stars(Math.max(tnGS('ٌ'),tnGS('ً'),tnGS('ٍ'),tnGS('all')))}</em></button>${['h','l'].map(T).join('')}</div>`}
 /* teaching videos chosen by the teacher, shared by every letter (last tile in each letter's skills) */
 const TUT=[['السكون','aXloqdxNZlM','ْ'],['الحركات القصيرة والطويلة (المدود)','mdwUZ_hlGhg','ـَا'],['الشدّة','pi5SxozfJSo','ـّ'],['ال القمرية وال الشمسية','vMB6ySDTBxk','ال'],
  ['تحليل الكلمات إلى مقاطع','W4HIk6Jp35k','✂'],['اسم الإشارة (هذا - هذه)','tdfbs5Fx7_Q','👉'],['ضمير المتكلم (أنا - نحن)','mH2DL5imSiI','🙋']];
@@ -873,6 +874,22 @@ function anBuild(){
  anTm.push(setTimeout(()=>{burst();bt.disabled=false;bt.textContent='✂️ فكّك الكلمة'},reduce?400:1900));
 }
 
+
+/* ---------- إحصائية استخدام «قراءتي» (أسماء المعلمات وعدد الاستخدام والتقييم فقط، دون أي محتوى للطلاب) ---------- */
+async function qLoad(){
+ const el=$('#qs');if(!el)return;el.innerHTML='<h3>🎙️ استخدام «قراءتي»</h3><p class="mut">جارٍ التحميل…</p>';
+ try{
+  const o=await (await fetch(FB+'/qr2/stats.json')).json()||{},L=Object.values(o).sort((a,b)=>(b.last||0)-(a.last||0));
+  if(!L.length){el.innerHTML='<h3>🎙️ استخدام «قراءتي»</h3><p class="mut">لم تستخدم أي معلمة «قراءتي» بعد.</p>';return}
+  const tot=t=>Object.values(t.cls||{}).reduce((a,c)=>({r:a.r+(c.r||0),s:a.s+(c.s||0)}),{r:0,s:0});
+  const rated=L.filter(t=>t.rate&&t.rate.stars),avg=rated.length?(rated.reduce((a,t)=>a+t.rate.stars,0)/rated.length).toFixed(1):'—';
+  const ds=ts=>ts?new Date(ts).toLocaleDateString('ar-SA'):'—';
+  el.innerHTML=`<h3>🎙️ استخدام «قراءتي»</h3><p class="mut" style="margin:4px 0 10px">${L.length} معلمة · متوسط التقييم: <b>${avg}</b> من ٥ (${rated.length} تقييم)</p>
+  ${L.map(t=>{const c=tot(t),r=t.rate||{};return `<div class="card" style="margin:0 0 10px;padding:12px"><b>${esc(t.name||'معلمة')}</b>${t.school?` <span class="mut">· مدرسة ${esc(t.school)}</span>`:''}
+  <div class="mut" style="font-size:15px">بدأت: ${ds(t.ts)} · آخر استخدام: ${ds(t.last)} · الفصول: ${Object.keys(t.cls||{}).length} · القراءات: ${c.r} · تسجيلات الطلاب: ${c.s}</div>
+  ${r.stars?`<div>${'⭐'.repeat(r.stars)}</div>`:''}${r.sug?`<div class="ins" style="margin-top:6px">💡 ${esc(r.sug)}</div>`:''}</div>`}).join('')}`;
+ }catch(e){el.innerHTML='<h3>🎙️ استخدام «قراءتي»</h3><p class="mut">تعذّر تحميل الإحصائية.</p>'}
+}
 /* ---------- teacher dashboard ---------- */
 const lvl=p=>p===null?['لم يبدأ','#8a8aa8']:p>=85?['متقن','#12a36f']:p>=60?['جيد','#e08a00']:['يحتاج معالجة','#e5483f'];
 const XLOK=true;
@@ -882,7 +899,8 @@ function dash(sel){
  const a=$('#app');
  if(!isT){a.innerHTML='<div class="card">لوحة المعلمة تظهر لصاحبة الصفحة فقط.</div><button onclick="home()">رجوع</button>';return}
  if(!fbOn()){a.innerHTML='<div class="card">لم يُربط الحفظ بقاعدة بيانات Firebase بعد.</div><button onclick="home()">رجوع</button>';return}
- a.innerHTML='<div id="dash"><div class="top"><h2>لوحة المعلمة</h2><button class="alt" onclick="home()">رجوع</button></div><div id="dc" class="card">جارٍ التحميل…</div></div>';
+ a.innerHTML='<div id="dash"><div class="top"><h2>لوحة المعلمة</h2><button class="alt" onclick="home()">رجوع</button></div><div id="dc" class="card">جارٍ التحميل…</div><div id="qs" class="card"></div></div>';
+ qLoad();
  if(unsub)clearInterval(unsub);
  const pull=async()=>{try{const r=await fetch(fbU('results')),o=await r.json()||{};DATA=Object.values(o).sort((x,y)=>y.ts-x.ts).slice(0,3000);paint(sel)}catch(e){const c=$('#dc');if(c)c.textContent='تعذّر تحميل البيانات'}};
  pull();unsub=setInterval(pull,15000);
