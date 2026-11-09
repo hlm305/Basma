@@ -140,7 +140,8 @@ function tHome(){
     return}
   const cl=lsG('qr_classes',[]);
   $('#app').innerHTML=head('لوحة المعلمة')+`<div class="card"><div class="row"><button onclick="home()">رجوع</button><button onclick="ST.editT=1;tHome()">✏️ تعديل اسمي ورقم مدرستي</button></div><p class="mut sm" style="margin:8px 0 0">الاسم: <b>${esc(t.name)}</b></p></div>
-  ${cl.length?`<div class="card"><h3>فصولي</h3>${cl.map((c,i)=>`<button class="big" onclick="tOpen(${i})">📚 ${esc(c.name)}</button>`).join('')}</div>`:''}
+  ${cl.length?`<div class="card"><h3>فصولي</h3>${cl.map((c,i)=>`<div class="row" style="margin:6px 0"><button class="big" style="flex:1" onclick="tOpen(${i})">📚 ${esc(c.name)}</button><button class="bad" aria-label="حذف الفصل" onclick="tDelClass(${i})">🗑</button></div>`).join('')}</div>`:''}
+  ${lsG('qr_trash',[]).length?`<div class="card"><h3>🗑 المحذوفات</h3><p class="mut sm">فصول محذوفة يمكن استرجاعها، أو حذفها نهائيًا.</p>${lsG('qr_trash',[]).map((c,j)=>`<div class="row" style="margin:6px 0;align-items:center"><b style="flex:1">${esc(c.name)}</b><button class="go" onclick="tRestoreC(${j})">↩️ استرجاع</button><button class="bad" onclick="tPurge(${j})">حذف نهائي</button></div>`).join('')}</div>`:''}
   <div class="card"><h3>إنشاء فصل جديد</h3><label for="cn">اسم الفصل (مثال: أول/٣)</label><input type="text" id="cn" maxlength="30" autocomplete="off">
   <label for="cw">كلمة الرمز (اسمكِ الأول، ويُضاف بعدها رقم مدرستكِ تلقائيًا)</label><input type="text" id="cw" maxlength="12" autocomplete="off" value="${esc(t.name.replace(/^(أ\.|الأستاذة|الاستاذة|المعلمة|معلمة)\s*/,'').trim().split(/\s+/)[0])}">
   <button class="go" id="cb" onclick="tCreate()">إنشاء الفصل</button><div id="msg"></div></div>
@@ -204,6 +205,7 @@ async function tClass(tab){
   $('#app').innerHTML=head(c.name,0)+`<div class="card np"><button onclick="tHome()">رجوع</button>
   <p class="mut" style="margin:10px 0 4px">رمز الفصل (أعطيه لطلابك، يكتبونه كما هو):</p><div class="code">${esc(c.disp||grp(c.cc))}</div>
   <div class="row" style="margin-top:8px"><button onclick="tCopy()">📋 نسخ رسالة للطلاب</button><button onclick="tCopyKey()">🔑 نسخ مفتاح الاسترجاع</button></div>
+  <div class="row" style="margin-top:8px"><button class="bad" onclick="tDelClass(-1)">🗑 حذف هذا الفصل</button></div>
   <p class="mut sm" style="margin:8px 0 0">مفتاح الاسترجاع يفتح هذا الفصل على جهاز آخر. احتفظي به ولا تعطيه للطلاب. إن فقدتِ جوالكِ بدونه فلن يمكن استرجاع التسجيلات.</p></div>
   <div class="tabs np"><button class="${ST.tab==='r'?'on':''}" onclick="tClass('r')">📖 القراءات</button><button class="${ST.tab==='s'?'on':''}" onclick="tClass('s')">🎧 التسجيلات</button><button class="${ST.tab==='p'?'on':''}" onclick="tClass('p')">📄 تقرير</button></div>
   <div id="tb"><p class="mut">جارٍ التحميل…</p></div>`;
@@ -246,6 +248,22 @@ async function tPublish(){
     tClass('r');
   }catch(e){b.disabled=false;msg('تعذّر النشر. حاولي مرة أخرى.')}
 }
+function tDelClass(i){
+  const all=lsG('qr_classes',[]);if(i<0)i=all.findIndex(x=>ST.cl&&x.cc===ST.cl.cc);const c=all[i];if(!c)return;
+  ask('نقل فصل «'+c.name+'» إلى المحذوفات؟ تستطيعين استرجاعه منها.',()=>{
+    const cl=lsG('qr_classes',[]);const j=cl.findIndex(x=>x.cc===c.cc);if(j<0)return;
+    const tr=lsG('qr_trash',[]);tr.push(Object.assign({},cl[j],{dts:Date.now()}));lsS('qr_trash',tr);
+    cl.splice(j,1);lsS('qr_classes',cl);ST.cl=null;toast('نُقل إلى المحذوفات ✓');tHome()})}
+function tRestoreC(j){const tr=lsG('qr_trash',[]);const c=tr[j];if(!c)return;tr.splice(j,1);lsS('qr_trash',tr);delete c.dts;const cl=lsG('qr_classes',[]);if(!cl.some(x=>x.cc===c.cc))cl.push(c);lsS('qr_classes',cl);toast('تم استرجاع الفصل ✓');tHome()}
+function tPurge(j){
+  const c=lsG('qr_trash',[])[j];if(!c)return;
+  ask('حذف فصل «'+c.name+'» نهائيًا مع كل قراءاته وتسجيلات طلابه؟ لا يمكن التراجع ولا الاسترجاع بعده.',async()=>{
+    try{const cid=(await ids(c.cc)).cid;const rd=await api('classes/'+cid+'/readings')||{};
+      for(const id of Object.keys(rd))await api('img/'+cid+'/'+id,'DELETE');
+      await api('classes/'+cid+'/readings','DELETE');await api('subs/'+cid,'DELETE');await api('audio/'+cid,'DELETE');await api('fb/'+cid,'DELETE');
+      const t=TM();if(t)await api('stats/'+t.tid+'/cls/'+cid,'DELETE');
+      const tr=lsG('qr_trash',[]);const k=tr.findIndex(x=>x.cc===c.cc);if(k>=0)tr.splice(k,1);lsS('qr_trash',tr);toast('تم الحذف نهائيًا ✓');tHome();
+    }catch(e){toast('تعذّر الحذف، تأكدي من الإنترنت')}})}
 function tDelR(id){ask('حذف هذه القراءة وتسجيلاتها؟',async()=>{
   const c=ST.cl.cid;try{
     for(const[sid,s]of Object.entries(ST.sb))if(s.rid===id){await api('subs/'+c+'/'+sid,'DELETE');await api('audio/'+c+'/'+sid,'DELETE');await api('fb/'+c+'/'+sid,'DELETE')}
