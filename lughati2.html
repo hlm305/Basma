@@ -216,6 +216,7 @@ body.nv .sp,body.nv .sayb,body.nv .lhero button{display:none!important}
 .crt{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px;border:2px solid var(--line);border-radius:16px;margin:8px 0}.crt.on{background:var(--okbg);border-color:#12a36f}.crt .cl{display:flex;gap:6px}.crt .cl i{font-style:normal;width:40px;height:40px;border-radius:12px;background:#e8dcc0;color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px}.crt .cl i.y{background:#12a36f}
 
 /* ---- كتابتي على السطر ---- */
+.kt,.kt *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .kt{--g:#0a7a52;--gd:#075c3d;--sun:#ffb703;--sl:#ffe08a;--ink:#0b2b20;--mut:#3d5a4c}
 .kt *{box-sizing:border-box}
 .kt-modes{display:flex;gap:8px;margin:6px 0 10px}
@@ -230,6 +231,8 @@ body.nv .sp,body.nv .sayb,body.nv .lhero button{display:none!important}
 .kt .kt-chip .s{position:absolute;bottom:0;left:0;right:0;font-size:11px;line-height:1;color:var(--sun)}
 .kt-say{display:flex;align-items:center;gap:10px;background:#fff;color:var(--ink);border:3px solid var(--sl);border-radius:18px;padding:6px 14px;margin:2px 0 10px;font-weight:800;font-size:18px;min-height:50px}
 .kt-say .o{font-size:28px}
+.kt-say #kt-msg{flex:1}
+.kt .kt-spk{flex:none;border:0;background:var(--g);color:#fff;border-radius:50%;width:46px;height:46px;font-size:22px;cursor:pointer;box-shadow:none;min-height:0;padding:0;border-bottom:4px solid var(--gd)}
 .kt-board{position:relative;background:#fff;border:4px solid var(--g);border-radius:22px;overflow:hidden;touch-action:none}
 .kt canvas{display:block;width:100%;height:auto;touch-action:none}
 .kt-bar{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
@@ -237,21 +240,36 @@ body.nv .sp,body.nv .sayb,body.nv .lhero button{display:none!important}
 .kt .kt-btn.y{background:var(--sun);color:var(--ink);border-bottom-color:#d99400}
 .kt .kt-btn.w{background:#fff;color:var(--g);border:3px solid var(--g);border-bottom-width:5px}
 .kt .kt-btn:active{transform:translateY(2px)}
-.kt .kt-res{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(255,246,220,.9);text-align:center;padding:16px}
-.kt .kt-res.show{display:flex}
-.kt .kt-res .b{background:#fff;color:var(--ink);border:4px solid var(--g);border-radius:24px;padding:16px 24px;max-width:92%;animation:ktpop .5s cubic-bezier(.2,1.6,.4,1)}
-.kt .kt-res .st{color:var(--sun);font-size:54px;letter-spacing:6px;line-height:1.1}
-.kt .kt-res h2{margin:6px 0 4px;font-size:27px;color:var(--g);font-weight:900}
-.kt .kt-res p{margin:0 0 12px;font-weight:700;color:var(--mut);font-size:17px}
-.kt .kt-res .rw{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.kt .kt-res .kt-btn{flex:none;min-width:140px}
+.kt .kt-res{display:none;margin-top:10px;text-align:center}
+.kt .kt-res.show{display:block}
+.kt .kt-res .b{background:#fff;color:var(--ink);border:3px solid var(--g);border-radius:20px;padding:8px 12px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:0 12px;animation:ktpop .45s cubic-bezier(.2,1.6,.4,1)}
+.kt .kt-res .st{color:var(--sun);font-size:28px;letter-spacing:4px;line-height:1.1}
+.kt .kt-res h2{margin:0;font-size:21px;color:var(--g);font-weight:900}
+.kt .kt-res p{margin:2px 0 8px;width:100%;font-weight:700;color:var(--mut);font-size:15px;line-height:1.4}
+.kt .kt-res .rw{display:flex;gap:10px;justify-content:center;width:100%}
+.kt .kt-res .kt-btn{flex:1;min-width:0;padding:9px 6px;font-size:17px}
 @keyframes ktpop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 @media (max-width:520px){.kt .kt-mode{font-size:17px}.kt .kt-btn{font-size:16px;min-width:100px}.kt-say{font-size:15px}}
+@media (min-width:1000px) and (hover:hover){
+#wrap{max-width:1240px}
+#app{padding-top:20px}
+.card{padding:22px;border-radius:26px}
+button{font-size:21px;padding:14px 26px}
+.hero{padding:34px 24px}
+.path{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:36px 16px}
+.games{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.gt{padding:16px 18px}
+.opts{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+.tuts{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.acards{grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+.kt canvas{width:auto;max-width:100%;max-height:56vh;margin:0 auto}
+input{font-size:24px}
+}
 </style>
 <div id="wrap">
 <header class="hd"><div class="brand"><span class="logo">🦉</span><div><b>رحلة الحروف</b><small>لغتي • الصف الأول الابتدائي</small><span class="by">إعداد: فاطمة المطيري</span></div></div><div class="chips" id="who"></div></header>
 <main id="app"></main>
-<footer class="ft">إعداد: <b>فاطمة المطيري</b><small class="rt">© الحقوق محفوظة</small><small id="vn"></small></footer>
+<footer class="ft"><button type="button" class="alt" style="font-size:16px;padding:10px 18px;margin-bottom:10px" onclick="fbOpen()">⭐ تقييم المنصة واقتراحاتك</button><br>إعداد: <b>فاطمة المطيري</b><small class="rt">© الحقوق محفوظة</small><small id="vn"></small></footer>
 </div>
 <script>
 document.documentElement.lang='ar';document.documentElement.dir='rtl';
@@ -350,8 +368,9 @@ const sukAt=a=>{for(let k=1;k<a.length-1;k++){if(hasSk(a[k])&&hasV(a[k-1])&&!a[k
 let VS=[],VN='';
 const lv=()=>{try{VS=speechSynthesis.getVoices().filter(v=>/^ar/i.test(v.lang))}catch(e){}};
 lv();try{speechSynthesis.addEventListener('voiceschanged',lv)}catch(e){}
-const FEM=/laila|lila|zariyah|salma|noura|nora|fatima|amira|mariam|maryam|hala|sara|zeina|hoda|aisha|ليلى|سلمى|نورة|فاطمة|مريم/i,MAL=/majed|maged|tarik|naayf|hamed|hamdan|shakir|fahd/i;
-const pickVoice=()=>{lv();return VS.find(v=>FEM.test(v.name))||VS.find(v=>/SA/i.test(v.lang)&&!MAL.test(v.name))||VS.find(v=>!MAL.test(v.name))||VS[0]||null};
+const FEM=/laila|lila|zariyah|salma|noura|nora|fatima|amira|mariam|maryam|hala|sara|zeina|hoda|aisha|ليلى|سلمى|نورة|فاطمة|مريم/i,MAL=/ماجد|طارق|majed|maged|tarik|naayf|hamed|hamdan|shakir|fahd/i;
+const PRM=/premium|enhanced|استثنائي|مُحسَّن|محسّن|محسن|عالي|ممتاز/i;
+const pickVoice=()=>{lv();let sv=null;try{sv=localStorage.getItem('lg_vname')}catch(e){}return (sv&&VS.find(v=>v.name===sv))||VS.find(v=>PRM.test(v.name)&&FEM.test(v.name))||VS.find(v=>PRM.test(v.name)&&!MAL.test(v.name))||VS.find(v=>PRM.test(v.name))||VS.find(v=>FEM.test(v.name))||VS.find(v=>/SA/i.test(v.lang)&&!MAL.test(v.name))||VS.find(v=>!MAL.test(v.name))||VS[0]||null};
 const AUD=new Set([]);   // names of recorded files in /audio (without .mp3); when listed they replace the device voice
 let VPUB=null,vtoastDone=0;
 const vOn=()=>{let l=null;try{l=localStorage.getItem('lg_voice')}catch(e){}return (l||VPUB||'off')==='on'};
@@ -364,7 +383,7 @@ function say(t){try{t=t.replace(/ـ/g,'');const k=plain(t).trim().replace(/\s+/g
  if(AUD.has(k)){new Audio('audio/'+k+'.mp3').play();VN='تسجيل صوتي';updV();return}
  if(!vOn()){if(!vtoastDone){vtoastDone=1;vToast('الصوت متوقف. لتشغيله اضغط زر «صوت ذكاء اصطناعي» في أعلى الصفحة.')}return}
  if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
- const u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';u.rate=.8;u.pitch=1.1;const v=pickVoice();if(v){u.voice=v;VN=v.name}else VN='';
+ const u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';u.rate=.85;u.pitch=1;const v=pickVoice();if(v){u.voice=v;VN=v.name}else VN='';
  speechSynthesis.speak(u);updV()}catch(e){}}
 function updV(){const e=$('#vn');if(e)e.textContent=isT?('الصوت المستخدم الآن: '+(VN||'الصوت الافتراضي للجهاز')):''}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-say]');if(b)say(b.getAttribute('data-say'))});
@@ -473,7 +492,8 @@ async function showCert(b){
  $('#cms').onclick=()=>cv.toBlob(async bl=>{const f=new File([bl],'شهادة-إتقان.png',{type:'image/png'});try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'شهادة إتقان'});return}}catch(e){return}const a=document.createElement('a');a.href=url;a.download='شهادة-إتقان.png';document.body.appendChild(a);a.click();a.remove()})}
 function skAvg(){const o={};Object.keys(GS).forEach(k=>{const p=k.split(':'),sk=p[1];if(!GN[sk]||!GS[k])return;(o[sk]=o[sk]||[]).push(GS[k])});return Object.keys(o).map(k=>({k,v:o[k].reduce((a,b)=>a+b,0)/o[k].length}))}
 const sLv=v=>v>=2.5?['متقن','#12a36f']:v>=1.8?['جيد','#e08a00']:['يحتاج مراجعة','#e5483f'];
-function ach(){
+let GTK=0;const gTo=(f,ms)=>{const t=GTK;setTimeout(()=>{if(t===GTK)f()},ms)};
+function ach(){GTK++;
  certNew();const n=ORD.filter(l=>DONE[l]).length,tot=ORD.reduce((a,l)=>a+(DONE[l]||0),0),sk=skAvg().sort((a,b)=>a.v-b.v),wk=sk.filter(x=>x.v<1.8).slice(0,2);
  $('#app').innerHTML=`<div class="top"><h2>إنجازاتي</h2><button class="alt" onclick="home()">رجوع</button></div>
  <section class="card"><div class="ptop"><h3>${esc(NAME)}</h3><span class="mut">${new Date().toLocaleDateString('ar-SA')}</span></div>
@@ -494,13 +514,13 @@ function loginView(){
 const KT_DATA=[{"c": "م", "w": ["مشعل", "فاطمة", "أمي", "مريم"], "p": "أبي سعد"}, {"c": "ب", "w": ["بيت", "مكتبة", "حاسوب", "كتب"], "p": "بيتنا مكتبة"}, {"c": "ل", "w": ["لماذا", "جلست", "يغسل", "الأكل"], "p": "يغسل يديه"}, {"c": "د", "w": ["دراجة", "ورد", "حديقة", "دمية"], "p": "صديقي خالد"}, {"c": "ن", "w": ["نورة", "نحن", "نظافة", "تعاون"], "p": "أمي تكنس"}, {"c": "ر", "w": ["رحب", "رأس", "ياسر", "فرحة"], "p": "أنا فرحة"}, {"c": "ص", "w": ["صالح", "صحتي", "مقصف", "عصير"], "p": "صحتي مهمة"}, {"c": "ف", "w": ["فصل", "فصول", "نافذة", "رف"], "p": "فصلي جميل"}, {"c": "س", "w": ["سور", "مدرستي", "فسيحة", "رسوم"], "p": "أحب مدرستي"}, {"c": "ق", "w": ["قال", "القراءة", "القصص", "القرآن"], "p": "القراءة تنير"}, {"c": "ت", "w": ["توت", "تفاح", "تين", "أرتب"], "p": "تفاح وتين"}, {"c": "ح", "w": ["حامد", "يحرس", "لحق", "فرح"], "p": "فرح الفريق"}, {"c": "أ", "w": ["أنا", "إبراهيم", "أعيش", "أمواج"], "p": "أحب مدينتي"}, {"c": "ط", "w": ["طارق", "طبيعة", "مطر", "طيور"], "p": "أنا طارق"}, {"c": "ز", "w": ["زهير", "زياد", "زمزم"], "p": "أخي زياد"}, {"c": "و", "w": ["وليد", "واسعة", "تبوك", "فواكه"], "p": "أنا وليد"}, {"c": "ج", "w": ["نجود", "جسور", "أبراج", "مساجد"], "p": "أنا نجود"}, {"c": "ش", "w": ["شيماء", "شاطئ", "شمس", "شراعية"], "p": "أنا شيماء"}, {"c": "ك", "w": ["كرة", "كسر", "ركل", "كسرة"], "p": "ركل الكرة"}, {"c": "ي", "w": ["يحب", "الرياضة", "يذهب", "النادي"], "p": "يحب الرياضة"}, {"c": "ه", "w": ["زاهية", "ألهو", "هواء", "هنا"], "p": "هنا وهناك"}, {"c": "ع", "w": ["عاد", "سعيد", "أسبوع", "تعلمت"], "p": "أعبر بسلام"}, {"c": "غ", "w": ["فراغ", "غراء", "غزال", "صغير"], "p": "غزال صغير"}, {"c": "خ", "w": ["خضار", "خيار", "خوخ", "بطيخ"], "p": "الخوخ حلو"}, {"c": "ث", "w": ["تحدث", "ثلاث", "كثير"], "p": "ثلاث كثير"}, {"c": "ذ", "w": ["ذباب", "تلميذة", "ذكية", "مهذبة"], "p": "تلميذة ذكية"}, {"c": "ض", "w": ["نهض", "ضرسي", "حضر", "ضرس"], "p": "يضر الأسنان"}, {"c": "ظ", "w": ["مظلة", "منظرها", "يحافظ", "نظافتها"], "p": "مظلة ملونة"}];
 function ktInit(root,start){
 const DATA=KT_DATA;
-const NONJOIN='ادذرزو';
+const NONJOIN='اأإآؤءادذرزو';
 const W=1000,H=620,BASE=400;
 const cv=root.querySelector('#kt-cv'),cx=cv.getContext('2d');
 const ink=document.createElement('canvas');ink.width=W;ink.height=H;const ic=ink.getContext('2d',{willReadFrequently:true});
 const gm=document.createElement('canvas');gm.width=W;gm.height=H;const gc=gm.getContext('2d',{willReadFrequently:true});
 const tl=document.createElement('canvas');tl.width=W;tl.height=H;const tc=tl.getContext('2d',{willReadFrequently:true});
-let mode='h',li=start||0,si=0,TXT='',S=300,LNS={},drawing=false,last=null,hasInk=false,anim=null,miss=[];
+let mode='h',li=start||0,si=0,TXT='',S=300,LNS={},drawing=false,last=null,hasInk=false,anim=null,miss=[],bad=[];bad=[];
 let stars={};try{stars=JSON.parse(localStorage.getItem('kt2')||'{}')}catch(e){}
 const save=()=>{try{localStorage.setItem('kt2',JSON.stringify(stars))}catch(e){}};
 const key=()=>mode+':'+DATA[li].c+':'+si;
@@ -513,11 +533,11 @@ function setText(t){TXT=t;cx.direction='rtl';cx.font=FONT(100);const w=cx.measur
  LNS={top:BASE-M.alef*S/100*1.08,mid:BASE-M.ba*S/100,base:BASE,low:BASE+Math.max(M.jim,35)*S/100}}
 /* ---- guide / masks ---- */
 function drawText(c,fill,stroke,lw){c.save();c.direction='rtl';c.textAlign='center';c.textBaseline='alphabetic';c.font=FONT(S);c.lineJoin='round';c.lineCap='round';if(fill){c.fillStyle=fill;c.fillText(TXT,W/2,BASE)}if(stroke){c.strokeStyle=stroke;c.lineWidth=lw;c.strokeText(TXT,W/2,BASE)}c.restore()}
-function buildMasks(){gc.clearRect(0,0,W,H);drawText(gc,'#000');tc.clearRect(0,0,W,H);drawText(tc,'#000','#000',Math.max(26,S*.2))}
+function buildMasks(){gc.clearRect(0,0,W,H);drawText(gc,'#000');tc.clearRect(0,0,W,H);drawText(tc,'#000','#000',Math.max(18,S*.12))}
 function rules(){cx.fillStyle='#fff';cx.fillRect(0,0,W,H);cx.fillStyle='#f3faf5';cx.fillRect(0,LNS.mid,W,LNS.base-LNS.mid);
  [[LNS.top,2,'#9fcdb4',[10,8]],[LNS.mid,2,'#9fcdb4',[10,8]],[LNS.base,5,'#0a7a52',[]],[LNS.low,2,'#9fcdb4',[10,8]]].forEach(([y,w,c,d])=>{cx.beginPath();cx.setLineDash(d);cx.lineWidth=w;cx.strokeStyle=c;cx.moveTo(24,y);cx.lineTo(W-24,y);cx.stroke()});cx.setLineDash([])}
 function guide(){drawText(cx,'#c4ead7')}
-function marks(){miss.forEach(m=>{cx.beginPath();cx.arc(m[0],m[1],11,0,7);cx.fillStyle='rgba(255,122,61,.88)';cx.fill()})}
+function marks(){cx.save();cx.fillStyle='rgba(230,57,70,.82)';bad.forEach(m=>cx.fillRect(m[0]-1,m[1]-1,10,10));cx.restore();miss.forEach(m=>{cx.beginPath();cx.arc(m[0],m[1],11,0,7);cx.fillStyle='rgba(230,57,70,.85)';cx.fill()})}
 function render(extra){rules();guide();cx.drawImage(ink,0,0);marks();if(extra)extra()}
 function playGuide(){cancelAnimationFrame(anim);const t0=performance.now(),dur=2200;
  (function f(now){const e=(now-t0)/dur;if(e>=1){render();return}rules();
@@ -528,15 +548,15 @@ function playGuide(){cancelAnimationFrame(anim);const t0=performance.now(),dur=2
 const el=id=>root.querySelector('#kt-'+id),MSG=el('msg'),RES=el('res');
 function drawModes(){el('modes').innerHTML='';[['h','حروف'],['w','كلمات'],['p','جمل']].forEach(([k,n])=>{const b=document.createElement('button');b.className='kt-mode'+(mode===k?' on':'');b.textContent=n;b.onclick=()=>{mode=k;si=0;load()};el('modes').appendChild(b)})}
 function totalStars(c){let n=0;Object.keys(stars).forEach(k=>{const p=k.split(':');if(p[1]===c)n+=stars[k]});return n}
-function drawLetters(){const r=el('letters');r.innerHTML='';DATA.forEach((d,i)=>{const b=document.createElement('button');b.className='kt-chip'+(i===li?' on':'');const t=totalStars(d.c);b.innerHTML=d.c+(t?'<span class="s">'+(t>=12?'★★★':t>=6?'★★':'★')+'</span>':'');b.onclick=()=>{li=i;si=0;load()};r.appendChild(b);if(i===li)setTimeout(()=>b.scrollIntoView({block:'nearest',inline:'center'}),0)})}
-function drawSubs(){const r=el('subs');r.innerHTML='';const it=items();if(mode==='p'){r.style.display='none';return}r.style.display='flex';it.forEach((x,i)=>{const b=document.createElement('button');b.className='kt-chip '+(mode==='h'?'f':'w')+(i===si?' on':'');const s=stars[mode+':'+DATA[li].c+':'+i]||0;b.innerHTML=x.t+(x.l?'<small>'+x.l+'</small>':'')+(s?'<span class="s">'+'★'.repeat(s)+'</span>':'');b.onclick=()=>{si=i;load(true)};r.appendChild(b)})}
-function load(keepLetters){const it=items();if(si>=it.length)si=0;ic.clearRect(0,0,W,H);hasInk=false;miss=[];RES.classList.remove('show');setText(it[si].t);buildMasks();
+function drawLetters(){const r=el('letters');r.innerHTML='';DATA.forEach((d,i)=>{const b=document.createElement('button');b.className='kt-chip'+(i===li?' on':'');const t=totalStars(d.c);b.innerHTML=d.c+(t?'<span class="s">'+(t>=12?'★★★':t>=6?'★★':'★')+'</span>':'');b.onclick=()=>{li=i;si=0;load();spk()};r.appendChild(b);if(i===li)setTimeout(()=>b.scrollIntoView({block:'nearest',inline:'center'}),0)})}
+function drawSubs(){const r=el('subs');r.innerHTML='';const it=items();if(mode==='p'){r.style.display='none';return}r.style.display='flex';it.forEach((x,i)=>{const b=document.createElement('button');b.className='kt-chip '+(mode==='h'?'f':'w')+(i===si?' on':'');const s=stars[mode+':'+DATA[li].c+':'+i]||0;b.innerHTML=x.t+(x.l?'<small>'+x.l+'</small>':'')+(s?'<span class="s">'+'★'.repeat(s)+'</span>':'');b.onclick=()=>{si=i;load(true);spk()};r.appendChild(b)})}
+function load(keepLetters){const it=items();if(si>=it.length)si=0;ic.clearRect(0,0,W,H);hasInk=false;miss=[];bad=[];RES.classList.remove('show');setText(it[si].t);buildMasks();
  MSG.textContent=mode==='h'?'اكتب الحرف ('+it[si].l+') بإصبعك فوق الشكل الأخضر':mode==='w'?'اكتب الكلمة: '+it[si].t:'اكتب الجملة: '+it[si].t;
  drawModes();if(!keepLetters)drawLetters();drawSubs();render();playGuide()}
 /* ---- drawing ---- */
 const lw=()=>Math.max(10,Math.min(22,S*.075));
 function pos(e){const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]}
-cv.addEventListener('pointerdown',e=>{if(RES.classList.contains('show'))return;cancelAnimationFrame(anim);cv.setPointerCapture(e.pointerId);drawing=true;last=pos(e);ic.fillStyle='#0b2b20';ic.beginPath();ic.arc(last[0],last[1],lw()/2,0,7);ic.fill();hasInk=true;miss=[];render()});
+cv.addEventListener('pointerdown',e=>{if(RES.classList.contains('show'))return;cancelAnimationFrame(anim);cv.setPointerCapture(e.pointerId);drawing=true;last=pos(e);ic.fillStyle='#0b2b20';ic.beginPath();ic.arc(last[0],last[1],lw()/2,0,7);ic.fill();hasInk=true;miss=[];bad=[];render()});
 cv.addEventListener('pointermove',e=>{if(!drawing)return;const p=pos(e);ic.lineCap='round';ic.lineJoin='round';ic.lineWidth=lw();ic.strokeStyle='#0b2b20';ic.beginPath();ic.moveTo(last[0],last[1]);ic.lineTo(p[0],p[1]);ic.stroke();last=p;render()});
 ['pointerup','pointercancel','pointerleave'].forEach(n=>cv.addEventListener(n,()=>{drawing=false}));
 /* ---- scoring on an 8px grid ---- */
@@ -546,7 +566,7 @@ function score(){const C=8,gw=W/C,gh=Math.ceil(H/C);
  const G=grid(gd,60),T=grid(td,60),I=grid(id,60);
  let inkN=0,inkIn=0;for(let i=0;i<I.length;i++)if(I[i]){inkN++;if(T[i])inkIn++}
  const prec=inkN?inkIn/inkN:0;
- const rc=Math.max(2,Math.round(Math.max(14,S*.11)/C));
+ const rc=Math.max(2,Math.round(Math.max(10,S*.065)/C));
  const cov=new Uint8Array(gw*gh);
  for(let y=0;y<gh;y++)for(let x=0;x<gw;x++){if(!G[y*gw+x])continue;let ok=0;for(let dy=-rc;dy<=rc&&!ok;dy++)for(let dx=-rc;dx<=rc;dx++){const xx=x+dx,yy=y+dy;if(xx>=0&&yy>=0&&xx<gw&&yy<gh&&dx*dx+dy*dy<=rc*rc&&I[yy*gw+xx]){ok=1;break}}cov[y*gw+x]=ok}
  /* components */
@@ -555,35 +575,52 @@ function score(){const C=8,gw=W/C,gh=Math.ceil(H/C);
  let gN=0,gH=0;comps.forEach(c=>{gN+=c.n;gH+=c.h});
  const pix=gN?gH/gN:0;const per=comps.map(c=>c.h/c.n);const meanC=per.length?per.reduce((a,b)=>a+b,0)/per.length:0;
  const minC=per.length?Math.min(...per):0;
- miss=[];let k=0;comps.forEach(c=>c.cells.forEach(j=>{if(!cov[j]&&(k++%3===0)){const x=j%gw,y=(j-x)/gw;miss.push([x*C+C/2,y*C+C/2])}}));
- return {cov:(pix+meanC)/2,prec,minC,inkN}}
-function starsOf(s){if(s.inkN<12)return 0;if(s.cov>=.85&&s.prec>=.85&&s.minC>=.5)return 3;if(s.cov>=.68&&s.prec>=.7&&s.minC>=.3)return 2;if(s.cov>=.45&&s.prec>=.55)return 1;return 0}
+ miss=[];bad=[];let k=0;comps.forEach(c=>c.cells.forEach(j=>{if(!cov[j]&&(k++%6===0)){const x=j%gw,y=(j-x)/gw;miss.push([x*C+C/2,y*C+C/2])}}));
+ bad=[];for(let y=0;y<gh;y++)for(let x=0;x<gw;x++){if(I[y*gw+x]&&!T[y*gw+x])bad.push([x*C,y*C])}
+ let gCells=0;G.forEach(v=>{gCells+=v});
+ /* md: mean distance (grid cells) from ink to nearest glyph cell, chamfer */
+ const DD=new Float32Array(gw*gh);for(let i=0;i<DD.length;i++)DD[i]=G[i]?0:99;
+ for(let y=0;y<gh;y++)for(let x=0;x<gw;x++){const i=y*gw+x;let v=DD[i];if(x>0)v=Math.min(v,DD[i-1]+1);if(y>0){v=Math.min(v,DD[i-gw]+1);if(x>0)v=Math.min(v,DD[i-gw-1]+1.4);if(x<gw-1)v=Math.min(v,DD[i-gw+1]+1.4)}DD[i]=v}
+ for(let y=gh-1;y>=0;y--)for(let x=gw-1;x>=0;x--){const i=y*gw+x;let v=DD[i];if(x<gw-1)v=Math.min(v,DD[i+1]+1);if(y<gh-1){v=Math.min(v,DD[i+gw]+1);if(x<gw-1)v=Math.min(v,DD[i+gw+1]+1.4);if(x>0)v=Math.min(v,DD[i+gw-1]+1.4)}DD[i]=v}
+ let dsum=0;for(let i=0;i<I.length;i++)if(I[i])dsum+=Math.min(DD[i],8);const md=inkN?dsum/inkN:9;
+ const big=comps.reduce((a,c)=>(!a||c.n>a.n)?c:a,null);
+ const pc=(arr,q)=>{if(!arr.length)return 0;arr.sort((a,b)=>a-b);return arr[Math.min(arr.length-1,Math.floor(arr.length*q))]};
+ const gy=[];for(let i=0;i<G.length;i++)if(G[i])gy.push(Math.floor(i/gw));const iy=[];for(let i=0;i<I.length;i++)if(I[i])iy.push(Math.floor(i/gw));
+ const dy=(pc(iy,.75)-pc(gy,.75))*C;
+ const gmax=gy.length?Math.max(...gy)*C:0;
+ let tIn=0;for(let y=0;y<gh;y++)for(let x=0;x<gw;x++){if(!I[y*gw+x])continue;let ok=0;for(let dy2=-1;dy2<=1&&!ok;dy2++)for(let dx2=-1;dx2<=1;dx2++){const xx=x+dx2,yy=y+dy2;if(xx>=0&&yy>=0&&xx<gw&&yy<gh&&G[yy*gw+xx]){ok=1;break}}tIn+=ok}
+ return {gcn:gCells,md,tp:inkN?tIn/inkN:0,cov:(pix+meanC)/2,prec,minC,inkN,ex:gCells?inkN/gCells:9,dy,desc:gmax>LNS.base+S*.07}}
+function starsOf(s){if(s.inkN<12)return 0;let n=0;if(s.cov>=0.82&&s.prec>=0.82&&s.minC>=.5&&s.tp>=0.52&&s.ex<=1.7)n=3;else if(s.cov>=0.66&&s.prec>=0.68&&s.minC>=.3&&s.tp>=0.42&&s.ex<=1.7)n=2;else if(s.cov>=.4&&s.prec>=.5&&s.tp>=0.28&&s.ex<=3)n=1;
+ if(n===3&&Math.abs(s.dy)>S*.16)n=2;const l3=Math.min(1.65,Math.max(1.15,1.15+(800-s.gcn)/500*.45));if(n===3&&s.md>l3)n=2;if(n===2&&s.md>l3*1.8)n=1;return n}
+function ruleMsg(s){const t=S*.16;if(s.dy>t)return s.desc?'نزل الحرف أكثر من اللازم تحت السطر':'الحرف يستقر على السطر ولا ينزل عنه';if(s.dy<-t)return s.desc?'في آخر الكلمة أو منفصلًا ينزل الحرف تحت السطر':'اجعل الحرف يستقر على السطر';return ''}
 const PRAISE=['ما شاء الله! كتابة متقنة','ممتاز! خط جميل','رائع! استمر هكذا'];
 el('check').onclick=()=>{if(!hasInk){MSG.textContent='ابدأ الكتابة بإصبعك أولًا ثم اضغط «تحقّق»';return}
- const sc=score(),n=starsOf(sc),k=key();if(n>(stars[k]||0)){stars[k]=n;save()}
+ const sc=score(),n=starsOf(sc),k=key();if(n>=3){bad=[];miss=[]}else if(n===2){if(bad.length<60)bad=[];if(miss.length<8)miss=[]}else{if(bad.length<12)bad=[]};if(n>(stars[k]||0)){stars[k]=n;save()}
  drawSubs();drawLetters();render();
  el('rst').textContent='★'.repeat(n)+'☆'.repeat(3-n);const rh=el('rh'),rp=el('rp');
  if(n===3){rh.textContent='ممتاز! 🎉';rp.textContent=PRAISE[Math.floor(Math.random()*PRAISE.length)]}
- else if(n===2){rh.textContent='جميل جدًا 👏';rp.textContent='قريب جدًا من الإتقان. البرتقالي يبيّن ما فاته'}
- else if(n===1){rh.textContent='بداية طيبة 🌱';rp.textContent='اتبع الخط المنقّط ببطء. البرتقالي يبيّن ما فاته'}
- else{rh.textContent='أعِد المحاولة 💪';rp.textContent='اضغط «أرني الطريقة» ثم اكتب من جديد'}
- el('next').style.display=n>=2?'':'none';RES.classList.add('show')};
-el('again').onclick=()=>{ic.clearRect(0,0,W,H);hasInk=false;miss=[];RES.classList.remove('show');render();playGuide()};
+ else if(n===2){rh.textContent='جميل جدًا 👏';rp.textContent=ruleMsg(sc)||'قريب جدًا من الإتقان. الأحمر يبيّن الخطأ'}
+ else if(n===1){rh.textContent='بداية طيبة 🌱';rp.textContent=ruleMsg(sc)||'اتبع الخط الأخضر ببطء. الأحمر يبيّن الخطأ'}
+ else{rh.textContent='أعِد المحاولة 💪';rp.textContent='الأحمر يبيّن الخطأ. اضغط «أرني الطريقة» ثم اكتب من جديد'}
+ el('next').style.display=n>=2?'':'none';RES.classList.add('show');try{say(n===3?'ممتاز':n===2?'جميل جدا':n===1?'بداية طيبة':'أعد المحاولة')}catch(e){}};
+function spk(){try{const L=DATA[li].c;let t;if(mode==='h')t=L;else{const u=U[ORD.indexOf(L)];t=mode==='w'?((u[1]&&u[1][si])||items()[si].t):((u&&u[2])||items()[si].t)}say(t)}catch(e){}}
+const SPK=el('spk');if(SPK)SPK.onclick=()=>{try{if(typeof vOn==='function'&&!vOn()){let z=null;try{z=localStorage.getItem('lg_voice')}catch(e){}if(z!=='off'&&typeof togV==='function')togV();else if(typeof vToast==='function'){vToast('الصوت متوقف. لتشغيله اضغط زر «صوت ذكاء اصطناعي» في أعلى الصفحة.');return}}}catch(e){}spk()};
+el('again').onclick=()=>{ic.clearRect(0,0,W,H);hasInk=false;miss=[];bad=[];RES.classList.remove('show');render();playGuide()};
 el('next').onclick=()=>{const it=items();if(si<it.length-1){si++;load(true)}else{si=0;li=(li+1)%DATA.length;load()}};
-el('clear').onclick=()=>{ic.clearRect(0,0,W,H);hasInk=false;miss=[];RES.classList.remove('show');render()};
-el('show').onclick=()=>{ic.clearRect(0,0,W,H);hasInk=false;miss=[];RES.classList.remove('show');playGuide()};
-window.__kt={score,starsOf,get S(){return S},get TXT(){return TXT},W,H,go:(m,l,s)=>{mode=m;li=l;si=s;load()},get LNS(){return LNS},ic,gc};
+el('clear').onclick=()=>{ic.clearRect(0,0,W,H);hasInk=false;miss=[];bad=[];RES.classList.remove('show');render()};
+el('show').onclick=()=>{ic.clearRect(0,0,W,H);hasInk=false;miss=[];bad=[];RES.classList.remove('show');playGuide()};
+window.__kt={score,starsOf,ruleMsg,get S(){return S},get TXT(){return TXT},W,H,go:(m,l,s)=>{mode=m;li=l;si=s;load()},get LNS(){return LNS},ic,gc};
 (document.fonts&&document.fonts.load?Promise.all([document.fonts.load('700 100px Cairo')]).catch(()=>{}):Promise.resolve()).then(()=>{measure();load()});
 }
 function ktStars(c){let t=0;try{const o=JSON.parse(localStorage.getItem("kt2")||"{}");Object.keys(o).forEach(k=>{if(k.split(":")[1]===c)t+=o[k]})}catch(e){}return t>=12?3:t>=6?2:t>0?1:0}
-function wr(i){if(!NAME){home();return}S=null;if(unsub){clearInterval(unsub);unsub=null}updHd();const has=typeof i==="number";$('#app').innerHTML="<div class=\"top\"><h2>✍️ كتابتي على السطر</h2><button class=\"alt\" onclick=\"__BACK__\">رجوع</button></div><div class=\"kt\"><div class=\"kt-modes\" id=\"kt-modes\"></div><div class=\"kt-row\" id=\"kt-letters\"></div><div class=\"kt-row\" id=\"kt-subs\"></div><div class=\"kt-say\"><span class=\"o\">🦉</span><span id=\"kt-msg\"></span></div><div class=\"kt-board\"><canvas id=\"kt-cv\" width=\"1000\" height=\"620\"></canvas><div class=\"kt-res\" id=\"kt-res\"><div class=\"b\"><div class=\"st\" id=\"kt-rst\"></div><h2 id=\"kt-rh\"></h2><p id=\"kt-rp\"></p><div class=\"rw\"><button class=\"kt-btn w\" id=\"kt-again\">أعِد المحاولة</button><button class=\"kt-btn y\" id=\"kt-next\">التالي ←</button></div></div></div></div><div class=\"kt-bar\"><button class=\"kt-btn w\" id=\"kt-show\">👀 أرني الطريقة</button><button class=\"kt-btn w\" id=\"kt-clear\">🧽 امسح</button><button class=\"kt-btn\" id=\"kt-check\">✔ تحقّق من كتابتي</button></div></div>".replace("__BACK__",has?"hubV("+i+",'w')":"home()");ktInit($('#app'),has?i:0);scrollTo(0,0)}
+function wr(i){if(!NAME){home();return}S=null;if(unsub){clearInterval(unsub);unsub=null}updHd();const has=typeof i==="number";$('#app').innerHTML="<div class=\"top\"><h2>✍️ كتابتي على السطر</h2><button class=\"alt\" onclick=\"__BACK__\">رجوع</button></div><div class=\"kt\"><div class=\"kt-modes\" id=\"kt-modes\"></div><div class=\"kt-row\" id=\"kt-letters\"></div><div class=\"kt-row\" id=\"kt-subs\"></div><div class=\"kt-say\"><span class=\"o\">🦉</span><span id=\"kt-msg\"></span><button class=\"kt-spk\" id=\"kt-spk\" aria-label=\"استمع\">🔊</button></div><div class=\"kt-board\"><canvas id=\"kt-cv\" width=\"1000\" height=\"620\"></canvas></div><div class=\"kt-res\" id=\"kt-res\"><div class=\"b\"><div class=\"st\" id=\"kt-rst\"></div><h2 id=\"kt-rh\"></h2><p id=\"kt-rp\"></p><div class=\"rw\"><button class=\"kt-btn w\" id=\"kt-again\">أعِد المحاولة</button><button class=\"kt-btn y\" id=\"kt-next\">التالي ←</button></div></div></div><div class=\"kt-bar\"><button class=\"kt-btn w\" id=\"kt-show\">👀 أرني الطريقة</button><button class=\"kt-btn w\" id=\"kt-clear\">🧽 امسح</button><button class=\"kt-btn\" id=\"kt-check\">✔ تحقّق من كتابتي</button></div></div>".replace("__BACK__",has?"hubV("+i+",'w')":"home()");ktInit($('#app'),has?i:0);["contextmenu","selectstart","dragstart"].forEach(n=>$('.kt').addEventListener(n,e=>e.preventDefault()));scrollTo(0,0)}
 
 function hubV(i,k){S=null;if(unsub){clearInterval(unsub);unsub=null}updHd();const L=ORD[i];
 const B=(c,d,f,ic,t,sm,st)=>`<button class="gt" style="--c:${c};--cd:${d}" onclick="${f}"><span class="gi">${ic}</span><b>${t}</b><small>${sm}</small><em>${st||''}</em></button>`;
 const items=k==='w'?[B('#0f9d6b','#0a7550',`wr(${i})`,'✍️','اكتب الحرف','على السطر بإصبعك',stars(ktStars(L))),B('var(--sun-d)','var(--sun-d)',`an(${i})`,'🔤','حلّل كلمتك','اكتب أي كلمة وشاهد مقاطعها')]
 :[(VID[L]?B('var(--green)','var(--green-d)',`vid(${i})`,'🎬','قراءة القطعة','شاهد واقرأ مع الفيديو',stars(GS[L+':v'])):''),B('var(--plum)','var(--plum-d)',`tut(${i})`,'📺','مقاطع تعليمية','شرح السكون والمدود والشدّة وغيرها')];
 $('#app').innerHTML=`<div class="top"><button class="alt" onclick="learn(${i})">رجوع</button><h2>${k==='w'?'اكتب وحلّل':'اقرأ وتعلّم'} — ${L}</h2></div><div class="games">${items.join('')}</div>`;scrollTo(0,0)}
-function home(t){
+function home(t){GTK++;
  if(WANT_T&&!isT){loginView();return}
  S=null;if(unsub){clearInterval(unsub);unsub=null}updHd();const a=$('#app');
  if(!NAME){a.innerHTML=`<section class="card hero"><span class="owl">🦉</span><h1>أهلًا بك في رحلة الحروف</h1><p class="mut" style="font-size:18px;margin:0">نتعلّم الحروف الثمانية والعشرين، ونقرأ كلمات وجملًا، ونلعب ونتعلّم.</p><label for="nm">ما اسمك؟</label><input id="nm" placeholder="اكتب اسمك هنا" maxlength="30" autocomplete="off"><button class="go" onclick="setName()">هيّا نبدأ الرحلة</button></section>${isT?'<p class="row"><button class="alt" onclick="dash()">لوحة المعلمة</button></p>':''}`;
@@ -639,7 +676,7 @@ function vid(i){
 function vDone(i){const L=ORD[i],b=$('#vd');if(b.disabled)return;b.disabled=true;GS[L+':v']=3;saveLocal();updHd();burst();log({letter:L,skill:'قراءة القطعة',ok:true,tries:0});
  $('#msg').innerHTML=`<div class="fb ok">${praise()}</div><p class="row"><button class="alt" onclick="learn(${i})">العودة للحرف</button></p>`}
 const wordBtn=w=>`<button class="w" data-say="${esc(w)}">${PIC[w]?`<span class="pic">${PIC[w]}</span>`:''}${w}</button>`;
-function learn(i){
+function learn(i){GTK++;
  const [L,ws,sn,pv]=U[i];S=null;updHd();
  $('#app').innerHTML=`<div class="top"><button class="alt" onclick="home()">رجوع</button>${vbH()}</div>
  ${isT&&pv?'<div class="note">ملاحظة للمعلمة (لا تظهر للطلاب): كلمات هذا الحرف وجملته من اختياري، وليست من كتاب الوحدات الثلاث. قارنيها بالكتاب.</div>':''}
@@ -704,14 +741,14 @@ function dr(){
  if(Q.pos.length===n){
   const ok=Q.dict?Q.pos.every((p,k)=>p.key===Q.a[k].b+Q.a[k].m):Q.pos.map(p=>p.t).join(Q.sep)===Q.ord.join(Q.sep);
   if(ok){$('#msg').innerHTML=`<div class="fb ok">${praise()} <span style="font-size:30px">${esc(Q.word)}</span></div>`;fin(Q)}
-  else{Q.tries++;$('#msg').innerHTML=`<div class="fb hint">ليست صحيحة. انظر: ${esc(Q.word)}</div>`;setTimeout(clr,1800)}
+  else{Q.tries++;$('#msg').innerHTML=`<div class="fb hint">ليست صحيحة. انظر: ${esc(Q.word)}</div>`;gTo(clr,1800)}
  }
 }
 function pk(j){const Q=S.qs[S.k];if(Q.done)return;Q.tl[j].u=1;Q.pos.push(Q.tl[j]);dr()}
 function clr(){const Q=S.qs[S.k];if(!Q||Q.done)return;Q.tl.forEach(x=>x.u=0);Q.pos=[];$('#msg').innerHTML='';dr()}
 function fin(Q){
  Q.done=1;burst();log({letter:ORD[S.i],skill:Q.s,ok:Q.tries===0,tries:Q.tries,enrich:!!S.enrich});
- setTimeout(()=>{S.k++;S.k<S.qs.length?q():end()},1300);
+ gTo(()=>{S.k++;S.k<S.qs.length?q():end()},1300);
 }
 function end(){
  const L=ORD[S.i],tot=S.qs.length,good=S.qs.filter(x=>x.tries===0).length,weak=[...new Set(S.qs.filter(x=>x.tries>0).map(x=>x.s))],p=Math.round(good/tot*100);
@@ -767,13 +804,14 @@ function gSuk(i){
 }
 /* word analysis avoids words with a shadda */
 function gAna(i){const ok=w=>{const n=parseW(w).length;return n>=2&&n<=7&&!w.includes('ّ')};let c=U[i][1].filter(ok);if(c.length<2)c=[...c,...POOL.filter(w=>ok(w)&&!c.includes(w)&&nz(w).includes(nz(U[i][0])))];return c.slice(0,3).map(w=>{const a=parseW(w);return{w,a,sy:syls(a),step:0}})}
+const PIG=[['🌹','🌸'],['🌳','🥬','🌽','🥒'],['📚','📖'],['🐦','🕊️','🦜'],['📱','💻'],['🏠','🏫','🏟️','🏪','🏙️','🕌','⛺'],['🍑','🍎','🍇','🍓','🍉'],['☀️','💡'],['🌧️','☁️','❄️'],['🦊','🐺','🐶'],['🐑','🦌'],['🏃','🤸'],['👧','👩'],['🧃','🧴','🧼'],['🌙','⭐']];
 function gPic(i){
  const t=nz(U[i][0]),ws=U[i][1],has=w=>PIC[w];
  let c=ws.filter(has);
  if(c.length<3)c=[...c,...POOL.filter(w=>has(w)&&!c.includes(w)&&nz(w).includes(t))];
  if(c.length<3)c=[...c,...POOL.filter(w=>has(w)&&!c.includes(w))];
  const all=[...new Set(Object.values(PIC))];
- return c.slice(0,3).map(w=>{const p=PIC[w],d=shuf(all.filter(x=>x!==p)).slice(0,2);return{w,p,opts:shuf([{t:p,ok:true},...d.map(t=>({t,ok:false}))])}});
+ return c.slice(0,3).map(w=>{const p=PIC[w],gr=PIG.filter(g=>g.includes(p)),d=shuf(all.filter(x=>x!==p&&!gr.some(g=>g.includes(x)))).slice(0,2);return{w,p,opts:shuf([{t:p,ok:true},...d.map(t=>({t,ok:false}))])}});
 }
 function gSent(i){
  const sn=U[i][2];if(!sn)return [];const words=sn.split(' '),t=nz(U[i][0]);
@@ -841,12 +879,12 @@ function ghPick(j){
   $('#msg').innerHTML=`<div class="fb hint">${['الشدّة حرفان متشابهان: الأول ساكن ( ْ )، والثاني عليه الحركة.','اقرأ الكلمة بعد فكّ الشدّة ببطء، وصفّق عند كل مقطع.','عُدّ الحروف بعد فكّ الشدّة: الحرف المشدّد حرفان.'][R.st]}</div>`;return}
  b.classList.add('g');$('#msg').innerHTML='';
  if(R.st===0){const t=whole(R.open);$('#an').innerHTML='<h3 class="sec">٢- تحليل الكلمة</h3>';$('#un').innerHTML=`<div class="row"><span class="syb" style="--h:150">${R.c}ّ = ${R.c}ْ + ${R.c}${R.v}</span></div><p class="row"><button class="w" style="font-size:30px" data-say="${esc(R.w)}">${t}</button></p>`}
- if(R.st<2){R.busy=1;setTimeout(()=>{R.st++;R.busy=0;ghQ(R)},900);return}
+ if(R.st<2){R.busy=1;gTo(()=>{R.st++;R.busy=0;ghQ(R)},900);return}
  R.done=1;
  $('#qa').innerHTML=`<h3 style="text-align:center">المقاطع (${R.sy.length})</h3><div class="row">${R.sy.map((x,k)=>`<span class="syb" style="--h:${HUE(k*3)}">${sylT(R.open,x[0],x[1])}</span>`).join('')}</div><h3 style="text-align:center;margin-top:10px">الحروف (${R.open.length})</h3><div class="lets">${R.open.map(x=>`<span>${x.b}</span>`).join('')}</div>`;
  $('#msg').innerHTML=`<div class="fb ok">${praise()}</div>`;gDone(R,1);
 }
-function G(kind,i){
+function G(kind,i){GTK++;
  const r={w:gWords,f:gForms,m:gMadd,s:gSuk,a:gAna,p:gPic,r:gSent,l:gLam,d:gShd,h:gShA}[kind](i);
  if(!r.length)return;S={g:kind,i,r,k:0,res:[]};gr();
 }
@@ -931,7 +969,7 @@ function gsPick(j){
 function gaPick(j){
  const R=S.r[S.k];if(R.done||R.busy)return;const o=R.opts[j],b=$('#op').children[j];
  if(o.ok){b.classList.add('g');
-  if(!R.step){R.busy=1;$('#msg').innerHTML=`<div class="fb ok">${praise()} ${'👏'.repeat(R.sy.length)} الكلمة ${R.sy.length} ${R.sy.length>2?'مقاطع':R.sy.length===2?'مقطعان':'مقطع'}</div>`;setTimeout(()=>{R.step=1;R.busy=0;$('#msg').innerHTML='';gaQ(R)},1300)}
+  if(!R.step){R.busy=1;$('#msg').innerHTML=`<div class="fb ok">${praise()} ${'👏'.repeat(R.sy.length)} الكلمة ${R.sy.length} ${R.sy.length>2?'مقاطع':R.sy.length===2?'مقطعان':'مقطع'}</div>`;gTo(()=>{R.step=1;R.busy=0;$('#msg').innerHTML='';gaQ(R)},1300)}
   else{R.done=1;$('#qa').innerHTML=`<h3 style="text-align:center">المقاطع</h3><div class="row">${R.sy.map((s,x)=>`<span class="syb" style="--h:${HUE(x*3)}">${sylT(R.ra,s[0],s[1])}</span>`).join('')}</div><h3 style="text-align:center;margin-top:10px">الحروف (${R.a.length})</h3><div class="lets">${R.a.map(x=>`<span>${x.b}</span>`).join('')}</div>`;
    $('#msg').innerHTML=`<div class="fb ok">${praise()}</div>`;gDone(R,1)}
  }else{R.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">${R.step?'عُدّ الحروف واحدًا واحدًا. الشدّة لا تُعدّ حرفًا جديدًا.':'انطق الكلمة ببطء وصفّق عند كل مقطع.'}</div>`}
@@ -949,7 +987,7 @@ function grPick(j){
 function gDone(R,manual){
  if(R.logged)return;R.logged=1;S.res.push(R.tries===0);burst();log({letter:S.i<0?'ال':ORD[S.i],skill:'لعبة: '+GN[S.g],ok:R.tries===0,tries:R.tries});
  if(manual){const last=S.k+1>=S.r.length;$('#msg').insertAdjacentHTML('beforeend',`<p class="row" style="margin-top:12px"><button class="go" onclick="S.k++;gr()">${last?'إنهاء اللعبة':'الكلمة التالية'}</button><button class="alt" onclick="${back()}">رجوع</button></p>`);return}
- setTimeout(()=>{S.k++;gr()},1900);
+ gTo(()=>{S.k++;gr()},1900);
 }
 function gEnd(){
  const good=S.res.filter(Boolean).length,p=Math.round(good/S.r.length*100),n=p>=85?3:p>=60?2:1,key=(S.i<0?'ال':ORD[S.i])+':'+S.g;
@@ -1025,7 +1063,7 @@ function tnAns(j){
  const Q=TN.qs[TN.k],o=Q.o[j],b=$('#op').children[j];if(Q.done)return;
  if(o.ok){Q.done=1;b.classList.add('g');if(Q.full&&$('#wl'))$('#wl').innerHTML=`<span class="fx">${esc(Q.full)}</span>`;$('#msg').innerHTML=`<div class="fb ok">${praise()} ${TNM[Q.m].n}: ${esc(TNM[Q.m].e)}</div>`;burst();
   log({letter:TNL||'التنوين',skill:'تنوين: '+Q.s,ok:Q.tries===0,tries:Q.tries});
-  setTimeout(()=>{TN.k++;TN.k<TN.qs.length?tnQ():tnEnd()},1500)}
+  gTo(()=>{if(!TN)return;TN.k++;TN.k<TN.qs.length?tnQ():tnEnd()},1500)}
  else{Q.tries++;b.classList.add('r');b.disabled=true;$('#msg').innerHTML=`<div class="fb hint">حاول مرة أخرى. ${esc(Q.hint||'')}</div>`}
 }
 function tnEnd(){
@@ -1129,11 +1167,41 @@ function dash(sel){
  const a=$('#app');
  if(!isT){a.innerHTML='<div class="card">لوحة المعلمة تظهر لصاحبة الصفحة فقط.</div><button onclick="home()">رجوع</button>';return}
  if(!fbOn()){a.innerHTML='<div class="card">لم يُربط الحفظ بقاعدة بيانات Firebase بعد.</div><button onclick="home()">رجوع</button>';return}
- a.innerHTML='<div id="dash"><div class="top"><h2>لوحة المعلمة</h2><span class="row"><button class="alt" onclick="home()">رجوع</button><button class="alt" onclick="signOut();isT=false;home()">خروج</button></span></div><div id="dc" class="card">جارٍ التحميل…</div><div id="qs" class="card"></div></div>';
+ a.innerHTML='<div id="dash"><div class="top"><h2>لوحة المعلمة</h2><span class="row"><button class="alt" onclick="home()">رجوع</button><button class="alt" onclick="signOut();isT=false;home()">خروج</button></span></div><div id="dc" class="card">جارٍ التحميل…</div><div id="qs" class="card"></div><div id="fbc" class="card"></div></div>';
  qLoad();
  if(unsub)clearInterval(unsub);
- const pull=async()=>{try{const r=await fbA('results');if(!r.ok){if(r.status===401||r.status===403){signOut();isT=false;loginView();return}throw 0}const o=await r.json()||{};const all=Object.values(o).sort((x,y)=>y.ts-x.ts);CERTS=all.filter(r=>r.cert);DATA=all.filter(r=>!r.cert).slice(0,3000);paint(sel)}catch(e){const c=$('#dc');if(c)c.textContent='تعذّر تحميل البيانات'}};
+ const pull=async()=>{try{const r=await fbA('results');if(!r.ok){if(r.status===401||r.status===403){signOut();isT=false;loginView();return}throw 0}const o=await r.json()||{};const all=Object.values(o).sort((x,y)=>y.ts-x.ts);FBS=all.filter(r=>r.fb);CERTS=all.filter(r=>r.cert&&!r.fb);DATA=all.filter(r=>!r.cert&&!r.fb).slice(0,3000);paint(sel);paintFb()}catch(e){const c=$('#dc');if(c)c.textContent='تعذّر تحميل البيانات'}};
  pull();unsub=setInterval(pull,15000);
+}
+
+let FBS=[];
+function fbOpen(){
+ if(document.getElementById('fbm'))return;
+ let st=0;try{st=+localStorage.getItem('lg_fb_st')||0}catch(e){}
+ const m=document.createElement('div');m.id='fbm';
+ m.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(20,40,30,.55);display:flex;align-items:center;justify-content:center;padding:16px';
+ m.innerHTML='<div style="background:#fff;border-radius:22px;max-width:460px;width:100%;padding:20px;box-shadow:0 10px 40px rgba(0,0,0,.35);font-family:inherit;direction:rtl;text-align:right"><h3 style="margin:0 0 4px;color:#2f7d4a">⭐ تقييم المنصة</h3><p style="margin:0 0 10px;font-size:15px;color:#555">رأيك يساعد على تطوير المنصة. اختر عدد النجوم ثم اكتب اقتراحك إن أحببت.</p><div id="fbs" style="display:flex;gap:6px;justify-content:center;margin:6px 0 10px;direction:ltr"></div><textarea id="fbt" maxlength="400" placeholder="اقتراحاتك لتطوير المنصة" style="width:100%;min-height:84px;border:2px solid #cfe3d3;border-radius:14px;padding:10px;font:inherit;font-size:16px;box-sizing:border-box;direction:rtl"></textarea><div id="fbmsg" style="min-height:24px;margin:6px 0;font-weight:700"></div><div style="display:flex;gap:10px;justify-content:flex-start"><button id="fbsend" class="go" style="flex:1">إرسال</button><button id="fbx" class="alt">إغلاق</button></div></div>';
+ document.body.appendChild(m);
+ const sb=m.querySelector('#fbs');
+ const draw=()=>{sb.innerHTML=[1,2,3,4,5].map(n=>`<button type="button" data-n="${n}" aria-label="${n} من ٥" style="font-size:34px;line-height:1;background:none;border:0;padding:2px;cursor:pointer;filter:${n<=st?'none':'grayscale(1) opacity(.4)'}">⭐</button>`).join('');sb.querySelectorAll('button').forEach(b=>b.onclick=()=>{st=+b.dataset.n;draw()})};
+ draw();
+ m.querySelector('#fbx').onclick=()=>m.remove();
+ m.addEventListener('click',e=>{if(e.target===m)m.remove()});
+ m.querySelector('#fbsend').onclick=()=>{
+  const sug=(m.querySelector('#fbt').value||'').trim(),msg=m.querySelector('#fbmsg');
+  if(!st&&!sug){msg.style.color='#a33';msg.textContent='اختر نجومًا أو اكتب اقتراحًا.';return}
+  try{localStorage.setItem('lg_fb_st',String(st))}catch(e){}
+  if(!fbOn()){msg.style.color='#2f7d4a';msg.textContent='شكرًا لك 🌷';setTimeout(()=>m.remove(),1400);return}
+  const b=m.querySelector('#fbsend');b.disabled=true;
+  fetch(fbU('results'),{method:'POST',body:JSON.stringify({fb:1,name:NAME||'زائر',stars:st,sug:sug.slice(0,400),skill:'تقييم المنصة',letter:'—',ok:true,ts:Date.now()})}).then(r=>{if(!r.ok)throw 0;msg.style.color='#2f7d4a';msg.textContent='شكرًا لك 🌷 وصل رأيك.';setTimeout(()=>m.remove(),1600)}).catch(()=>{b.disabled=false;msg.style.color='#a33';msg.textContent='تعذّر الإرسال، تأكد من الإنترنت وحاول مرة أخرى.'});
+ };
+}
+function paintFb(){
+ const el=document.getElementById('fbc');if(!el)return;
+ const rs=FBS||[];
+ if(!rs.length){el.innerHTML='<h3>⭐ تقييم المنصة واقتراحات الزوار</h3><p class="mut">لا توجد تقييمات بعد.</p>';return}
+ const rated=rs.filter(r=>r.stars),avg=rated.length?(rated.reduce((a,r)=>a+r.stars,0)/rated.length).toFixed(1):'—';
+ el.innerHTML='<h3>⭐ تقييم المنصة واقتراحات الزوار</h3><p>المتوسط: <b>'+avg+'</b> من ٥ — عدد التقييمات: <b>'+rated.length+'</b> — عدد الاقتراحات: <b>'+rs.filter(r=>r.sug).length+'</b></p>'+rs.filter(r=>r.sug).slice(0,40).map(r=>'<div style="border-top:1px solid #e3ece4;padding:8px 0"><b>'+esc(r.name||'زائر')+'</b> '+(r.stars?'⭐'.repeat(r.stars):'')+' <small class="mut">'+new Date(r.ts).toLocaleDateString('ar-SA')+'</small><div>'+esc(r.sug)+'</div></div>').join('');
 }
 function bars(map,keys){return keys.filter(k=>map[k]).map(k=>{const p=pct(map[k]),l=lvl(p);return `<div class="br"><span class="bk">${esc(k)}</span><div class="bar2"><i style="width:${Math.max(p,3)}%;background:${l[1]}"></i></div><span class="bp">${p}%</span></div>`}).join('')}
 function group(rs,f){const m={};rs.forEach(r=>{(m[f(r)]=m[f(r)]||[]).push(r)});return m}
@@ -1242,5 +1310,38 @@ function csv(){
 init();
 </script>
 
+<script>
+let wakeLock=null;
+async function keepAwake(){
+  try{ if('wakeLock' in navigator){ wakeLock=await navigator.wakeLock.request('screen'); } }catch(e){}
+}
+keepAwake();
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') keepAwake(); });
+document.addEventListener('click',keepAwake,{once:true});
+</script>
+<script>
+/* احتياط لمنع السكون في iOS: فيديو صامت مخفي يعمل بعد أول لمسة */
+(function(){var v=null;
+function start(){try{if(!v){v=document.createElement('video');v.setAttribute('playsinline','');v.setAttribute('muted','');v.muted=true;v.loop=true;v.setAttribute('aria-hidden','true');v.style.cssText='position:fixed;width:1px;height:1px;opacity:.01;pointer-events:none;left:0;top:0';v.src='data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAANKbW9vdgAAAGxtdmhkAAAAAAAAAAAAAAAAAAAD6AAAA+gAAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAnR0cmFrAAAAXHRraGQAAAADAAAAAAAAAAAAAAABAAAAAAAAA+gAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAEAAAABAAAAAAAAkZWR0cwAAABxlbHN0AAAAAAAAAAEAAAPoAAAAAAABAAAAAAHsbWRpYQAAACBtZGhkAAAAAAAAAAAAAAAAAAAoAAAAKABVxAAAAAAALWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABl21pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAx1cmwgAAAAAQAAAVdzdGJsAAAAt3N0c2QAAAAAAAAAAQAAAKdhdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAEAAQABIAAAASAAAAAAAAAABFUxhdmM2MC4zMS4xMDIgbGlieDI2NAAAAAAAAAAAAAAAGP//AAAALWF2Y0MBQsAK/+EAFmdCwAraEJsBEAAAAwAQAAADAUDxImoBAARozg/IAAAAEHBhc3AAAAABAAAAAQAAABRidHJ0AAAAAAAAF1gAABdYAAAAGHN0dHMAAAAAAAAAAQAAAAoAAAQAAAAAFHN0c3MAAAAAAAAAAQAAAAEAAAAcc3RzYwAAAAAAAAABAAAAAQAAAAoAAAABAAAAPHN0c3oAAAAAAAAAAAAAAAoAAAKRAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAAFHN0Y28AAAAAAAAAAQAAA3oAAABidWR0YQAAAFptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAAC1pbHN0AAAAJal0b28AAAAdZGF0YQAAAAEAAAAATGF2ZjYwLjE2LjEwMAAAAAhmcmVlAAAC821kYXQAAAJwBgX//2zcRem95tlIt5Ys2CDZI+7veDI2NCAtIGNvcmUgMTY0IHIzMTA4IDMxZTE5ZjkgLSBILjI2NC9NUEVHLTQgQVZDIGNvZGVjIC0gQ29weWxlZnQgMjAwMy0yMDIzIC0gaHR0cDovL3d3dy52aWRlb2xhbi5vcmcveDI2NC5odG1sIC0gb3B0aW9uczogY2FiYWM9MCByZWY9MSBkZWJsb2NrPTE6MDowIGFuYWx5c2U9MHgxOjB4MTExIG1lPWhleCBzdWJtZT0yIHBzeT0xIHBzeV9yZD0xLjAwOjAuMDAgbWl4ZWRfcmVmPTAgbWVfcmFuZ2U9MTYgY2hyb21hX21lPTEgdHJlbGxpcz0wIDh4OGRjdD0wIGNxbT0wIGRlYWR6b25lPTIxLDExIGZhc3RfcHNraXA9MSBjaHJvbWFfcXBfb2Zmc2V0PTAgdGhyZWFkcz0yIGxvb2thaGVhZF90aHJlYWRzPTEgc2xpY2VkX3RocmVhZHM9MCBucj0wIGRlY2ltYXRlPTEgaW50ZXJsYWNlZD0wIGJsdXJheV9jb21wYXQ9MCBjb25zdHJhaW5lZF9pbnRyYT0wIGJmcmFtZXM9MCB3ZWlnaHRwPTAga2V5aW50PTI1MCBrZXlpbnRfbWluPTEwIHNjZW5lY3V0PTQwIGludHJhX3JlZnJlc2g9MCByY19sb29rYWhlYWQ9MTAgcmM9Y3JmIG1idHJlZT0xIGNyZj0yMy4wIHFjb21wPTAuNjAgcXBtaW49MCBxcG1heD02OSBxcHN0ZXA9NCBpcF9yYXRpbz0xLjQwIGFxPTE6MS4wMACAAAAAGWWIhA////w9FAAEgXycnJ1111111111114AAAAGQZogP8IwAAAABkGaQD/CMAAAAAZBmmA/wjAAAAAGQZqAP8IwAAAABkGaoD/CMAAAAAZBmsA/wjAAAAAGQZrgP8IwAAAABkGbADvCMAAAAAZBmyA3wjA=';document.body.appendChild(v)}
+var r=v.play();if(r&&r.catch)r.catch(function(){})}catch(e){}}
+['touchend','click'].forEach(function(t){document.addEventListener(t,function f(){start();document.removeEventListener(t,f)},{passive:true})});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')start()});
+})();
+</script>
+<script>
+/* سكون ذاتي لتوفير البطارية: تخفيت بعد دقيقة، وإظلام كامل بعد دقيقتين، ويعود العمل فورًا باللمس دون رمز دخول */
+(function(){var T1=60000,T2=120000,t1,t2,ov=null,st=0;
+function mk(){if(ov)return;ov=document.createElement('div');ov.setAttribute('aria-hidden','true');ov.style.cssText='position:fixed;inset:0;z-index:2147483647;background:#000;opacity:0;pointer-events:none;transition:opacity 1.5s ease;display:flex;align-items:flex-end;justify-content:center;padding-bottom:48px;color:#555;font:600 15px system-ui,sans-serif;touch-action:manipulation';ov.textContent='المس الشاشة للمتابعة';document.body.appendChild(ov);
+['pointerdown','touchstart','mousedown','click'].forEach(function(e){ov.addEventListener(e,function(ev){if(st){ev.preventDefault();ev.stopPropagation();if(e==='pointerdown'||e==='touchstart')wake()}},{passive:false})})}
+function dim(){mk();st=1;ov.style.pointerEvents='none';ov.style.opacity='.55';ov.style.color='transparent'}
+function off(){mk();st=2;ov.style.pointerEvents='auto';ov.style.opacity='1';ov.style.color='#555'}
+function wake(){st=0;if(ov){ov.style.transition='opacity .12s';ov.style.opacity='0';ov.style.pointerEvents='none';setTimeout(function(){if(ov)ov.style.transition='opacity 1.5s ease'},200)}arm()}
+function arm(){clearTimeout(t1);clearTimeout(t2);t1=setTimeout(dim,T1);t2=setTimeout(off,T2)}
+function act(){if(st===2)return;if(st===1){wake();return}arm()}
+['pointerdown','pointermove','touchstart','keydown','scroll','wheel'].forEach(function(e){document.addEventListener(e,act,{passive:true,capture:true})});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')wake()});
+arm();
+})();
+</script>
 </body>
 </html>
