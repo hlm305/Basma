@@ -250,11 +250,26 @@ body.nv .sp,body.nv .sayb,body.nv .lhero button{display:none!important}
 .kt .kt-res .kt-btn{flex:1;min-width:0;padding:9px 6px;font-size:17px}
 @keyframes ktpop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 @media (max-width:520px){.kt .kt-mode{font-size:17px}.kt .kt-btn{font-size:16px;min-width:100px}.kt-say{font-size:15px}}
+@media (min-width:1000px) and (hover:hover){
+#wrap{max-width:1240px}
+#app{padding-top:20px}
+.card{padding:22px;border-radius:26px}
+button{font-size:21px;padding:14px 26px}
+.hero{padding:34px 24px}
+.path{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:36px 16px}
+.games{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.gt{padding:16px 18px}
+.opts{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+.tuts{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.acards{grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+.kt canvas{width:auto;max-width:100%;max-height:56vh;margin:0 auto}
+input{font-size:24px}
+}
 </style>
 <div id="wrap">
 <header class="hd"><div class="brand"><span class="logo">🦉</span><div><b>رحلة الحروف</b><small>لغتي • الصف الأول الابتدائي</small><span class="by">إعداد: فاطمة المطيري</span></div></div><div class="chips" id="who"></div></header>
 <main id="app"></main>
-<footer class="ft">إعداد: <b>فاطمة المطيري</b><small class="rt">© الحقوق محفوظة</small><small id="vn"></small></footer>
+<footer class="ft"><button type="button" class="alt" style="font-size:16px;padding:10px 18px;margin-bottom:10px" onclick="fbOpen()">⭐ تقييم المنصة واقتراحاتك</button><br>إعداد: <b>فاطمة المطيري</b><small class="rt">© الحقوق محفوظة</small><small id="vn"></small></footer>
 </div>
 <script>
 document.documentElement.lang='ar';document.documentElement.dir='rtl';
@@ -789,13 +804,14 @@ function gSuk(i){
 }
 /* word analysis avoids words with a shadda */
 function gAna(i){const ok=w=>{const n=parseW(w).length;return n>=2&&n<=7&&!w.includes('ّ')};let c=U[i][1].filter(ok);if(c.length<2)c=[...c,...POOL.filter(w=>ok(w)&&!c.includes(w)&&nz(w).includes(nz(U[i][0])))];return c.slice(0,3).map(w=>{const a=parseW(w);return{w,a,sy:syls(a),step:0}})}
+const PIG=[['🌹','🌸'],['🌳','🥬','🌽','🥒'],['📚','📖'],['🐦','🕊️','🦜'],['📱','💻'],['🏠','🏫','🏟️','🏪','🏙️','🕌','⛺'],['🍑','🍎','🍇','🍓','🍉'],['☀️','💡'],['🌧️','☁️','❄️'],['🦊','🐺','🐶'],['🐑','🦌'],['🏃','🤸'],['👧','👩'],['🧃','🧴','🧼'],['🌙','⭐']];
 function gPic(i){
  const t=nz(U[i][0]),ws=U[i][1],has=w=>PIC[w];
  let c=ws.filter(has);
  if(c.length<3)c=[...c,...POOL.filter(w=>has(w)&&!c.includes(w)&&nz(w).includes(t))];
  if(c.length<3)c=[...c,...POOL.filter(w=>has(w)&&!c.includes(w))];
  const all=[...new Set(Object.values(PIC))];
- return c.slice(0,3).map(w=>{const p=PIC[w],d=shuf(all.filter(x=>x!==p)).slice(0,2);return{w,p,opts:shuf([{t:p,ok:true},...d.map(t=>({t,ok:false}))])}});
+ return c.slice(0,3).map(w=>{const p=PIC[w],gr=PIG.filter(g=>g.includes(p)),d=shuf(all.filter(x=>x!==p&&!gr.some(g=>g.includes(x)))).slice(0,2);return{w,p,opts:shuf([{t:p,ok:true},...d.map(t=>({t,ok:false}))])}});
 }
 function gSent(i){
  const sn=U[i][2];if(!sn)return [];const words=sn.split(' '),t=nz(U[i][0]);
@@ -1151,11 +1167,41 @@ function dash(sel){
  const a=$('#app');
  if(!isT){a.innerHTML='<div class="card">لوحة المعلمة تظهر لصاحبة الصفحة فقط.</div><button onclick="home()">رجوع</button>';return}
  if(!fbOn()){a.innerHTML='<div class="card">لم يُربط الحفظ بقاعدة بيانات Firebase بعد.</div><button onclick="home()">رجوع</button>';return}
- a.innerHTML='<div id="dash"><div class="top"><h2>لوحة المعلمة</h2><span class="row"><button class="alt" onclick="home()">رجوع</button><button class="alt" onclick="signOut();isT=false;home()">خروج</button></span></div><div id="dc" class="card">جارٍ التحميل…</div><div id="qs" class="card"></div></div>';
+ a.innerHTML='<div id="dash"><div class="top"><h2>لوحة المعلمة</h2><span class="row"><button class="alt" onclick="home()">رجوع</button><button class="alt" onclick="signOut();isT=false;home()">خروج</button></span></div><div id="dc" class="card">جارٍ التحميل…</div><div id="qs" class="card"></div><div id="fbc" class="card"></div></div>';
  qLoad();
  if(unsub)clearInterval(unsub);
- const pull=async()=>{try{const r=await fbA('results');if(!r.ok){if(r.status===401||r.status===403){signOut();isT=false;loginView();return}throw 0}const o=await r.json()||{};const all=Object.values(o).sort((x,y)=>y.ts-x.ts);CERTS=all.filter(r=>r.cert);DATA=all.filter(r=>!r.cert).slice(0,3000);paint(sel)}catch(e){const c=$('#dc');if(c)c.textContent='تعذّر تحميل البيانات'}};
+ const pull=async()=>{try{const r=await fbA('results');if(!r.ok){if(r.status===401||r.status===403){signOut();isT=false;loginView();return}throw 0}const o=await r.json()||{};const all=Object.values(o).sort((x,y)=>y.ts-x.ts);FBS=all.filter(r=>r.fb);CERTS=all.filter(r=>r.cert&&!r.fb);DATA=all.filter(r=>!r.cert&&!r.fb).slice(0,3000);paint(sel);paintFb()}catch(e){const c=$('#dc');if(c)c.textContent='تعذّر تحميل البيانات'}};
  pull();unsub=setInterval(pull,15000);
+}
+
+let FBS=[];
+function fbOpen(){
+ if(document.getElementById('fbm'))return;
+ let st=0;try{st=+localStorage.getItem('lg_fb_st')||0}catch(e){}
+ const m=document.createElement('div');m.id='fbm';
+ m.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(20,40,30,.55);display:flex;align-items:center;justify-content:center;padding:16px';
+ m.innerHTML='<div style="background:#fff;border-radius:22px;max-width:460px;width:100%;padding:20px;box-shadow:0 10px 40px rgba(0,0,0,.35);font-family:inherit;direction:rtl;text-align:right"><h3 style="margin:0 0 4px;color:#2f7d4a">⭐ تقييم المنصة</h3><p style="margin:0 0 10px;font-size:15px;color:#555">رأيك يساعد على تطوير المنصة. اختر عدد النجوم ثم اكتب اقتراحك إن أحببت.</p><div id="fbs" style="display:flex;gap:6px;justify-content:center;margin:6px 0 10px;direction:ltr"></div><textarea id="fbt" maxlength="400" placeholder="اقتراحاتك لتطوير المنصة" style="width:100%;min-height:84px;border:2px solid #cfe3d3;border-radius:14px;padding:10px;font:inherit;font-size:16px;box-sizing:border-box;direction:rtl"></textarea><div id="fbmsg" style="min-height:24px;margin:6px 0;font-weight:700"></div><div style="display:flex;gap:10px;justify-content:flex-start"><button id="fbsend" class="go" style="flex:1">إرسال</button><button id="fbx" class="alt">إغلاق</button></div></div>';
+ document.body.appendChild(m);
+ const sb=m.querySelector('#fbs');
+ const draw=()=>{sb.innerHTML=[1,2,3,4,5].map(n=>`<button type="button" data-n="${n}" aria-label="${n} من ٥" style="font-size:34px;line-height:1;background:none;border:0;padding:2px;cursor:pointer;filter:${n<=st?'none':'grayscale(1) opacity(.4)'}">⭐</button>`).join('');sb.querySelectorAll('button').forEach(b=>b.onclick=()=>{st=+b.dataset.n;draw()})};
+ draw();
+ m.querySelector('#fbx').onclick=()=>m.remove();
+ m.addEventListener('click',e=>{if(e.target===m)m.remove()});
+ m.querySelector('#fbsend').onclick=()=>{
+  const sug=(m.querySelector('#fbt').value||'').trim(),msg=m.querySelector('#fbmsg');
+  if(!st&&!sug){msg.style.color='#a33';msg.textContent='اختر نجومًا أو اكتب اقتراحًا.';return}
+  try{localStorage.setItem('lg_fb_st',String(st))}catch(e){}
+  if(!fbOn()){msg.style.color='#2f7d4a';msg.textContent='شكرًا لك 🌷';setTimeout(()=>m.remove(),1400);return}
+  const b=m.querySelector('#fbsend');b.disabled=true;
+  fetch(fbU('results'),{method:'POST',body:JSON.stringify({fb:1,name:NAME||'زائر',stars:st,sug:sug.slice(0,400),skill:'تقييم المنصة',letter:'—',ok:true,ts:Date.now()})}).then(r=>{if(!r.ok)throw 0;msg.style.color='#2f7d4a';msg.textContent='شكرًا لك 🌷 وصل رأيك.';setTimeout(()=>m.remove(),1600)}).catch(()=>{b.disabled=false;msg.style.color='#a33';msg.textContent='تعذّر الإرسال، تأكد من الإنترنت وحاول مرة أخرى.'});
+ };
+}
+function paintFb(){
+ const el=document.getElementById('fbc');if(!el)return;
+ const rs=FBS||[];
+ if(!rs.length){el.innerHTML='<h3>⭐ تقييم المنصة واقتراحات الزوار</h3><p class="mut">لا توجد تقييمات بعد.</p>';return}
+ const rated=rs.filter(r=>r.stars),avg=rated.length?(rated.reduce((a,r)=>a+r.stars,0)/rated.length).toFixed(1):'—';
+ el.innerHTML='<h3>⭐ تقييم المنصة واقتراحات الزوار</h3><p>المتوسط: <b>'+avg+'</b> من ٥ — عدد التقييمات: <b>'+rated.length+'</b> — عدد الاقتراحات: <b>'+rs.filter(r=>r.sug).length+'</b></p>'+rs.filter(r=>r.sug).slice(0,40).map(r=>'<div style="border-top:1px solid #e3ece4;padding:8px 0"><b>'+esc(r.name||'زائر')+'</b> '+(r.stars?'⭐'.repeat(r.stars):'')+' <small class="mut">'+new Date(r.ts).toLocaleDateString('ar-SA')+'</small><div>'+esc(r.sug)+'</div></div>').join('');
 }
 function bars(map,keys){return keys.filter(k=>map[k]).map(k=>{const p=pct(map[k]),l=lvl(p);return `<div class="br"><span class="bk">${esc(k)}</span><div class="bar2"><i style="width:${Math.max(p,3)}%;background:${l[1]}"></i></div><span class="bp">${p}%</span></div>`}).join('')}
 function group(rs,f){const m={};rs.forEach(r=>{(m[f(r)]=m[f(r)]||[]).push(r)});return m}
